@@ -15,6 +15,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ngx-translate-router": [
+        "dist/ngx-translate-router"
+      ],
+      "ngx-translate-router/*": [
+        "dist/ngx-translate-router/*"
+      ]
+    }
   }
 }
