@@ -2,12 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
-import { LocalizeRouterModule, LocalizeParser, ManualParserLoader, LocalizeRouterSettings } from 'ngx-translate-router';
+import { LocalizeRouterModule, LocalizeParser, ManualParserLoader, LocalizeRouterSettings } from '@gilsdav/ngx-translate-router';
 
 import { HomeComponent } from './home/home.component';
-
 
 
 export function ManualLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings) {

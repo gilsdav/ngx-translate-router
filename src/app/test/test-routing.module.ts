@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { LocalizeRouterModule } from 'ngx-translate-router';
+import { LocalizeRouterModule } from '@gilsdav/ngx-translate-router';
 
 import { BobComponent } from './bob/bob.component';
 

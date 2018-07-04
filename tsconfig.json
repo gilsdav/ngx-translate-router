@@ -17,10 +17,10 @@
       "dom"
     ],
     "paths": {
-      "ngx-translate-router": [
+      "@gilsdav/ngx-translate-router": [
         "dist/ngx-translate-router"
       ],
-      "ngx-translate-router/*": [
+      "@gilsdav/ngx-translate-router/*": [
         "dist/ngx-translate-router/*"
       ]
     }

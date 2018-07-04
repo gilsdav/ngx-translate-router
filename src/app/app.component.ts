@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalizeRouterService } from 'ngx-translate-router';
+import { LocalizeRouterService } from '@gilsdav/ngx-translate-router';
 
 @Component({
     selector: 'app-root',
