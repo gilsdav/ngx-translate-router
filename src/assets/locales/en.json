@@ -1,0 +1,6 @@
+{
+    "TITLE": "hello",
+    "ROUTES.home": "home",
+    "ROUTES.test": "mytest",
+    "ROUTES.bob": "george"
+}

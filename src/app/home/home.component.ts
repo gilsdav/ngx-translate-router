@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LocalizeRouterService } from 'ngx-translate-router';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private localize: LocalizeRouterService) { }
 
   ngOnInit() {
+  }
+
+  public switchLang() {
+    console.log('change lang');
+    this.localize.changeLanguage(this.localize.parser.currentLang === 'fr' ? 'en' : 'fr');
   }
 
 }

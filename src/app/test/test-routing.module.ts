@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { NgxTranslateRouterModule } from 'ngx-translate-router';
+import { LocalizeRouterModule } from 'ngx-translate-router';
 
 import { BobComponent } from './bob/bob.component';
 
@@ -12,8 +12,8 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
-    NgxTranslateRouterModule.forChild(routes)
+    LocalizeRouterModule.forChild(routes)
   ],
-  exports: [RouterModule, NgxTranslateRouterModule]
+  exports: [RouterModule, LocalizeRouterModule]
 })
 export class TestRoutingModule { }

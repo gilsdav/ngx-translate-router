@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { LocalizeRouterService } from 'ngx-translate-router';
+
 @Component({
   selector: 'app-bob',
   templateUrl: './bob.component.html',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BobComponent implements OnInit {
 
-  constructor() { }
+  constructor(private localize: LocalizeRouterService) { }
 
   ngOnInit() {
+  }
+
+  public switchLang() {
+    console.log('change lang');
+    this.localize.changeLanguage(this.localize.parser.currentLang === 'fr' ? 'en' : 'fr');
   }
 
 }

@@ -4,15 +4,14 @@ import { Location } from '@angular/common';
 
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
-import { NgxTranslateRouterModule, NgxTranslateRouterParser } from 'ngx-translate-router';
+import { LocalizeRouterModule, LocalizeParser, ManualParserLoader, LocalizeRouterSettings } from 'ngx-translate-router';
 
 import { HomeComponent } from './home/home.component';
-import { ManualTranslateRouteParser } from 'projects/ngx-translate-router/src/public_api';
 
 
 
-export function ManualLoaderFactory(translate: TranslateService, location: Location) {
-    return new ManualTranslateRouteParser(translate, location, ['en', 'fr']);
+export function ManualLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings) {
+    return new ManualParserLoader(translate, location, settings, ['en', 'fr'], 'ROUTES.');
 }
 
 export const routes: Routes = [
@@ -20,7 +19,7 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'test', loadChildren: './test/test.module#TestModule' },
     { path: 'bob', children: [
-        { path: 'home', component: HomeComponent }
+        { path: 'home/:test', component: HomeComponent }
     ] },
     { path: '**', redirectTo: '/home' }
 ];
@@ -28,14 +27,14 @@ export const routes: Routes = [
 @NgModule({
     imports: [
         RouterModule.forRoot(routes),
-        NgxTranslateRouterModule.forRoot(routes, {
+        LocalizeRouterModule.forRoot(routes, {
             parser: {
-                provide: NgxTranslateRouterParser,
+                provide: LocalizeParser,
                 useFactory: ManualLoaderFactory,
-                deps: [TranslateService, Location]
+                deps: [TranslateService, Location, LocalizeRouterSettings]
             }
         })
     ],
-    exports: [RouterModule, NgxTranslateRouterModule]
+    exports: [RouterModule, LocalizeRouterModule]
 })
 export class AppRoutingModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxTranslateRouterService } from 'ngx-translate-router';
+import { LocalizeRouterService } from 'ngx-translate-router';
 
 @Component({
     selector: 'app-root',
@@ -9,10 +9,10 @@ import { NgxTranslateRouterService } from 'ngx-translate-router';
 export class AppComponent implements OnInit {
     title = 'app';
 
-    constructor(private routerService: NgxTranslateRouterService) { }
+    constructor(private localize: LocalizeRouterService) { }
 
     ngOnInit() {
-        this.routerService.changeLanguage('fr');
+        // this.routerService.changeLanguage('fr');
     }
 
 }

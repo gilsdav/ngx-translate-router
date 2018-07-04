@@ -1,5 +1,7 @@
 <p>
-  home works!
+  {{'TITLE' | translate}}
 </p>
 
-<a [routerLink]="['/test', 'bobie']">test</a>
+<a [routerLink]="['/test', 'bob'] | localize">test</a>
+
+<button (click)="switchLang()">change</button>
