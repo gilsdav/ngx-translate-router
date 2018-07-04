@@ -45,6 +45,7 @@ In order to use `ngx-translate-router` you must initialize it with following inf
 * Routes to be translated
 
 ### Initialize module
+`import {LocalizeRouterModule} from '@gilsdav/ngx-translate-router';`
 <!-- Module can be initialized either using static file or manually by passing necessary values.
 
 #### Http loader
