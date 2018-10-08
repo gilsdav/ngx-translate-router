@@ -6,6 +6,7 @@ import { LocalizeRouterModule } from '@gilsdav/ngx-translate-router';
 import { BobComponent } from './bob/bob.component';
 
 const routes: Routes = [
+  { path: '', component: BobComponent },
   { path: 'bob', component: BobComponent }
 ];
 

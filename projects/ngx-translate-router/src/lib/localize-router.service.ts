@@ -1,4 +1,5 @@
 import { Inject } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, UrlSegment, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, pairwise } from 'rxjs/operators';
@@ -20,7 +21,8 @@ export class LocalizeRouterService {
       @Inject(LocalizeParser) public parser: LocalizeParser,
       @Inject(LocalizeRouterSettings) public settings: LocalizeRouterSettings,
       @Inject(Router) private router: Router,
-      @Inject(ActivatedRoute) private route: ActivatedRoute
+      @Inject(ActivatedRoute) private route: ActivatedRoute,
+      @Inject(Location) private location: Location
     ) {
       this.routerEvents = new Subject<string>();
   }
@@ -43,9 +45,9 @@ export class LocalizeRouterService {
    * Change language and navigate to translated route
    */
   changeLanguage(lang: string, extras?: NavigationExtras, useNavigateMethod?: boolean): void {
-    if (this.route) {
-      console.log(this.route);
-    }
+    // if (this.route) {
+    //   console.log(this.route);
+    // }
     if (lang !== this.parser.currentLang) {
       const rootSnapshot: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
 
@@ -75,11 +77,20 @@ export class LocalizeRouterService {
           url = urlSegments.join('/');
         }
 
+        const lastSlashIndex = url.lastIndexOf('/');
+        if (lastSlashIndex > 0 && lastSlashIndex === url.length - 1) {
+          url = url.slice(0, -1);
+        }
+
         this.router.resetConfig(this.parser.routes);
         if (useNavigateMethod) {
           this.router.navigate([url], extras);
         } else {
-          this.router.navigateByUrl(url, extras);
+          if (!extras) {
+            this.location.replaceState(url); // go(url)
+          } else {
+            this.router.navigateByUrl(url, extras);
+          }
         }
       });
     }
@@ -97,7 +108,6 @@ export class LocalizeRouterService {
     } else {
       return this.parseSegmentValue(snapshot);
     }
-
     /* if (snapshot.firstChild && snapshot.firstChild.routeConfig && snapshot.firstChild.routeConfig.path) {
       if (snapshot.firstChild.routeConfig.path !== '**') {
         return this.parseSegmentValue(snapshot) + '/' + this.traverseRouteSnapshot(snapshot.firstChild);
@@ -161,9 +171,8 @@ export class LocalizeRouterService {
    */
   private _routeChanged(): (eventPair: [NavigationStart, NavigationStart]) => void {
     return ([previousEvent, currentEvent]: [NavigationStart, NavigationStart]) => {
-      const previousLang = this.parser.getLocationLang(previousEvent.url) || this.parser.defaultLang;
+      const previousLang = this.parser.currentLang; // this.parser.getLocationLang(previousEvent.url) || this.parser.defaultLang;
       const currentLang = this.parser.getLocationLang(currentEvent.url) || this.parser.defaultLang;
-
       if (currentLang !== previousLang) {
         this.parser.translateRoutes(currentLang).subscribe(() => {
           this.router.resetConfig(this.parser.routes);
