@@ -1,6 +1,6 @@
 import { Inject } from '@angular/core';
-import { Location } from '@angular/common';
-import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, UrlSegment, ActivatedRoute } from '@angular/router';
+// import { Location } from '@angular/common';
+import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, pairwise } from 'rxjs/operators';
 
@@ -21,8 +21,8 @@ export class LocalizeRouterService {
       @Inject(LocalizeParser) public parser: LocalizeParser,
       @Inject(LocalizeRouterSettings) public settings: LocalizeRouterSettings,
       @Inject(Router) private router: Router,
-      @Inject(ActivatedRoute) private route: ActivatedRoute,
-      @Inject(Location) private location: Location
+      @Inject(ActivatedRoute) private route: ActivatedRoute/*,
+      @Inject(Location) private location: Location*/
     ) {
       this.routerEvents = new Subject<string>();
   }
