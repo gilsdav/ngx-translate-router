@@ -23,4 +23,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.localize.changeLanguage(this.localize.parser.currentLang === 'fr' ? 'en' : 'fr');
   }
 
+  public routerOutletActivation(active: boolean) {
+    console.log('routerOutletActivation', active);
+  }
+
 }

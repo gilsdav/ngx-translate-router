@@ -15,4 +15,8 @@ export class AppComponent implements OnInit {
         // this.routerService.changeLanguage('fr');
     }
 
+    public routerOutletActivation(active: boolean) {
+      console.log('routerOutletActivation', active);
+    }
+
 }

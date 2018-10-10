@@ -86,11 +86,12 @@ export class LocalizeRouterService {
         if (useNavigateMethod) {
           this.router.navigate([url], extras);
         } else {
-          if (!extras) {
-            this.location.replaceState(url); // go(url)
-          } else {
-            this.router.navigateByUrl(url, extras);
-          }
+          // if (!extras) {
+          //   this.location.replaceState(url); // go(url)
+          // } else {
+          //   this.router.navigateByUrl(url, extras);
+          // }
+          this.router.navigateByUrl(url, extras);
         }
       });
     }
