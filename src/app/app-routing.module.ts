@@ -16,7 +16,7 @@ export function ManualLoaderFactory(translate: TranslateService, location: Locat
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
-    { path: 'test', loadChildren: './test/test.module#TestModule' },
+    { path: 'test', component: HomeComponent, loadChildren: './test/test.module#TestModule' },
     { path: 'bob', children: [
         { path: 'home/:test', component: HomeComponent }
     ] },

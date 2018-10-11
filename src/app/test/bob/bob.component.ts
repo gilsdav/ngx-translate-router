@@ -12,6 +12,7 @@ export class BobComponent implements OnInit {
   constructor(private localize: LocalizeRouterService) { }
 
   ngOnInit() {
+    console.log('on init');
   }
 
   public switchLang() {

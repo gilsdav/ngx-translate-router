@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { LocalizeRouterService } from './localize-router.service';
 import { DummyLocalizeParser, LocalizeParser } from './localize-router.parser';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
 import { LocalizeRouterPipe } from './localize-router.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,7 @@ import {
   USE_CACHED_LANG
 } from './localize-router.config';
 import { LocalizeRouterConfigLoader } from './localize-router-config-loader';
+import { GilsdavReuseStrategy } from './gilsdav-reuse-strategy';
 
 @Injectable()
 export class ParserInitializer {
@@ -84,6 +85,10 @@ export class LocalizeRouterModule {
           multi: true,
           useFactory: getAppInitializer,
           deps: [ParserInitializer, LocalizeParser, RAW_ROUTES]
+        },
+        {
+          provide: RouteReuseStrategy,
+          useClass: GilsdavReuseStrategy
         }
       ]
     };

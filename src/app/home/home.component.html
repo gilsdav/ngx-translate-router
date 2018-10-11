@@ -5,3 +5,5 @@
 <a [routerLink]="['/test', 'bob'] | localize">test</a>
 
 <button (click)="switchLang()">change</button>
+
+<router-outlet (activate)="routerOutletActivation(true)" (deactivate)="routerOutletActivation(false)"></router-outlet>

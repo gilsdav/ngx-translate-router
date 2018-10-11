@@ -163,7 +163,7 @@ export abstract class LocalizeParser {
    */
   private _translateRouteTree(routes: Routes): void {
     routes.forEach((route: Route) => {
-      if (route.path && route.path !== '**') {
+      if (route.path !== null && route.path !== undefined/* && route.path !== '**'*/) {
         this._translateProperty(route, 'path');
       }
       if (route.redirectTo) {

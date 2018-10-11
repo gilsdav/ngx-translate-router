@@ -9,3 +9,4 @@ export * from './lib/localize-router.service';
 export * from './lib/localize-router.pipe';
 export * from './lib/localize-router.config';
 export * from './lib/localize-router-config-loader';
+export * from './lib/gilsdav-reuse-strategy';
