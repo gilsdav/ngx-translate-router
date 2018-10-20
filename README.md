@@ -39,18 +39,18 @@ npm install --save @gilsdav/ngx-translate-router
 
 ## Usage
 
-In order to use `ngx-translate-router` you must initialize it with following information:
+In order to use `@gilsdav/ngx-translate-router` you must initialize it with following information:
 * Available languages/locales
 * Prefix for route segment translations
 * Routes to be translated
 
 ### Initialize module
 `import {LocalizeRouterModule} from '@gilsdav/ngx-translate-router';`
-<!-- Module can be initialized either using static file or manually by passing necessary values.
+Module can be initialized either using static file or manually by passing necessary values.
 
 #### Http loader
 
-In order to use Http loader for config files, you must include `localize-router-http-loader` package and use its `LocalizeRouterHttpLoader`. 
+In order to use Http loader for config files, you must include `@gilsdav/ngx-translate-router-http-loader` package and use its `LocalizeRouterHttpLoader`. 
 
 ```ts
 import {BrowserModule} from "@angular/platform-browser";
@@ -59,7 +59,7 @@ import {Location} from '@angular/common';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
 import {TranslateModule} from '@ngx-translate/core';
 import {LocalizeRouterModule} from '@gilsdav/ngx-translate-router';
-import {LocalizeRouterHttpLoader} from 'localize-router-http-loader';
+import {LocalizeRouterHttpLoader} from '@gilsdav/ngx-translate-router-http-loader';
 import {RouterModule} from '@angular/router';
 
 import {routes} from './app.routes';
@@ -84,7 +84,7 @@ import {routes} from './app.routes';
 export class AppModule { }
 ```
 
-More details are available on [localize-router-http-loader](https://github.com/Greentube/localize-router-http-loader). -->
+More details are available on [localize-router-http-loader](https://github.com/Greentube/localize-router-http-loader).
 
 If you are using child modules or routes you need to initialize them with `forChild` command:
 ```ts
