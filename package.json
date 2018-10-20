@@ -4,17 +4,19 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod ngx-translate-router",
+    "build": "npm run build:main && npm run build:http-loader",
+    "build:main": "ng build --prod ngx-translate-router",
+    "build:http-loader": "ng build --prod ngx-translate-router-http-loader",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^6.0.2",
     "@angular/common": "^6.0.2",
-    "@angular/compiler": "^6.0.2",
     "@angular/core": "^6.0.2",
+    "@angular/compiler": "^6.0.2",
+    "@angular/animations": "^6.0.2",
     "@angular/forms": "^6.0.2",
     "@angular/http": "^6.0.2",
     "@angular/platform-browser": "^6.0.2",
