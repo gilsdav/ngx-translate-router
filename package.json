@@ -36,7 +36,7 @@
     "tsickle": ">=0.25.5",
     "tslib": "^1.7.1",
     "typescript": "~2.7.2",
-    "@angular/cli": "~6.0.3",
+    "@angular/cli": "~8.0.1",
     "@angular/language-service": "^6.0.2",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",

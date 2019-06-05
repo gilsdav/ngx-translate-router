@@ -6,6 +6,13 @@
 
 Based on and extension of [ngx-translate](https://github.com/ngx-translate/core).
 
+**Version to choose :**
+| version | angular version |
+| ------- | --------------- |
+| 1.0.2   | 6 - 7           |
+| 1.0.3   | 8               |
+
+
 Demo project can be found under sub folder `src`.
 
 > This documentation is for version 1.x.x which requires Angular 6+. If you are migrating from the older version follow [migration guide](https://github.com/Greentube/localize-router/blob/master/MIGRATION_GUIDE.md) to upgrade to latest version.
