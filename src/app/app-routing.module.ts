@@ -5,7 +5,10 @@ import { HttpClient } from '@angular/common/http';
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { LocalizeRouterModule, LocalizeParser, ManualParserLoader, LocalizeRouterSettings } from '@gilsdav/ngx-translate-router';
+import {
+  LocalizeRouterModule, LocalizeParser, ManualParserLoader,
+  LocalizeRouterSettings, translateModule
+} from '@gilsdav/ngx-translate-router';
 import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loader';
 
 import { HomeComponent } from './home/home.component';
@@ -22,11 +25,13 @@ export function HttpLoaderFactory(translate: TranslateService, location: Locatio
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
-    { path: 'test', component: HomeComponent, loadChildren: './test/test.module#TestModule' },
+    // { path: 'test', component: HomeComponent, loadChildren: './test/test.module#TestModule' },
+    { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => translateModule(mod.TestModule)) },
+
     { path: 'bob', children: [
         { path: 'home/:test', component: HomeComponent }
     ] },
-    { path: '**', redirectTo: '/home' }
+    // { path: '**', redirectTo: '/home' }
 ];
 
 @NgModule({
