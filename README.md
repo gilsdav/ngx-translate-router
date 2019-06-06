@@ -327,5 +327,9 @@ language across the application.
 - `translateRoute(path: string): string`: Translates single path
 - `getLocationLang(url?: string): string`: Extracts language from current url if matching defined locales
 
+### LocalizeConfigLoader
+#### Methods:
+- `translateModule(moduleType: Type<any>)`: *(version >= 2.0.0)* Translate routes for lazy-loaded modules using `LoadChildrenCallback` syntax (exemple: `loadChildren: () => import('./test/test.module').then(mod => translateModule(mod.TestModule))`)
+
 ## License
 Licensed under MIT

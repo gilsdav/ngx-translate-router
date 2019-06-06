@@ -45,7 +45,7 @@ export class LocalizeRouterConfigLoader extends SystemJsNgModuleLoader {
   }
 }
 
-export class MyNgModuleFactory extends NgModuleFactory<any> {
+export class LocalizeNgModuleFactory extends NgModuleFactory<any> {
   constructor(public moduleType: Type<any>) {
     super();
   }
@@ -71,5 +71,5 @@ export class MyNgModuleFactory extends NgModuleFactory<any> {
 }
 
 export function translateModule(moduleType: Type<any>) {
-  return new MyNgModuleFactory(moduleType);
+  return new LocalizeNgModuleFactory(moduleType);
 }
