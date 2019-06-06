@@ -177,6 +177,8 @@ export class LocalizeRouterService {
       if (currentLang !== previousLang) {
         this.parser.translateRoutes(currentLang).subscribe(() => {
           this.router.resetConfig(this.parser.routes);
+          // Init new navigation with same url to take new congif in consideration
+          this.router.navigateByUrl(currentEvent.url, { replaceUrl: true });
           // Fire route change event
           this.routerEvents.next(currentLang);
         });
