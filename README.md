@@ -11,7 +11,7 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 | version | angular version |
 | ------- | --------------- |
 | 1.0.2   | 6 - 7           |
-| 1.0.3   | 8               |
+| 2.0.0   | 8               |
 
 
 Demo project can be found under sub folder `src`.
