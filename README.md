@@ -7,6 +7,7 @@
 Based on and extension of [ngx-translate](https://github.com/ngx-translate/core).
 
 **Version to choose :**
+
 | version | angular version |
 | ------- | --------------- |
 | 1.0.2   | 6 - 7           |
