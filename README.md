@@ -329,7 +329,7 @@ language across the application.
 
 ### LocalizeConfigLoader
 #### Methods:
-- `translateModule(moduleType: Type<any>)`: *(version >= 2.0.0)* Translate routes for lazy-loaded modules using `LoadChildrenCallback` syntax (exemple: `loadChildren: () => import('./test/test.module').then(mod => translateModule(mod.TestModule))`)
+- `translateModule(moduleType: Type<any>)`: *(version >= 2.0.0)* Translate routes for lazy-loaded modules using `LoadChildrenCallback` syntax (example: `loadChildren: () => import('./test/test.module').then(mod => translateModule(mod.TestModule))`)
 
 ## License
 Licensed under MIT
