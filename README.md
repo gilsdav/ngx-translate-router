@@ -11,7 +11,7 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 | version | angular version |
 | ------- | --------------- |
 | 1.0.2   | 6 - 7           |
-| 2.0.0   | 8               |
+| 2.0.1   | 8               |
 
 
 Demo project can be found under sub folder `src`.
@@ -77,6 +77,7 @@ import {routes} from './app.routes';
     BrowserModule,
     HttpClientModule,
     TranslateModule.forRoot(),
+    RouterModule.forRoot(routes),
     LocalizeRouterModule.forRoot(routes, {
       parser: {
         provide: LocalizeParser,
@@ -84,8 +85,7 @@ import {routes} from './app.routes';
             new LocalizeRouterHttpLoader(translate, location, settings, http),
         deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
       }
-    }),
-    RouterModule.forRoot(routes)
+    })
   ],
   bootstrap: [AppComponent]
 })
@@ -99,8 +99,8 @@ If you are using child modules or routes you need to initialize them with `forCh
 @NgModule({
   imports: [
     TranslateModule,
-    LocalizeRouterModule.forChild(routes),
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    LocalizeRouterModule.forChild(routes)
   ],
   declarations: [ChildComponent]
 })
@@ -326,10 +326,6 @@ yoursite.com/en/users/John%20Doe/profile -> yoursite.com/de/benutzer/John%20Doe/
 language across the application.
 - `translateRoute(path: string): string`: Translates single path
 - `getLocationLang(url?: string): string`: Extracts language from current url if matching defined locales
-
-### LocalizeConfigLoader
-#### Methods:
-- `translateModule(moduleType: Type<any>)`: *(version >= 2.0.0)* Translate routes for lazy-loaded modules using `LoadChildrenCallback` syntax (example: `loadChildren: () => import('./test/test.module').then(mod => translateModule(mod.TestModule))`)
 
 ## License
 Licensed under MIT
