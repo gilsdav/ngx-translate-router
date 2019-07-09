@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import {
   LocalizeRouterModule, LocalizeParser, ManualParserLoader,
-  LocalizeRouterSettings, translateModule
+  LocalizeRouterSettings
 } from '@gilsdav/ngx-translate-router';
 import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loader';
 
@@ -26,7 +26,7 @@ export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     // { path: 'test', component: HomeComponent, loadChildren: './test/test.module#TestModule' },
-    { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => translateModule(mod.TestModule)) },
+    { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
 
     { path: 'bob', children: [
         { path: 'home/:test', component: HomeComponent }
@@ -53,3 +53,5 @@ export const routes: Routes = [
     exports: [RouterModule, LocalizeRouterModule]
 })
 export class AppRoutingModule { }
+
+
