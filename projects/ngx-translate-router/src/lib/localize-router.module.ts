@@ -1,21 +1,24 @@
 import {
   NgModule, ModuleWithProviders, APP_INITIALIZER, Optional, SkipSelf,
-  Injectable, Injector, NgModuleFactoryLoader
+  Injectable, Injector, NgModuleFactoryLoader, ApplicationRef, Compiler
 } from '@angular/core';
 import { LocalizeRouterService } from './localize-router.service';
 import { DummyLocalizeParser, LocalizeParser } from './localize-router.parser';
-import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
+import { RouterModule, Routes, RouteReuseStrategy, Router, UrlSerializer, ChildrenOutletContexts,
+  ROUTES, ROUTER_CONFIGURATION, UrlHandlingStrategy } from '@angular/router';
 import { LocalizeRouterPipe } from './localize-router.pipe';
 import { TranslateModule } from '@ngx-translate/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import {
   ALWAYS_SET_PREFIX,
-  CACHE_MECHANISM, CACHE_NAME, DEFAULT_LANG_FUNCTION, LOCALIZE_ROUTER_FORROOT_GUARD, LocalizeRouterConfig, LocalizeRouterSettings,
+  CACHE_MECHANISM, CACHE_NAME, DEFAULT_LANG_FUNCTION, LOCALIZE_ROUTER_FORROOT_GUARD,
+  LocalizeRouterConfig, LocalizeRouterSettings,
   RAW_ROUTES,
   USE_CACHED_LANG
 } from './localize-router.config';
-import { LocalizeRouterConfigLoader } from './localize-router-config-loader';
+// import { LocalizeRouterConfigLoader } from './localize-router-config-loader';
 import { GilsdavReuseStrategy } from './gilsdav-reuse-strategy';
+import { setupRouter } from './localized-router';
 
 @Injectable()
 export class ParserInitializer {
@@ -61,6 +64,15 @@ export class LocalizeRouterModule {
       ngModule: LocalizeRouterModule,
       providers: [
         {
+          provide: Router,
+          useFactory: setupRouter,
+          deps: [
+            ApplicationRef, UrlSerializer, ChildrenOutletContexts, Location, Injector,
+            NgModuleFactoryLoader, Compiler, ROUTES, LocalizeParser, ROUTER_CONFIGURATION,
+            [UrlHandlingStrategy, new Optional()], [RouteReuseStrategy, new Optional()]
+          ]
+        },
+        {
           provide: LOCALIZE_ROUTER_FORROOT_GUARD,
           useFactory: provideForRootGuard,
           deps: [[LocalizeRouterModule, new Optional(), new SkipSelf()]]
@@ -79,7 +91,7 @@ export class LocalizeRouterModule {
         },
         LocalizeRouterService,
         ParserInitializer,
-        { provide: NgModuleFactoryLoader, useClass: LocalizeRouterConfigLoader },
+        // { provide: NgModuleFactoryLoader, useClass: LocalizeRouterConfigLoader },
         {
           provide: APP_INITIALIZER,
           multi: true,
