@@ -77,6 +77,9 @@ export class LocalizeRouterService {
           url = urlSegments.join('/');
         }
 
+        // Prevent multiple "/" character
+        url = url.replace(/\/+/g, '/');
+
         const lastSlashIndex = url.lastIndexOf('/');
         if (lastSlashIndex > 0 && lastSlashIndex === url.length - 1) {
           url = url.slice(0, -1);
