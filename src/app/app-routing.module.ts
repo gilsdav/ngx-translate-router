@@ -19,11 +19,12 @@ import { HomeComponent } from './home/home.component';
 // }
 
 export function HttpLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings, http: HttpClient) {
-  return new LocalizeRouterHttpLoader(translate, location, settings, http);
+  return new LocalizeRouterHttpLoader(translate, location, {...settings, alwaysSetPrefix: true}, http);
 }
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    // { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: '', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
     { path: 'home', component: HomeComponent },
     // { path: 'test', component: HomeComponent, loadChildren: './test/test.module#TestModule' },
     { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
