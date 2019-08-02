@@ -23,16 +23,13 @@ export function HttpLoaderFactory(translate: TranslateService, location: Locatio
 }
 
 export const routes: Routes = [
-    // { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: '', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
+    { path: '', loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
     { path: 'home', component: HomeComponent },
-    // { path: 'test', component: HomeComponent, loadChildren: './test/test.module#TestModule' },
-    { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
+    { path: 'test', loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
 
     { path: 'bob', children: [
         { path: 'home/:test', component: HomeComponent }
     ] },
-    // { path: '**', redirectTo: '/home' }
 ];
 
 @NgModule({

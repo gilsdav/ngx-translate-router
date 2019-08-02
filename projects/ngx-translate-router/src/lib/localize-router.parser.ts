@@ -52,6 +52,17 @@ export abstract class LocalizeParser {
     });
   } */
 
+  mutateRouterRootRoute(currentLanguage: string, previousLanguage: string, routes: Routes) {
+    const previousTranslatedLanguage = this.settings.alwaysSetPrefix || previousLanguage !== this.defaultLang ?
+      previousLanguage : '';
+    const currentTranslatedLanguage = this.settings.alwaysSetPrefix || currentLanguage !== this.defaultLang ?
+      currentLanguage : '';
+    const baseRoute = routes.find(route => route.path === previousTranslatedLanguage);
+    if (baseRoute) {
+      baseRoute.path = currentTranslatedLanguage;
+    }
+  }
+
 
   /**
    * Initialize language and routes
