@@ -12,7 +12,10 @@ export class AppComponent implements OnInit {
     constructor(private localize: LocalizeRouterService) { }
 
     ngOnInit() {
-        // this.routerService.changeLanguage('fr');
+      // should be triggered on every language change
+      this.localize.routerEvents.subscribe((language: string) => {
+        console.log(language);
+      });
     }
 
     public routerOutletActivation(active: boolean) {

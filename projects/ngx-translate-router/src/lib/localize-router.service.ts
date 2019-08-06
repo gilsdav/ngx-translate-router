@@ -2,7 +2,7 @@ import { Inject } from '@angular/core';
 // import { Location } from '@angular/common';
 import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { filter, pairwise } from 'rxjs/operators';
+import {filter, pairwise, tap} from 'rxjs/operators';
 
 import { LocalizeParser } from './localize-router.parser';
 import { LocalizeRouterSettings } from './localize-router.config';
@@ -175,16 +175,21 @@ export class LocalizeRouterService {
    */
   private _routeChanged(): (eventPair: [NavigationStart, NavigationStart]) => void {
     return ([previousEvent, currentEvent]: [NavigationStart, NavigationStart]) => {
-      const previousLang = this.parser.currentLang; // this.parser.getLocationLang(previousEvent.url) || this.parser.defaultLang;
+      const previousLang = this.parser.getLocationLang(previousEvent.url) || this.parser.defaultLang;
       const currentLang = this.parser.getLocationLang(currentEvent.url) || this.parser.defaultLang;
+
       if (currentLang !== previousLang) {
-        this.parser.translateRoutes(currentLang).subscribe(() => {
-          this.router.resetConfig(this.parser.routes);
-          // Init new navigation with same url to take new congif in consideration
-          this.router.navigateByUrl(currentEvent.url, { replaceUrl: true });
-          // Fire route change event
-          this.routerEvents.next(currentLang);
-        });
+        // mutate router config directly to avoid getting out of sync
+        this.parser.mutateRouterRootRoute(currentLang, previousLang, this.router.config);
+        this.parser.translateRoutes(currentLang)
+          .pipe(
+            // reset routes again once they are all translated
+            tap(() => this.router.resetConfig(this.parser.routes))
+          )
+          .subscribe(() => {
+            // Fire route change event
+            this.routerEvents.next(currentLang);
+          });
       }
     };
   }
