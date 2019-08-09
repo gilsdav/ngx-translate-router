@@ -9,7 +9,7 @@
     "url": "https://github.com/gilsdav"
   },
   "peerDependencies": {
-    "@gilsdav/ngx-translate-router": "^1.0.3",
+    "@gilsdav/ngx-translate-router": ">=1.0.1",
     "@angular/common": "^8.0.0",
     "@angular/core": "^8.0.0",
     "@angular/router": "^8.0.0",
