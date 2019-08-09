@@ -184,8 +184,6 @@ export class LocalizeRouterService {
 
       if (currentLang !== actualLang) {
         this.latestUrl = currentEvent.url;
-        // mutate router config directly to avoid getting out of sync
-        // this.parser.mutateRouterRootRoute(currentLang, previousLang, this.router.config);
         this.cancelNavigation(currentEvent);
         this.parser.translateRoutes(currentLang)
           .pipe(
