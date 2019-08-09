@@ -1,6 +1,7 @@
 import { Inject } from '@angular/core';
 // import { Location } from '@angular/common';
-import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute } from '@angular/router';
+import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
+  Event, NavigationCancel, RouterEvent } from '@angular/router';
 import { Subject } from 'rxjs';
 import {filter, pairwise, tap} from 'rxjs/operators';
 
@@ -13,6 +14,8 @@ import { LocalizeRouterSettings } from './localize-router.config';
  */
 export class LocalizeRouterService {
   routerEvents: Subject<string>;
+
+  private latestUrl: string;
 
   /**
    * CTOR
@@ -175,22 +178,42 @@ export class LocalizeRouterService {
    */
   private _routeChanged(): (eventPair: [NavigationStart, NavigationStart]) => void {
     return ([previousEvent, currentEvent]: [NavigationStart, NavigationStart]) => {
+      const actualLang = this.parser.currentLang;
       const previousLang = this.parser.getLocationLang(previousEvent.url) || this.parser.defaultLang;
       const currentLang = this.parser.getLocationLang(currentEvent.url) || this.parser.defaultLang;
 
-      if (currentLang !== previousLang) {
+      if (currentLang !== actualLang) {
+        this.latestUrl = currentEvent.url;
         // mutate router config directly to avoid getting out of sync
-        this.parser.mutateRouterRootRoute(currentLang, previousLang, this.router.config);
+        // this.parser.mutateRouterRootRoute(currentLang, previousLang, this.router.config);
+        this.cancelNavigation(currentEvent);
         this.parser.translateRoutes(currentLang)
           .pipe(
-            // reset routes again once they are all translated
-            tap(() => this.router.resetConfig(this.parser.routes))
+            tap(() => {
+              // reset routes again once they are all translated
+              this.router.resetConfig(this.parser.routes);
+              // init new navigation with same url to take new congif in consideration
+              this.router.navigateByUrl(currentEvent.url, { replaceUrl: true });
+            })
           )
           .subscribe(() => {
             // Fire route change event
-            this.routerEvents.next(currentLang);
+            if (currentLang !== previousLang) {
+              this.routerEvents.next(currentLang);
+            }
           });
+      } else if (currentEvent.url !== this.latestUrl) {
+        this.latestUrl = currentEvent.url;
+        if (currentLang !== previousLang) {
+          this.routerEvents.next(currentLang);
+        }
       }
     };
   }
+
+  private cancelNavigation(navigation: RouterEvent) {
+    (this.router.events as Subject<Event>).next(new NavigationCancel(navigation.id, navigation.url, ''));
+    (this.router as any).transitions.next({...(this.router as any).transitions.getValue(), id: 0});
+  }
+
 }
