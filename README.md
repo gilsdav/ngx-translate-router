@@ -8,10 +8,10 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 
 **Version to choose :**
 
-| version | angular version |
-| ------- | --------------- |
-| 1.0.2   | 6 - 7           |
-| 2.0.2   | 8               |
+| angular version | translate-router | http-loader |
+| --------------- | ---------------- | ----------- |
+| 6 - 7           | 1.0.2            | 1.0.1       |
+| 8               | 2.0.2            | 1.0.2       |
 
 
 Demo project can be found under sub folder `src`.

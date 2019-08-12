@@ -1,8 +1,9 @@
 import { Inject } from '@angular/core';
 // import { Location } from '@angular/common';
-import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute } from '@angular/router';
+import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
+  Event, NavigationCancel } from '@angular/router';
 import { Subject } from 'rxjs';
-import {filter, pairwise, tap} from 'rxjs/operators';
+import { filter, pairwise } from 'rxjs/operators';
 
 import { LocalizeParser } from './localize-router.parser';
 import { LocalizeRouterSettings } from './localize-router.config';
@@ -13,6 +14,8 @@ import { LocalizeRouterSettings } from './localize-router.config';
  */
 export class LocalizeRouterService {
   routerEvents: Subject<string>;
+
+  private latestUrl: string;
 
   /**
    * CTOR
@@ -85,16 +88,20 @@ export class LocalizeRouterService {
           url = url.slice(0, -1);
         }
 
+        const queryParamsObj = this.parser.chooseQueryParams(extras, this.route.snapshot.queryParams);
+
         this.router.resetConfig(this.parser.routes);
+
         if (useNavigateMethod) {
-          this.router.navigate([url], extras);
+          const extrasToApply: NavigationExtras = extras ? {...extras} : {};
+          if (queryParamsObj) {
+            extrasToApply.queryParams = queryParamsObj;
+          }
+          this.router.navigate([url], extrasToApply);
         } else {
-          // if (!extras) {
-          //   this.location.replaceState(url); // go(url)
-          // } else {
-          //   this.router.navigateByUrl(url, extras);
-          // }
-          this.router.navigateByUrl(url, extras);
+          let queryParams = this.parser.formatQueryParams(queryParamsObj);
+          queryParams = queryParams ? `?${queryParams}` : '';
+          this.router.navigateByUrl(`${url}${queryParams}`, extras);
         }
       });
     }
@@ -178,19 +185,31 @@ export class LocalizeRouterService {
       const previousLang = this.parser.getLocationLang(previousEvent.url) || this.parser.defaultLang;
       const currentLang = this.parser.getLocationLang(currentEvent.url) || this.parser.defaultLang;
 
-      if (currentLang !== previousLang) {
-        // mutate router config directly to avoid getting out of sync
-        this.parser.mutateRouterRootRoute(currentLang, previousLang, this.router.config);
+      if (currentLang !== previousLang && this.latestUrl !== currentEvent.url) {
+        this.latestUrl = currentEvent.url;
+        this.cancelCurrentNavigation();
         this.parser.translateRoutes(currentLang)
-          .pipe(
-            // reset routes again once they are all translated
-            tap(() => this.router.resetConfig(this.parser.routes))
-          )
           .subscribe(() => {
+            // Reset routes again once they are all translated
+            this.router.resetConfig(this.parser.routes);
+            // Init new navigation with same url to take new congif in consideration
+            this.router.navigateByUrl(currentEvent.url);
             // Fire route change event
             this.routerEvents.next(currentLang);
           });
       }
+      this.latestUrl = currentEvent.url;
     };
   }
+
+  /**
+   * Drop the current Navigation
+   */
+  private cancelCurrentNavigation() {
+    const currentNavigation = this.router.getCurrentNavigation();
+    const url = this.router.serializeUrl(currentNavigation.extractedUrl);
+    (this.router.events as Subject<Event>).next(new NavigationCancel(currentNavigation.id, url, ''));
+    (this.router as any).transitions.next({...(this.router as any).transitions.getValue(), id: 0});
+  }
+
 }
