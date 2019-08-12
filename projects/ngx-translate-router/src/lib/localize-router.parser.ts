@@ -108,7 +108,7 @@ export abstract class LocalizeParser {
     for (let i = children.length - 1; i >= 0; i--) {
       if (children[i].data && children[i].data['skipRouteLocalization']) {
         if (children[i].data['skipRouteLocalization']['localizeRedirectTo'] && children[i].redirectTo !== undefined) {
-          this._translateProperty(children[i], 'redirectTo', true);
+          this._translateProperty(children[i], 'redirectTo', !children[i].redirectTo.indexOf('/'));
         }
         if (this.settings.alwaysSetPrefix) {
           // add directly to routes
