@@ -343,12 +343,12 @@ export abstract class LocalizeParser {
    * Get translated value
    */
   private translateText(key: string): string {
-    if (!this._translationObject) {
-      return key;
-    }
     if (this.escapePrefix && key.startsWith(this.escapePrefix)) {
       return key.replace(this.escapePrefix, '');
     } else {
+      if (!this._translationObject) {
+        return key;
+      }
       const fullKey = this.prefix + key;
       const res = this.translate.getParsedResult(this._translationObject, fullKey);
       return res !== fullKey ? res : key;
