@@ -1,4 +1,4 @@
-import { Routes, Route } from '@angular/router';
+import { Routes, Route, NavigationExtras, Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, Observer } from 'rxjs';
 import { Location } from '@angular/common';
@@ -334,6 +334,30 @@ export abstract class LocalizeParser {
     const fullKey = this.prefix + key;
     const res = this.translate.getParsedResult(this._translationObject, fullKey);
     return res !== fullKey ? res : key;
+  }
+
+  /**
+   * Strategy to choose between new or old queryParams
+   * @param newExtras extras that containes new QueryParams
+   * @param currentQueryParams current query params
+   */
+  public chooseQueryParams(newExtras: NavigationExtras, currentQueryParams: Params) {
+    let queryParamsObj: Params;
+    if (newExtras && newExtras.queryParams) {
+      queryParamsObj = newExtras.queryParams;
+    } else if (currentQueryParams) {
+      queryParamsObj = currentQueryParams;
+    }
+    return queryParamsObj;
+  }
+
+  /**
+   * Format query params from object to string.
+   * Exemple of result: `param=value&param2=value2`
+   * @param params query params object
+   */
+  public formatQueryParams(params: Params): string {
+    return Object.keys(params).map(key => key + '=' + params[key]).join('&');
   }
 }
 
