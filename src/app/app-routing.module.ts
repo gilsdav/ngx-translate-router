@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
-  LocalizeRouterModule, LocalizeParser, ManualParserLoader,
+  LocalizeRouterModule, LocalizeParser, ManualParserLoader, CacheMechanism,
   LocalizeRouterSettings
 } from '@gilsdav/ngx-translate-router';
 import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loader';
@@ -48,7 +48,9 @@ export const routes: Routes = [
               provide: LocalizeParser,
               useFactory: HttpLoaderFactory,
               deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
-            }
+            },
+            cacheMechanism: CacheMechanism.Cookie,
+            cacheUseGlobalPath: true
         })
     ],
     exports: [RouterModule, LocalizeRouterModule]

@@ -303,7 +303,11 @@ export abstract class LocalizeParser {
       if (value) {
         const d: Date = new Date();
         d.setTime(d.getTime() + COOKIE_EXPIRY * 86400000); // * days
-        document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()}`;
+        if (this.settings.cacheUseGlobalPath) {
+          document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
+        } else {
+          document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()}`;
+        }
         return;
       }
       const regexp = new RegExp('(?:^' + name + '|;\\s*' + name + ')=(.*?)(?:;|$)', 'g');

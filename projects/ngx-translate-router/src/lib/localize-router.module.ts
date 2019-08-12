@@ -14,7 +14,8 @@ import {
   CACHE_MECHANISM, CACHE_NAME, DEFAULT_LANG_FUNCTION, LOCALIZE_ROUTER_FORROOT_GUARD,
   LocalizeRouterConfig, LocalizeRouterSettings,
   RAW_ROUTES,
-  USE_CACHED_LANG
+  USE_CACHED_LANG,
+  CACHE_USE_GLOBAL_PATH
 } from './localize-router.config';
 // import { LocalizeRouterConfigLoader } from './localize-router-config-loader';
 import { GilsdavReuseStrategy } from './gilsdav-reuse-strategy';
@@ -82,6 +83,7 @@ export class LocalizeRouterModule {
         { provide: CACHE_NAME, useValue: config.cacheName },
         { provide: CACHE_MECHANISM, useValue: config.cacheMechanism },
         { provide: DEFAULT_LANG_FUNCTION, useValue: config.defaultLangFunction },
+        { provide: CACHE_USE_GLOBAL_PATH, useValue: config.cacheUseGlobalPath },
         LocalizeRouterSettings,
         config.parser || { provide: LocalizeParser, useClass: DummyLocalizeParser },
         {

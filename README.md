@@ -287,6 +287,7 @@ export function localizeLoaderFactory(translate: TranslateService, location: Loc
   When value is `false`, prefix will not be used for for default language (this includes the situation when there is only one language).
 - `cacheMechanism`: CacheMechanism.LocalStorage || CacheMechanism.Cookie. Default value is `CacheMechanism.LocalStorage`.
 - `cacheName`: string. Name of cookie/local store. Default value is `LOCALIZE_DEFAULT_LANGUAGE`.
+- `cacheUseGlobalPath`: boolean. When value is `true`, the cookie path will be globally set to `/`. Default value is `false`.
 - `defaultLangFunction`: (languages: string[], cachedLang?: string, browserLang?: string) => string. Override method for custom logic for picking default language, when no language is provided via url. Default value is `undefined`.
 ### LocalizeRouterService
 #### Properties:

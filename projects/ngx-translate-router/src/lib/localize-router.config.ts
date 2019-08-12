@@ -37,6 +37,10 @@ export const CACHE_MECHANISM = new InjectionToken<CacheMechanism>('CACHE_MECHANI
  * Cache name
  */
 export const CACHE_NAME = new InjectionToken<string>('CACHE_NAME');
+/**
+ * Cache use global path
+ */
+export const CACHE_USE_GLOBAL_PATH = new InjectionToken<boolean>('CACHE_USE_GLOBAL_PATH');
 
 /**
  * Type for default language function
@@ -64,6 +68,7 @@ export interface LocalizeRouterConfig {
   cacheName?: string;
   defaultLangFunction?: DefaultLanguageFunction;
   alwaysSetPrefix?: boolean;
+  cacheUseGlobalPath?: boolean;
 }
 
 const LOCALIZE_CACHE_NAME = 'LOCALIZE_DEFAULT_LANGUAGE';
@@ -77,7 +82,8 @@ export class LocalizeRouterSettings implements LocalizeRouterConfig {
     @Inject(ALWAYS_SET_PREFIX) public alwaysSetPrefix: boolean = true,
     @Inject(CACHE_MECHANISM) public cacheMechanism: CacheMechanism = CacheMechanism.LocalStorage,
     @Inject(CACHE_NAME) public cacheName: string = LOCALIZE_CACHE_NAME,
-    @Inject(DEFAULT_LANG_FUNCTION) public defaultLangFunction: DefaultLanguageFunction = void 0
+    @Inject(DEFAULT_LANG_FUNCTION) public defaultLangFunction: DefaultLanguageFunction = void 0,
+    @Inject(CACHE_USE_GLOBAL_PATH) public cacheUseGlobalPath: boolean = false
   ) {
   }
 }
