@@ -185,15 +185,18 @@ Working example can be found [here](https://github.com/meeroslav/universal-local
 
 `Localize router` intercepts Router initialization and translates each `path` and `redirectTo` path of Routes.
 The translation process is done with [ngx-translate](https://github.com/ngx-translate/core). In order to separate 
-router translations from normal application translations we use `prefix`. Default value for prefix is `ROUTES.`. Finally, in order to avoid accidentally translating a URL segment that should not be translated, you can optionally use `escapePrefix` so the prefix gets stripped and the segment doesn't get translated. Default `escapePrefix`is unset. 
+router translations from normal application translations we use `prefix`. Default value for prefix is `ROUTES.`. Finally, in order to avoid accidentally translating a URL segment that should not be translated, you can optionally use `escapePrefix` so the prefix gets stripped and the segment doesn't get translated. Default `escapePrefix` is unset. 
 
 ```
 'home' -> 'ROUTES.home'
 ```
 
-Example to escape the translation of the param with `escapePrefix: 'ESCAPE.'`
+Example to escape the translation of the segment with `escapePrefix: '!'`
 ```
-'ESCAPE.param' -> 'param'
+'!segment' -> 'segment'
+```
+```
+{ path: '!home/first' ... } -> '/fr/home/premier'
 ```
 
 Upon every route change `Localize router` kicks in to check if there was a change to language. Translated routes are prepended with two letter language code:
