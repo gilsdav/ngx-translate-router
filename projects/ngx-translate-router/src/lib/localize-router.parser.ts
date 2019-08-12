@@ -96,14 +96,13 @@ export abstract class LocalizeParser {
     /** exclude certain routes */
     for (let i = children.length - 1; i >= 0; i--) {
       if (children[i].data && children[i].data['skipRouteLocalization']) {
-        if (children[i].data['skipRouteLocalization']['localizeRedirectTo'] && children[i].redirectTo !== undefined) {
-          this._translateProperty(children[i], 'redirectTo', !children[i].redirectTo.indexOf('/'));
-        }
         if (this.settings.alwaysSetPrefix) {
           // add directly to routes
           this.routes.push(children[i]);
         }
-        children.splice(i, 1);
+        if (!(children[i].data['skipRouteLocalization']['localizeRedirectTo'] && children[i].redirectTo !== undefined)) {
+          children.splice(i, 1);
+        }
       }
     }
 
@@ -167,17 +166,23 @@ export abstract class LocalizeParser {
    */
   private _translateRouteTree(routes: Routes): void {
     routes.forEach((route: Route) => {
-      if (route.path !== null && route.path !== undefined/* && route.path !== '**'*/) {
-        this._translateProperty(route, 'path');
-      }
-      if (route.redirectTo) {
+      const skipRouteLocalization = (route.data && route.data['skipRouteLocalization']);
+      const localizeRedirection = !skipRouteLocalization || skipRouteLocalization['localizeRedirectTo'];
+
+      if (route.redirectTo && localizeRedirection) {
         this._translateProperty(route, 'redirectTo', !route.redirectTo.indexOf('/'));
       }
-      if (route.children) {
-        this._translateRouteTree(route.children);
-      }
-      if (route.loadChildren && (<any>route)._loadedConfig) {
-        this._translateRouteTree((<any>route)._loadedConfig.routes);
+
+      if (!skipRouteLocalization) {
+        if (route.path !== null && route.path !== undefined/* && route.path !== '**'*/) {
+          this._translateProperty(route, 'path');
+        }
+        if (route.children) {
+          this._translateRouteTree(route.children);
+        }
+        if (route.loadChildren && (<any>route)._loadedConfig) {
+          this._translateRouteTree((<any>route)._loadedConfig.routes);
+        }
       }
     });
   }
@@ -201,7 +206,11 @@ export abstract class LocalizeParser {
   }
 
   get urlPrefix() {
-    return this.settings.alwaysSetPrefix || this.currentLang !== this.defaultLang ? this.currentLang : '';
+    if (this.settings.alwaysSetPrefix || this.currentLang !== this.defaultLang) {
+      return this.currentLang ? this.currentLang : this.defaultLang;
+    } else {
+      return '';
+    }
   }
 
   /**
