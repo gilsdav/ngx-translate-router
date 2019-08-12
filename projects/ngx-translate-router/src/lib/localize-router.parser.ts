@@ -17,6 +17,7 @@ export abstract class LocalizeParser {
   defaultLang: string;
 
   protected prefix: string;
+  protected escapePrefix: string;
 
   private _translationObject: any;
   private _wildcardRoute: Route;
@@ -95,6 +96,9 @@ export abstract class LocalizeParser {
     /** exclude certain routes */
     for (let i = children.length - 1; i >= 0; i--) {
       if (children[i].data && children[i].data['skipRouteLocalization']) {
+        if (children[i].data['skipRouteLocalization']['localizeRedirectTo'] && children[i].redirectTo !== undefined) {
+          this._translateProperty(children[i], 'redirectTo', !children[i].redirectTo.indexOf('/'));
+        }
         if (this.settings.alwaysSetPrefix) {
           // add directly to routes
           this.routes.push(children[i]);
@@ -328,12 +332,16 @@ export abstract class LocalizeParser {
    * Get translated value
    */
   private translateText(key: string): string {
-    if (!this._translationObject) {
-      return key;
+    if (this.escapePrefix && key.startsWith(this.escapePrefix)) {
+      return key.replace(this.escapePrefix, '');
+    } else {
+      if (!this._translationObject) {
+        return key;
+      }
+      const fullKey = this.prefix + key;
+      const res = this.translate.getParsedResult(this._translationObject, fullKey);
+      return res !== fullKey ? res : key;
     }
-    const fullKey = this.prefix + key;
-    const res = this.translate.getParsedResult(this._translationObject, fullKey);
-    return res !== fullKey ? res : key;
   }
 
   /**
@@ -370,10 +378,11 @@ export class ManualParserLoader extends LocalizeParser {
    * CTOR
    */
   constructor(translate: TranslateService, location: Location, settings: LocalizeRouterSettings,
-    locales: string[] = ['en'], prefix: string = 'ROUTES.') {
+    locales: string[] = ['en'], prefix: string = 'ROUTES.', escapePrefix: string = '') {
     super(translate, location, settings);
     this.locales = locales;
     this.prefix = prefix || '';
+    this.escapePrefix = escapePrefix || '';
   }
 
   /**

@@ -1,4 +1,5 @@
 {
   "locales": ["en", "fr"],
-  "prefix": "ROUTES."
+  "prefix": "ROUTES.",
+  "escapePrefix": "IGNORE."
 }
