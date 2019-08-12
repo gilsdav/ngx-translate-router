@@ -30,6 +30,8 @@ export const routes: Routes = [
     { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
     { path: '!test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
 
+    { path: 'toredirect', redirectTo: '/home', data: { skipRouteLocalization: { localizeRedirectTo: true } }},
+
     { path: 'bob', children: [
         { path: 'home/:test', component: HomeComponent }
     ] },
