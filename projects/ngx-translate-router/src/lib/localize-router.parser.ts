@@ -17,6 +17,7 @@ export abstract class LocalizeParser {
   defaultLang: string;
 
   protected prefix: string;
+  protected escapePrefix: string;
 
   private _translationObject: any;
   private _wildcardRoute: Route;
@@ -342,9 +343,13 @@ export abstract class LocalizeParser {
     if (!this._translationObject) {
       return key;
     }
-    const fullKey = this.prefix + key;
-    const res = this.translate.getParsedResult(this._translationObject, fullKey);
-    return res !== fullKey ? res : key;
+    if (this.escapePrefix && key.startsWith(this.escapePrefix)) {
+      return key.replace(this.escapePrefix, '');
+    } else {
+      const fullKey = this.prefix + key;
+      const res = this.translate.getParsedResult(this._translationObject, fullKey);
+      return res !== fullKey ? res : key;
+    }
   }
 }
 
@@ -357,10 +362,11 @@ export class ManualParserLoader extends LocalizeParser {
    * CTOR
    */
   constructor(translate: TranslateService, location: Location, settings: LocalizeRouterSettings,
-    locales: string[] = ['en'], prefix: string = 'ROUTES.') {
+    locales: string[] = ['en'], prefix: string = 'ROUTES.', escapePrefix: string = '') {
     super(translate, location, settings);
     this.locales = locales;
     this.prefix = prefix || '';
+    this.escapePrefix = escapePrefix || '';
   }
 
   /**
