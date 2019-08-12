@@ -214,12 +214,16 @@ Make sure you therefore place most common language (e.g. 'en') as a first string
 
 Sometimes you might have a need to have certain routes excluded from the localization process e.g. login page, registration page etc. This is possible by setting flag `skipRouteLocalization` on route's data object.
 
+In case you want to redirect to an url when skipRouteLocalization is activated, you can also provide config option `localizeRedirectTo` to skip route localization but localize redirect to. Otherwise, route and redirectTo will not be translated.
+
 ```ts
 let routes = [
   // this route gets localized
   { path: 'home', component: HomeComponent },
   // this route will not be localized
   { path: 'login', component: LoginComponent, data: { skipRouteLocalization: true } }
+    // this route will not be localized, but redirect to will do
+  { path: 'logout', redirectTo: 'login', data: { skipRouteLocalization: { localizeRedirectTo: true } } }
 ];
 ```
 
