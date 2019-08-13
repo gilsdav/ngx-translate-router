@@ -38,7 +38,7 @@ export const CACHE_MECHANISM = new InjectionToken<CacheMechanism>('CACHE_MECHANI
  */
 export const CACHE_NAME = new InjectionToken<string>('CACHE_NAME');
 /**
- * Cache use global path
+ * Cookie cache format
  */
 export const COOKIE_FORMAT = new InjectionToken<boolean>('COOKIE_FORMAT');
 
