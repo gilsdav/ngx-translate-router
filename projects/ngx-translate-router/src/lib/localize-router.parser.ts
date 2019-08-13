@@ -315,7 +315,7 @@ export abstract class LocalizeParser {
     try {
       const name = encodeURIComponent(this.settings.cacheName);
       if (value) {
-        let cookieTemplate = this.settings.cookieFormat;
+        let cookieTemplate = `${this.settings.cookieFormat}`;
         const d: Date = new Date();
 
         d.setTime(d.getTime() + COOKIE_EXPIRY * 86400000); // * days
