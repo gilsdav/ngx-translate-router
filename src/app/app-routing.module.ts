@@ -15,7 +15,7 @@ import { HomeComponent } from './home/home.component';
 
 
 // export function ManualLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings) {
-//     return new ManualParserLoader(translate, location, settings, ['en', 'fr'], 'ROUTES.');
+//     return new ManualParserLoader(translate, location, settings, ['en', 'fr'], 'ROUTES.', '!');
 // }
 
 export function HttpLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings, http: HttpClient) {
@@ -28,6 +28,9 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     // { path: 'test', component: HomeComponent, loadChildren: './test/test.module#TestModule' },
     { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
+    { path: '!test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
+
+    { path: 'toredirect', redirectTo: '/home', data: { skipRouteLocalization: { localizeRedirectTo: true } }},
 
     { path: 'bob', children: [
         { path: 'home/:test', component: HomeComponent }

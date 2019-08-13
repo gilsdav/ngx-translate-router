@@ -2,7 +2,8 @@
   {{'TITLE' | translate}}
 </p>
 
-<a [routerLink]="['/test', 'bob'] | localize">test</a>
+<p><a [routerLink]="['/test', 'bob'] | localize">test</a></p>
+<p><a [routerLink]="['/!test', 'bob'] | localize">test2</a></p>
 
 <button (click)="switchLang()">change</button>
 
