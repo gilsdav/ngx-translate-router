@@ -37,6 +37,10 @@ export const CACHE_MECHANISM = new InjectionToken<CacheMechanism>('CACHE_MECHANI
  * Cache name
  */
 export const CACHE_NAME = new InjectionToken<string>('CACHE_NAME');
+/**
+ * Cookie cache format
+ */
+export const COOKIE_FORMAT = new InjectionToken<boolean>('COOKIE_FORMAT');
 
 /**
  * Type for default language function
@@ -64,9 +68,11 @@ export interface LocalizeRouterConfig {
   cacheName?: string;
   defaultLangFunction?: DefaultLanguageFunction;
   alwaysSetPrefix?: boolean;
+  cookieFormat?: string;
 }
 
 const LOCALIZE_CACHE_NAME = 'LOCALIZE_DEFAULT_LANGUAGE';
+const DEFAULT_COOKIE_FORMAT = '{{value}};{{expires}}';
 
 export class LocalizeRouterSettings implements LocalizeRouterConfig {
   /**
@@ -77,7 +83,8 @@ export class LocalizeRouterSettings implements LocalizeRouterConfig {
     @Inject(ALWAYS_SET_PREFIX) public alwaysSetPrefix: boolean = true,
     @Inject(CACHE_MECHANISM) public cacheMechanism: CacheMechanism = CacheMechanism.LocalStorage,
     @Inject(CACHE_NAME) public cacheName: string = LOCALIZE_CACHE_NAME,
-    @Inject(DEFAULT_LANG_FUNCTION) public defaultLangFunction: DefaultLanguageFunction = void 0
+    @Inject(DEFAULT_LANG_FUNCTION) public defaultLangFunction: DefaultLanguageFunction = void 0,
+    @Inject(COOKIE_FORMAT) public cookieFormat: string = DEFAULT_COOKIE_FORMAT
   ) {
   }
 }
