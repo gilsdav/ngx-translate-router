@@ -1,12 +1,14 @@
-import { Router, UrlSerializer, ChildrenOutletContexts, Routes, Route, RouteConfigLoadStart, RouteConfigLoadEnd, ExtraOptions, UrlHandlingStrategy, RouteReuseStrategy, RouterEvent, LoadChildren, ROUTES } from '@angular/router';
+import {
+  Router, UrlSerializer, ChildrenOutletContexts, Routes,
+  Route, ExtraOptions, UrlHandlingStrategy, RouteReuseStrategy, RouterEvent, LoadChildren, ROUTES
+} from '@angular/router';
 import { Type, Injector, NgModuleFactoryLoader, Compiler, ApplicationRef, NgModuleFactory } from '@angular/core';
 import { Location } from '@angular/common';
 import { flatten } from '@angular/compiler';
-import {ɵgetDOM as getDOM} from '@angular/platform-browser';
+import { ɵgetDOM as getDOM } from '@angular/platform-browser';
 import { from, of, isObservable, Observable } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 import { isPromise } from './util';
-import { translateModule } from './localize-router-config-loader';
 import { LocalizeParser } from './localize-router.parser';
 
 export class LocalizedRouter extends Router {
