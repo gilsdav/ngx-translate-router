@@ -310,8 +310,6 @@ export abstract class LocalizeParser {
           .replace('{{value}}', `${name}=${encodeURIComponent(value)}`)
           .replace('{{expires}}', `expires=${d.toUTCString()}`);
 
-        console.log(cookieTemplate);
-
         document.cookie = cookieTemplate;
         return;
       }
