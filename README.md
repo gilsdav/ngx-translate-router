@@ -300,8 +300,11 @@ export function localizeLoaderFactory(translate: TranslateService, location: Loc
   When value is `false`, prefix will not be used for for default language (this includes the situation when there is only one language).
 - `cacheMechanism`: CacheMechanism.LocalStorage || CacheMechanism.Cookie. Default value is `CacheMechanism.LocalStorage`.
 - `cacheName`: string. Name of cookie/local store. Default value is `LOCALIZE_DEFAULT_LANGUAGE`.
-- `cookieFormat`: string. Cookie format for extending cookie. `value` is `CACHE_NAME=language`, `expires` is `expires=2019-09-11T21:19:23.000Z` results to `LOCALIZE_DEFAULT_LANGUAGE=en;expires=Wed, 11 Sep 2019 21:19:23 GMT`. Possible extended format e.g `{{value}};{{expires}};path=/`. Default value is `{{value}};{{expires}}`.
 - `defaultLangFunction`: (languages: string[], cachedLang?: string, browserLang?: string) => string. Override method for custom logic for picking default language, when no language is provided via url. Default value is `undefined`.
+- `cookieFormat`: string. Format of cookie to store. Default value is `'{{value}};{{expires}}'`. (Extended format e.g : `'{{value}};{{expires}};path=/'`) 
+  - `{{value}}` will be replaced by the value to save (`CACHE_NAME=language`). Must be present into format.
+  - `{{expires}}` will be replaced by `expires=currentDate+30days`. Optional if you want session cookie.
+  - results to : `LOCALIZE_DEFAULT_LANGUAGE=en;expires=Wed, 11 Sep 2019 21:19:23 GMT`. 
 ### LocalizeRouterService
 #### Properties:
 - `routerEvents`: An EventEmitter to listen to language change event
