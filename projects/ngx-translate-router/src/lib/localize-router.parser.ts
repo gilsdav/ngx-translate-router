@@ -100,7 +100,8 @@ export abstract class LocalizeParser {
           // add directly to routes
           this.routes.push(children[i]);
         }
-        if (!(children[i].data['skipRouteLocalization']['localizeRedirectTo'] && children[i].redirectTo !== undefined)) {
+        // remove from routes to translate only if doesn't have to translate `redirectTo` property
+        if (children[i].redirectTo === undefined || !(children[i].data['skipRouteLocalization']['localizeRedirectTo'])) {
           children.splice(i, 1);
         }
       }
