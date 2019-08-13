@@ -317,13 +317,10 @@ export abstract class LocalizeParser {
       if (value) {
         let cookieTemplate = `${this.settings.cookieFormat}`;
         const d: Date = new Date();
-
         d.setTime(d.getTime() + COOKIE_EXPIRY * 86400000); // * days
-
         cookieTemplate = cookieTemplate
           .replace('{{value}}', `${name}=${encodeURIComponent(value)}`)
           .replace('{{expires}}', `expires=${d.toUTCString()}`);
-
         document.cookie = cookieTemplate;
         return;
       }
