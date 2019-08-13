@@ -5,7 +5,7 @@ import { flatten } from '@angular/compiler';
 import {ɵgetDOM as getDOM} from '@angular/platform-browser';
 import { from, of, isObservable, Observable } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
-import { isPromise } from '@angular/compiler/src/util';
+import { isPromise } from './util';
 import { translateModule } from './localize-router-config-loader';
 import { LocalizeParser } from './localize-router.parser';
 
