@@ -315,9 +315,16 @@ export abstract class LocalizeParser {
     try {
       const name = encodeURIComponent(this.settings.cacheName);
       if (value) {
+        let cookieTemplate = this.settings.cookieFormat;
         const d: Date = new Date();
+
         d.setTime(d.getTime() + COOKIE_EXPIRY * 86400000); // * days
-        document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()}`;
+
+        cookieTemplate = cookieTemplate
+          .replace('{{value}}', `${name}=${encodeURIComponent(value)}`)
+          .replace('{{expires}}', `expires=${d.toUTCString()}`);
+
+        document.cookie = cookieTemplate;
         return;
       }
       const regexp = new RegExp('(?:^' + name + '|;\\s*' + name + ')=(.*?)(?:;|$)', 'g');
