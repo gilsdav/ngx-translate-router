@@ -36,7 +36,11 @@ export class GilsdavReuseStrategy implements RouteReuseStrategy {
     if (!route.data.localizeRouter && (!route.parent || !route.parent.parent)) { // Lang route
       return 'LANG';
     } else if (route.data.localizeRouter) {
-      return `${this.getKey(route.parent)}/${route.data.localizeRouter.path}`;
+      let key = `${this.getKey(route.parent)}/${route.data.localizeRouter.path}`;
+      if (route.data.discriminantPathKey) {
+        key = `${route.data.discriminantPathKey}-${key}`;
+      }
+      return key;
     }
   }
 }

@@ -24,7 +24,21 @@ export function HttpLoaderFactory(translate: TranslateService, location: Locatio
 
 export const routes: Routes = [
     // { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: '', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
+    {
+      path: '',
+      component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule),
+      data: { discriminantPathKey: 'TESTPATH' }
+    },
+    {
+      path: '',
+      loadChildren: () => import('./test2/test.module').then(mod => mod.TestModule),
+      data: { discriminantPathKey: 'TEST2PATH' }
+    },
+    {
+      path: '',
+      loadChildren: () => import('./test3/test.module').then(mod => mod.TestModule),
+      data: { discriminantPathKey: 'TEST3PATH' }
+    },
     { path: 'home', component: HomeComponent },
     // { path: 'test', component: HomeComponent, loadChildren: './test/test.module#TestModule' },
     { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },

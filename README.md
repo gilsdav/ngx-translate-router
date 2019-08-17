@@ -245,6 +245,28 @@ this.translate.use(languageFromUrl || cachedLanguage || languageOfBrowser || fir
 
 Both `languageOfBrowser` and `languageFromUrl` are cross-checked with locales from config.
 
+#### Path discrimination
+
+Do you use same path to load multiple lazy-loaded modules and you have wrong component tree ?
+`discriminantPathKey` will help ngx-translate-router to generate good component tree. 
+
+```ts
+  {
+    path: '',
+    loadChildren: () => import('app/home/home.module').then(m => m.HomeModule),
+    data: {
+        discriminantPathKey: 'HOMEPATH'
+    }
+  },
+  {
+    path: '',
+    loadChildren: () => import('app/information/information.module').then(m => m.InformationModule),
+    data: {
+        discriminantPathKey: 'INFOPATH'
+    }
+  }
+```
+
 ### Pipe
 
 `LocalizeRouterPipe` is used to translate `routerLink` directive's content. Pipe can be appended to partial strings in the routerLink's definition or to entire array element:
