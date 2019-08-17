@@ -17,7 +17,7 @@ import {
   USE_CACHED_LANG,
   COOKIE_FORMAT
 } from './localize-router.config';
-// import { LocalizeRouterConfigLoader } from './localize-router-config-loader';
+import { LocalizeRouterConfigLoader } from './localize-router-config-loader';
 import { GilsdavReuseStrategy } from './gilsdav-reuse-strategy';
 import { setupRouter } from './localized-router';
 
@@ -64,15 +64,15 @@ export class LocalizeRouterModule {
     return {
       ngModule: LocalizeRouterModule,
       providers: [
-        {
-          provide: Router,
-          useFactory: setupRouter,
-          deps: [
-            ApplicationRef, UrlSerializer, ChildrenOutletContexts, Location, Injector,
-            NgModuleFactoryLoader, Compiler, ROUTES, LocalizeParser, ROUTER_CONFIGURATION,
-            [UrlHandlingStrategy, new Optional()], [RouteReuseStrategy, new Optional()]
-          ]
-        },
+        // {
+        //   provide: Router,
+        //   useFactory: setupRouter,
+        //   deps: [
+        //     ApplicationRef, UrlSerializer, ChildrenOutletContexts, Location, Injector,
+        //     NgModuleFactoryLoader, Compiler, ROUTES, LocalizeParser, ROUTER_CONFIGURATION,
+        //     [UrlHandlingStrategy, new Optional()], [RouteReuseStrategy, new Optional()]
+        //   ]
+        // },
         {
           provide: LOCALIZE_ROUTER_FORROOT_GUARD,
           useFactory: provideForRootGuard,
@@ -93,7 +93,7 @@ export class LocalizeRouterModule {
         },
         LocalizeRouterService,
         ParserInitializer,
-        // { provide: NgModuleFactoryLoader, useClass: LocalizeRouterConfigLoader },
+        { provide: NgModuleFactoryLoader, useClass: LocalizeRouterConfigLoader },
         {
           provide: APP_INITIALIZER,
           multi: true,
