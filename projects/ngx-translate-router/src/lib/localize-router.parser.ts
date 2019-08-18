@@ -290,10 +290,10 @@ export abstract class LocalizeParser {
    * Cache value to local storage
    */
   private _cacheWithLocalStorage(value?: string): string {
-    if (typeof window === 'undefined' || typeof window.localStorage === 'undefined') {
-      return;
-    }
     try {
+      if (typeof window === 'undefined' || typeof window.localStorage === 'undefined') {
+        return;
+      }
       if (value) {
         window.localStorage.setItem(this.settings.cacheName, value);
         return;
@@ -309,10 +309,10 @@ export abstract class LocalizeParser {
    * Cache value via cookies
    */
   private _cacheWithCookies(value?: string): string {
-    if (typeof document === 'undefined' || typeof document.cookie === 'undefined') {
-      return;
-    }
     try {
+      if (  typeof document === 'undefined' || typeof document.cookie === 'undefined') {
+        return;
+      }
       const name = encodeURIComponent(this.settings.cacheName);
       if (value) {
         let cookieTemplate = `${this.settings.cookieFormat}`;
@@ -328,7 +328,7 @@ export abstract class LocalizeParser {
       const result = regexp.exec(document.cookie);
       return decodeURIComponent(result[1]);
     } catch (e) {
-      return; // should not happen but better safe than sorry
+      return; // should not happen but better safe than sorry (can happen by using domino)
     }
   }
 
