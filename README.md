@@ -11,6 +11,7 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 | angular version | translate-router | http-loader |
 | --------------- | ---------------- | ----------- |
 | 6 - 7           | 1.0.2            | 1.0.1       |
+| 7               | 1.7.2            | 1.1.0       |
 | 8               | 2.1.0            | 1.1.0       |
 
 
