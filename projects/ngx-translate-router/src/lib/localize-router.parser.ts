@@ -328,7 +328,7 @@ export abstract class LocalizeParser {
       const result = regexp.exec(document.cookie);
       return decodeURIComponent(result[1]);
     } catch (e) {
-      return; // should not happen but better safe than sorry (can happend by using domino)
+      return; // should not happen but better safe than sorry (can happen by using domino)
     }
   }
 
