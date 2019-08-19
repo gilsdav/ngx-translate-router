@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 export interface ILocalizeRouterParserConfig {
   locales: Array<string>;
   prefix?: string;
+  escapePrefix?: string;
 }
 
 export class LocalizeRouterHttpLoader extends LocalizeParser {
@@ -41,6 +42,7 @@ export class LocalizeRouterHttpLoader extends LocalizeParser {
         .subscribe((data: ILocalizeRouterParserConfig) => {
           this.locales = data.locales;
           this.prefix = data.prefix || '';
+          this.escapePrefix = data.escapePrefix || '';
           this.init(routes).then(resolve);
         });
     });

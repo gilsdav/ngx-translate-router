@@ -8,10 +8,11 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 
 **Version to choose :**
 
-| angular version | translate-router | http-loader |
-| --------------- | ---------------- | ----------- |
-| 6 - 7           | 1.0.2            | 1.0.1       |
-| 8               | 2.0.2            | 1.0.2       |
+| angular version | translate-router | http-loader | type |
+| --------------- | ---------------- | ----------- | ---- |
+| 6 - 7           | 1.0.2            | 1.0.1       | legacy |
+| 7               | 1.7.2            | 1.1.0       | active |
+| 8               | 2.1.0            | 1.1.0       | active |
 
 
 Demo project can be found under sub folder `src`.
@@ -185,9 +186,18 @@ Working example can be found [here](https://github.com/meeroslav/universal-local
 
 `Localize router` intercepts Router initialization and translates each `path` and `redirectTo` path of Routes.
 The translation process is done with [ngx-translate](https://github.com/ngx-translate/core). In order to separate 
-router translations from normal application translations we use `prefix`. Default value for prefix is `ROUTES.`.
+router translations from normal application translations we use `prefix`. Default value for prefix is `ROUTES.`. Finally, in order to avoid accidentally translating a URL segment that should not be translated, you can optionally use `escapePrefix` so the prefix gets stripped and the segment doesn't get translated. Default `escapePrefix` is unset. 
+
 ```
 'home' -> 'ROUTES.home'
+```
+
+Example to escape the translation of the segment with `escapePrefix: '!'`
+```
+'!segment' -> 'segment'
+```
+```
+{ path: '!home/first' ... } -> '/fr/home/premier'
 ```
 
 Upon every route change `Localize router` kicks in to check if there was a change to language. Translated routes are prepended with two letter language code:
@@ -208,12 +218,16 @@ Make sure you therefore place most common language (e.g. 'en') as a first string
 
 Sometimes you might have a need to have certain routes excluded from the localization process e.g. login page, registration page etc. This is possible by setting flag `skipRouteLocalization` on route's data object.
 
+In case you want to redirect to an url when skipRouteLocalization is activated, you can also provide config option `localizeRedirectTo` to skip route localization but localize redirect to. Otherwise, route and redirectTo will not be translated.
+
 ```ts
 let routes = [
   // this route gets localized
   { path: 'home', component: HomeComponent },
   // this route will not be localized
   { path: 'login', component: LoginComponent, data: { skipRouteLocalization: true } }
+    // this route will not be localized, but redirect to will do
+  { path: 'logout', redirectTo: 'login', data: { skipRouteLocalization: { localizeRedirectTo: true } } }
 ];
 ```
 
@@ -288,6 +302,10 @@ export function localizeLoaderFactory(translate: TranslateService, location: Loc
 - `cacheMechanism`: CacheMechanism.LocalStorage || CacheMechanism.Cookie. Default value is `CacheMechanism.LocalStorage`.
 - `cacheName`: string. Name of cookie/local store. Default value is `LOCALIZE_DEFAULT_LANGUAGE`.
 - `defaultLangFunction`: (languages: string[], cachedLang?: string, browserLang?: string) => string. Override method for custom logic for picking default language, when no language is provided via url. Default value is `undefined`.
+- `cookieFormat`: string. Format of cookie to store. Default value is `'{{value}};{{expires}}'`. (Extended format e.g : `'{{value}};{{expires}};path=/'`) 
+  - `{{value}}` will be replaced by the value to save (`CACHE_NAME=language`). Must be present into format.
+  - `{{expires}}` will be replaced by `expires=currentDate+30days`. Optional if you want session cookie.
+  - results to : `LOCALIZE_DEFAULT_LANGUAGE=en;expires=Wed, 11 Sep 2019 21:19:23 GMT`. 
 ### LocalizeRouterService
 #### Properties:
 - `routerEvents`: An EventEmitter to listen to language change event
