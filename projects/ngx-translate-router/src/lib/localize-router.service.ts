@@ -160,7 +160,7 @@ export class LocalizeRouterService {
     const subPathSegments: string[] = snapshot.url.map(segment => segment.path)
       .map((s: string, i: number) => {
         const localizeMatcherParams = snapshot.data && snapshot.data.localizeMatcher && snapshot.data.localizeMatcher.params || {};
-        const [paramName] = Object.entries(snapshot.params).find(([_, value]) => value === s);
+        const [paramName] = Object.entries(snapshot.params).find(pair => pair[1] === s);
         const val = localizeMatcherParams[paramName] ? localizeMatcherParams[paramName](s) : null;
         return val || `${this.parser.getEscapePrefix()}${s}`;
       });
