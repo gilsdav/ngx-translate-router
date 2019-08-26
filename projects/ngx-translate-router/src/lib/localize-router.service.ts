@@ -135,7 +135,7 @@ export class LocalizeRouterService {
    * Extracts new segment value based on routeConfig and url
    */
   private parseSegmentValue(snapshot: ActivatedRouteSnapshot): string {
-    if (snapshot.routeConfig.matcher) {
+    if (snapshot.routeConfig && snapshot.routeConfig.matcher) {
       const subPathSegments = this.parseSegmentValueMatcher(snapshot);
       return subPathSegments.map((s: string, i: number) => s.indexOf(':') === 0 ? snapshot.url[i].path : s).join('/');
     } else if (snapshot.data.localizeRouter) {
