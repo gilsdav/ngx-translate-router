@@ -38,7 +38,7 @@ export class GilsdavReuseStrategy implements RouteReuseStrategy {
     } else if (route.data.localizeRouter) {
       let key = `${this.getKey(route.parent)}/${route.data.localizeRouter.path}`;
       if (route.data.discriminantPathKey) {
-        key = `${route.data.discriminantPathKey}-${key}`;
+        key = `${key}-${route.data.discriminantPathKey}`;
       }
       return key;
     }
