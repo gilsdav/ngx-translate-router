@@ -33,10 +33,16 @@ export class GilsdavReuseStrategy implements RouteReuseStrategy {
   }
   private getKey(route: ActivatedRouteSnapshot) {
     // console.log(route.parent.component.toString());
-    if (!route.data.localizeRouter && (!route.parent || !route.parent.parent)) { // Lang route
+    if (route.firstChild && route.firstChild.routeConfig && route.firstChild.routeConfig.path.indexOf('**') !== -1) { // WildCard
+      return 'WILDCARD';
+    } else if (!route.data.localizeRouter && (!route.parent || !route.parent.parent)) { // Lang route
       return 'LANG';
     } else if (route.data.localizeRouter) {
-      return `${this.getKey(route.parent)}/${route.data.localizeRouter.path}`;
+      let key = `${this.getKey(route.parent)}/${route.data.localizeRouter.path}`;
+      if (route.data.discriminantPathKey) {
+        key = `${key}-${route.data.discriminantPathKey}`;
+      }
+      return key;
     }
   }
 }

@@ -8,10 +8,11 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 
 **Version to choose :**
 
-| angular version | translate-router | http-loader |
-| --------------- | ---------------- | ----------- |
-| 6 - 7           | 1.0.2            | 1.0.1       |
-| 8               | 2.1.0            | 1.1.0       |
+| angular version | translate-router | http-loader | type |
+| --------------- | ---------------- | ----------- | ---- |
+| 6 - 7           | 1.0.2            | 1.0.1       | legacy |
+| 7               | 1.7.2            | 1.1.0       | active |
+| 8               | 2.1.0            | 1.1.0       | active |
 
 
 Demo project can be found under sub folder `src`.
@@ -27,8 +28,10 @@ Demo project can be found under sub folder `src`.
         - [Manual initialization](#manual-initialization)
         - [Server side initialization](#server-side-initialization)
     - [How it works](#how-it-works)
-        - [excluding-routes](#excluding-routes)
+        - [Excluding routes](#excluding-routes)
         - [ngx-translate integration](#ngx-translate-integration)
+        - [Path discrimination](#path-discrimination)
+        - [WildCard path](#wildcard-path)
     - [Pipe](#pipe)
     - [Service](#service)
     - [AOT](#aot)
@@ -244,6 +247,56 @@ this.translate.use(languageFromUrl || cachedLanguage || languageOfBrowser || fir
 ```
 
 Both `languageOfBrowser` and `languageFromUrl` are cross-checked with locales from config.
+
+#### Path discrimination
+
+Do you use same path to load multiple lazy-loaded modules and you have wrong component tree ?
+`discriminantPathKey` will help ngx-translate-router to generate good component tree. 
+
+```ts
+  {
+    path: '',
+    loadChildren: () => import('app/home/home.module').then(m => m.HomeModule),
+    data: {
+        discriminantPathKey: 'HOMEPATH'
+    }
+  },
+  {
+    path: '',
+    loadChildren: () => import('app/information/information.module').then(m => m.InformationModule),
+    data: {
+        discriminantPathKey: 'INFOPATH'
+    }
+  }
+```
+
+#### WildCard Path
+##### Favored way
+
+The favored way to use WildCard ( `'**'` path ) is to use the `redirectTo`. It will let the user to translate the "not found" page message.
+
+```ts
+{
+  path: '404',
+  component: NotFoundComponent
+},
+{
+  path: '**',
+  redirectTo: '/404'
+}
+```
+
+##### Alternative
+
+If you need to keep the wrong url you will face to a limitation: ***You can not translate current page.***
+This limitation is because we can not determine the language from a wrong url.
+
+```ts
+{
+  path: '**',
+  component: NotFoundComponent
+}
+```
 
 ### Pipe
 
