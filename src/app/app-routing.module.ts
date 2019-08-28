@@ -12,6 +12,7 @@ import {
 import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loader';
 
 import { HomeComponent } from './home/home.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 
 // export function ManualLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings) {
@@ -49,7 +50,8 @@ export const routes: Routes = [
     { path: 'bob', children: [
         { path: 'home/:test', component: HomeComponent }
     ] },
-    // { path: '**', redirectTo: '/home' }
+    { path: '404', component: NotFoundComponent },
+    { path: '**', redirectTo: '/404' }
 ];
 
 @NgModule({
