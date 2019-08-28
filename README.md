@@ -28,8 +28,9 @@ Demo project can be found under sub folder `src`.
         - [Manual initialization](#manual-initialization)
         - [Server side initialization](#server-side-initialization)
     - [How it works](#how-it-works)
-        - [excluding-routes](#excluding-routes)
+        - [Excluding routes](#excluding-routes)
         - [ngx-translate integration](#ngx-translate-integration)
+        - [Path discrimination](#path-discrimination)
     - [Pipe](#pipe)
     - [Service](#service)
     - [AOT](#aot)
@@ -245,6 +246,28 @@ this.translate.use(languageFromUrl || cachedLanguage || languageOfBrowser || fir
 ```
 
 Both `languageOfBrowser` and `languageFromUrl` are cross-checked with locales from config.
+
+#### Path discrimination
+
+Do you use same path to load multiple lazy-loaded modules and you have wrong component tree ?
+`discriminantPathKey` will help ngx-translate-router to generate good component tree. 
+
+```ts
+  {
+    path: '',
+    loadChildren: () => import('app/home/home.module').then(m => m.HomeModule),
+    data: {
+        discriminantPathKey: 'HOMEPATH'
+    }
+  },
+  {
+    path: '',
+    loadChildren: () => import('app/information/information.module').then(m => m.InformationModule),
+    data: {
+        discriminantPathKey: 'INFOPATH'
+    }
+  }
+```
 
 ### Pipe
 
