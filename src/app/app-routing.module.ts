@@ -69,7 +69,7 @@ export const routes: Routes = [
               deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
             },
             cacheMechanism: CacheMechanism.Cookie,
-            cookieFormat: '{{value}};{{expires}};path=/'
+            cookieFormat: '{{value}};{{expires:20}};path=/'
         })
     ],
     exports: [RouterModule, LocalizeRouterModule]
