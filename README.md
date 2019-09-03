@@ -357,7 +357,7 @@ export function localizeLoaderFactory(translate: TranslateService, location: Loc
 - `cookieFormat`: string. Format of cookie to store. Default value is `'{{value}};{{expires}}'`. (Extended format e.g : `'{{value}};{{expires}};path=/'`) 
   - `{{value}}` will be replaced by the value to save (`CACHE_NAME=language`). Must be present into format.
   - `{{expires}}` will be replaced by `expires=currentDate+30days`. Optional if you want session cookie.
-  - or use `{{expires:365}}` will be replaced by `expires=currentDate+365days`.
+    - you can configure the number of expiration days by using this synthax: `{{expires:365}}`. It will result as `expires=currentDate+365days`.
   - results to : `LOCALIZE_DEFAULT_LANGUAGE=en;expires=Wed, 11 Sep 2019 21:19:23 GMT`. 
 ### LocalizeRouterService
 #### Properties:
