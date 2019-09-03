@@ -318,10 +318,9 @@ export abstract class LocalizeParser {
         let cookieTemplate = `${this.settings.cookieFormat}`;
         cookieTemplate = cookieTemplate
           .replace('{{value}}', `${name}=${encodeURIComponent(value)}`)
-          .replace(/{{expires:?(\d+)?}}/g, (matched, index) => {
-              const days = index === undefined ? COOKIE_EXPIRY : parseInt(index, 10);
+          .replace(/{{expires:?(\d+)?}}/g, (fullMatch, groupMatch) => {
+              const days = groupMatch === undefined ? COOKIE_EXPIRY : parseInt(groupMatch, 10);
               const date: Date = new Date();
-
               date.setTime(date.getTime() + days * 86400000);
               return `expires=${date.toUTCString()}`;
           });
