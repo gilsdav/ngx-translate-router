@@ -157,9 +157,9 @@ export class LocalizeRouterService {
   }
 
   private parseSegmentValueMatcher(snapshot: ActivatedRouteSnapshot): string[] {
+    const localizeMatcherParams = snapshot.data && snapshot.data.localizeMatcher && snapshot.data.localizeMatcher.params || { };
     const subPathSegments: string[] = snapshot.url.map(segment => segment.path)
       .map((s: string, i: number) => {
-        const localizeMatcherParams = snapshot.data && snapshot.data.localizeMatcher && snapshot.data.localizeMatcher.params || { };
         const matchedParam = Object.entries(snapshot.params).find((pair) => pair[1] === s);
         const val = matchedParam && localizeMatcherParams[matchedParam[0]] ? localizeMatcherParams[matchedParam[0]](s) : null;
         return val || `${this.parser.getEscapePrefix()}${s}`;
