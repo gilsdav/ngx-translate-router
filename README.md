@@ -32,6 +32,7 @@ Demo project can be found under sub folder `src`.
         - [ngx-translate integration](#ngx-translate-integration)
         - [Path discrimination](#path-discrimination)
         - [WildCard path](#wildcard-path)
+        - [Matcher params translation](#matcher-params-translation)
     - [Pipe](#pipe)
     - [Service](#service)
     - [AOT](#aot)
@@ -297,6 +298,49 @@ This limitation is because we can not determine the language from a wrong url.
   component: NotFoundComponent
 }
 ```
+
+#### Matcher params translation
+
+In case you want to translate some params of matcher, `localizeMatcher` provides you the way to do it through a function per each param.
+
+Example: 
+
+```
+  {
+    path: 'matcher',
+    children: [
+      {
+        matcher: detailMatcher,
+        loadChildren: () => import('./matcher/matcher-detail/matcher-detail.module').then(mod => mod.MatcherDetailModule)
+      },
+      {
+        matcher: baseMatcher,
+        loadChildren: () => import('./matcher/matcher.module').then(mod => mod.MatcherModule),
+        data: {
+          localizeMatcher: {
+            params: {
+              mapPage: shouldTranslateMap
+            }
+          }
+        }
+      }
+    ]
+  }
+
+...
+
+export function shouldTranslateMap(param: string): string {
+  if (isNaN(+param)) {
+    return 'map';
+  }
+  return null;
+}
+
+```
+
+The output of the function should be `falsy` if the param must not be translated or should return the `key` (without prefix) you want to use when translating if you want to translate the param. 
+
+Notice that any function that you use in `localizeMatcher` must be exported to be compatible with AOT.
 
 ### Pipe
 

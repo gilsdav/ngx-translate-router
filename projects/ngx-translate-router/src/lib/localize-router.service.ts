@@ -1,7 +1,9 @@
 import { Inject } from '@angular/core';
 // import { Location } from '@angular/common';
-import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
-  Event, NavigationCancel } from '@angular/router';
+import {
+  Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
+  Event, NavigationCancel, UrlSegment
+} from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, pairwise } from 'rxjs/operators';
 
@@ -130,13 +132,23 @@ export class LocalizeRouterService {
   }
 
   /**
+   * Build URL from segments and snapshot (for params)
+   */
+  private buildUrlFromSegments(snapshot: ActivatedRouteSnapshot, segments: string[]): string {
+    return segments.map((s: string, i: number) => s.indexOf(':') === 0 ? snapshot.url[i].path : s).join('/');
+  }
+
+  /**
    * Extracts new segment value based on routeConfig and url
    */
   private parseSegmentValue(snapshot: ActivatedRouteSnapshot): string {
-    if (snapshot.data.localizeRouter) {
+    if (snapshot.routeConfig && snapshot.routeConfig.matcher) {
+      const subPathSegments = this.parseSegmentValueMatcher(snapshot);
+      return this.buildUrlFromSegments(snapshot, subPathSegments);
+    } else if (snapshot.data.localizeRouter) {
       const path = snapshot.data.localizeRouter.path;
       const subPathSegments = path.split('/');
-      return subPathSegments.map((s: string, i: number) => s.indexOf(':') === 0 ? snapshot.url[i].path : s).join('/');
+      return this.buildUrlFromSegments(snapshot, subPathSegments);
     } else {
       return '';
     }
@@ -149,6 +161,18 @@ export class LocalizeRouterService {
       }
     }
     return ''; */
+  }
+
+  private parseSegmentValueMatcher(snapshot: ActivatedRouteSnapshot): string[] {
+    const localizeMatcherParams = snapshot.data && snapshot.data.localizeMatcher && snapshot.data.localizeMatcher.params || { };
+    const subPathSegments: string[] = snapshot.url
+      .map((segment: UrlSegment) => {
+        const s = segment.path;
+        const matchedParam = Object.entries(snapshot.params).find((pair) => pair[1] === s); // TODO: fix problem here (exemple: http://localhost:4200/en/mymatcher/aaa/bbb/carte/carte)
+        const val = matchedParam && localizeMatcherParams[matchedParam[0]] ? localizeMatcherParams[matchedParam[0]](s) : null;
+        return val || `${this.parser.getEscapePrefix()}${s}`;
+      });
+    return subPathSegments;
   }
 
   /**

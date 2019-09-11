@@ -22,4 +22,9 @@ export class AppComponent implements OnInit {
       console.log('routerOutletActivation', active);
     }
 
+    public switchLang() {
+      console.log('change lang');
+      this.localize.changeLanguage(this.localize.parser.currentLang === 'fr' ? 'en' : 'fr');
+    }
+
 }
