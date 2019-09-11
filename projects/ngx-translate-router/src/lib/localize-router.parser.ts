@@ -381,6 +381,14 @@ export abstract class LocalizeParser {
   public formatQueryParams(params: Params): string {
     return Object.keys(params).map(key => key + '=' + params[key]).join('&');
   }
+
+  public getPrefix(): string {
+    return this.prefix;
+  }
+
+  public getEscapePrefix(): string {
+    return this.escapePrefix;
+  }
 }
 
 /**

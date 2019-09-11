@@ -268,6 +268,49 @@ Do you use same path to load multiple lazy-loaded modules and you have wrong com
   }
 ```
 
+#### Matcher params translation
+
+In case you want to translate some params of matcher, `localizeMatcher` provides you the way to do it through a function per each param.
+
+Example: 
+
+```
+  {
+    path: 'matcher',
+    children: [
+      {
+        matcher: detailMatcher,
+        loadChildren: () => import('./matcher/matcher-detail/matcher-detail.module').then(mod => mod.MatcherDetailModule)
+      },
+      {
+        matcher: baseMatcher,
+        loadChildren: () => import('./matcher/matcher.module').then(mod => mod.MatcherModule),
+        data: {
+          localizeMatcher: {
+            params: {
+              mapPage: shouldTranslateMap
+            }
+          }
+        }
+      }
+    ]
+  }
+
+...
+
+export function shouldTranslateMap(param: string): string {
+  if (isNaN(+param)) {
+    return 'map';
+  }
+  return null;
+}
+
+```
+
+The output of the function should be `falsy` if the param must not be translated or should return the `key` (without prefix) you want to use when translating if you want to translate the param. 
+
+Notice that any function that you use in `localizeMatcher` must be exported so it is later available. 
+
 ### Pipe
 
 `LocalizeRouterPipe` is used to translate `routerLink` directive's content. Pipe can be appended to partial strings in the routerLink's definition or to entire array element:

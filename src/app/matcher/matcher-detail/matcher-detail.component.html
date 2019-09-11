@@ -1,0 +1,27 @@
+<div class="links">
+  <span>matcher detail</span>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', 'bbb', 'ccc', '12345678'] | localize">['/matcher', 'aaa', 'bbb', 'ccc', '12345678']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', 'bbb', '12345678'] | localize">['/matcher', 'aaa', 'bbb', '12345678']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', '12345678'] | localize">['/matcher', 'aaa', '12345678']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', '12345678'] | localize">['/matcher', '12345678']</a>
+
+  <span>matcher base</span>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', 'bbb', 'ccc', 'map'] | localize">['/matcher', 'aaa', 'bbb', 'ccc', 'map']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', 'bbb', 'ccc', 2] | localize">['/matcher', 'aaa', 'bbb', 'ccc', 2]</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', 'bbb', 'ccc'] | localize">['/matcher', 'aaa', 'bbb', 'ccc']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', 'bbb', 'map'] | localize">['/matcher', 'aaa', 'bbb', 'map']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', 'bbb', 2] | localize">['/matcher', 'aaa', 'bbb', 2]</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', 'bbb'] | localize">['/matcher', 'aaa', 'bbb']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', 'map'] | localize">['/matcher', 'aaa', 'map']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa', '2'] | localize">['/matcher', 'aaa', '2']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'aaa'] | localize">['/matcher', 'aaa']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', 'map'] | localize">['/matcher', 'map']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher', '2'] | localize">['/matcher', '2']</a>
+  <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/matcher'] | localize">['/matcher']</a>
+</div>
+
+<h2>Matcher on detail</h2>
+
+<div class="list">
+  <div class="item" *ngFor="let number of [1, 2, 3, 4, 5, 6]">{{ number }}</div>
+</div>

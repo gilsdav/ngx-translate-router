@@ -1,7 +1,9 @@
 import { Inject } from '@angular/core';
 // import { Location } from '@angular/common';
-import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
-  Event, NavigationCancel } from '@angular/router';
+import {
+  Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
+  Event, NavigationCancel
+} from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, pairwise } from 'rxjs/operators';
 
@@ -133,7 +135,10 @@ export class LocalizeRouterService {
    * Extracts new segment value based on routeConfig and url
    */
   private parseSegmentValue(snapshot: ActivatedRouteSnapshot): string {
-    if (snapshot.data.localizeRouter) {
+    if (snapshot.routeConfig && snapshot.routeConfig.matcher) {
+      const subPathSegments = this.parseSegmentValueMatcher(snapshot);
+      return subPathSegments.map((s: string, i: number) => s.indexOf(':') === 0 ? snapshot.url[i].path : s).join('/');
+    } else if (snapshot.data.localizeRouter) {
       const path = snapshot.data.localizeRouter.path;
       const subPathSegments = path.split('/');
       return subPathSegments.map((s: string, i: number) => s.indexOf(':') === 0 ? snapshot.url[i].path : s).join('/');
@@ -149,6 +154,17 @@ export class LocalizeRouterService {
       }
     }
     return ''; */
+  }
+
+  private parseSegmentValueMatcher(snapshot: ActivatedRouteSnapshot): string[] {
+    const localizeMatcherParams = snapshot.data && snapshot.data.localizeMatcher && snapshot.data.localizeMatcher.params || { };
+    const subPathSegments: string[] = snapshot.url.map(segment => segment.path)
+      .map((s: string, i: number) => {
+        const matchedParam = Object.entries(snapshot.params).find((pair) => pair[1] === s);
+        const val = matchedParam && localizeMatcherParams[matchedParam[0]] ? localizeMatcherParams[matchedParam[0]](s) : null;
+        return val || `${this.parser.getEscapePrefix()}${s}`;
+      });
+    return subPathSegments;
   }
 
   /**
