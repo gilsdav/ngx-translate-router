@@ -342,6 +342,9 @@ The output of the function should be `falsy` if the param must not be translated
 
 Notice that any function that you use in `localizeMatcher` must be exported to be compatible with AOT.
 
+##### Matcher params translated without localizeMatcher issue
+If the URL is accidentally translated from a language to another which creates an inconsistent state you have to enable `escapePrefix` mechanism. (example: `escapePrefix: '!'`)
+
 ### Pipe
 
 `LocalizeRouterPipe` is used to translate `routerLink` directive's content. Pipe can be appended to partial strings in the routerLink's definition or to entire array element:
