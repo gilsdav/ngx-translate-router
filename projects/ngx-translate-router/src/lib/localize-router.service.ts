@@ -144,8 +144,8 @@ export class LocalizeRouterService {
    */
   private parseSegmentValue(snapshot: ActivatedRouteSnapshot): string {
     if (snapshot.routeConfig && snapshot.routeConfig.matcher) {
-      const subPathSegments = this.parseSegmentValueMatcher(snapshot);
-      return this.buildUrlFromSegments(snapshot, subPathSegments);
+      const subPathMatchedSegments = this.parseSegmentValueMatcher(snapshot);
+      return this.buildUrlFromSegments(snapshot, subPathMatchedSegments);
     } else if (snapshot.data.localizeRouter) {
       const path = snapshot.data.localizeRouter.path;
       const subPathSegments = path.split('/');
