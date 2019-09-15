@@ -1,0 +1,14 @@
+.links {
+  display: grid;
+  gap: .5rem;
+  margin: 2rem 0;
+  justify-content: start;
+}
+.links > a {
+  color: #333;
+  text-decoration: none;
+  margin-left: 2rem;
+}
+.links > a.active {
+  color: #22c;
+}
