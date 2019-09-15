@@ -2,13 +2,14 @@ import { Inject } from '@angular/core';
 // import { Location } from '@angular/common';
 import {
   Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
-  Event, NavigationCancel, UrlSegment
+  Event, NavigationCancel
 } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, pairwise } from 'rxjs/operators';
 
 import { LocalizeParser } from './localize-router.parser';
 import { LocalizeRouterSettings } from './localize-router.config';
+import { LocalizedMatcherUrlSegment } from './localized-matcher-url-segment';
 
 /**
  * Localization service
@@ -166,11 +167,12 @@ export class LocalizeRouterService {
   private parseSegmentValueMatcher(snapshot: ActivatedRouteSnapshot): string[] {
     const localizeMatcherParams = snapshot.data && snapshot.data.localizeMatcher && snapshot.data.localizeMatcher.params || { };
     const subPathSegments: string[] = snapshot.url
-      .map((segment: UrlSegment) => {
-        const s = segment.path;
-        const matchedParam = Object.entries(snapshot.params).find((pair) => pair[1] === s); // TODO: fix problem here (exemple: http://localhost:4200/en/mymatcher/aaa/bbb/carte/carte)
-        const val = matchedParam && localizeMatcherParams[matchedParam[0]] ? localizeMatcherParams[matchedParam[0]](s) : null;
-        return val || `${this.parser.getEscapePrefix()}${s}`;
+      .map((segment: LocalizedMatcherUrlSegment) => {
+        const currentPath = segment.path;
+        const matchedParamName = segment.localizedParamName;
+        const val = (matchedParamName && localizeMatcherParams[matchedParamName]) ?
+          localizeMatcherParams[matchedParamName](currentPath) : null;
+        return val || `${this.parser.getEscapePrefix()}${currentPath}`;
       });
     return subPathSegments;
   }

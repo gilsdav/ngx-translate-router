@@ -301,31 +301,32 @@ This limitation is because we can not determine the language from a wrong url.
 
 #### Matcher params translation
 
+##### Configure routes
 In case you want to translate some params of matcher, `localizeMatcher` provides you the way to do it through a function per each param.
 
 Example: 
 
-```
-  {
-    path: 'matcher',
-    children: [
-      {
-        matcher: detailMatcher,
-        loadChildren: () => import('./matcher/matcher-detail/matcher-detail.module').then(mod => mod.MatcherDetailModule)
-      },
-      {
-        matcher: baseMatcher,
-        loadChildren: () => import('./matcher/matcher.module').then(mod => mod.MatcherModule),
-        data: {
-          localizeMatcher: {
-            params: {
-              mapPage: shouldTranslateMap
-            }
+```ts
+{
+  path: 'matcher',
+  children: [
+    {
+      matcher: detailMatcher,
+      loadChildren: () => import('./matcher/matcher-detail/matcher-detail.module').then(mod => mod.MatcherDetailModule)
+    },
+    {
+      matcher: baseMatcher,
+      loadChildren: () => import('./matcher/matcher.module').then(mod => mod.MatcherModule),
+      data: {
+        localizeMatcher: {
+          params: {
+            mapPage: shouldTranslateMap
           }
         }
       }
-    ]
-  }
+    }
+  ]
+}
 
 ...
 
@@ -335,12 +336,30 @@ export function shouldTranslateMap(param: string): string {
   }
   return null;
 }
-
 ```
 
 The output of the function should be `falsy` if the param must not be translated or should return the `key` (without prefix) you want to use when translating if you want to translate the param. 
 
 Notice that any function that you use in `localizeMatcher` must be exported to be compatible with AOT.
+
+##### Small changes to your matcher
+
+We work with `UrlSegment` to split URL into "params" in basic `UrlMatchResult` but there is not enough information to apply the translations.
+
+You must use the `LocalizedMatcherUrlSegment` type to more strongly associate a segment with a parameter. It contains only the `localizedParamName` attribute in addition to basic UrlSegment. Set this attribute before adding the segment into `consumed` and` posParams`.
+
+```ts
+const result: UrlMatchResult = {
+  consumed: [],
+  posParams: { }
+};
+
+...
+
+(segment as LocalizedMatcherUrlSegment).localizedParamName = name;
+result.consumed.push(segment);
+result.posParams[name] = segment;
+```
 
 ##### Matcher params translated without localizeMatcher issue
 If the URL is accidentally translated from a language to another which creates an inconsistent state you have to enable `escapePrefix` mechanism. (example: `escapePrefix: '!'`)

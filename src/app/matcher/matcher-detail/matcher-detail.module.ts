@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes, UrlSegment, UrlMatchResult } from '@angular/router';
 
-import { LocalizeRouterModule } from '@gilsdav/ngx-translate-router';
+import { LocalizeRouterModule, LocalizedMatcherUrlSegment } from '@gilsdav/ngx-translate-router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { MatcherDetailComponent } from './matcher-detail.component';
@@ -31,6 +31,7 @@ export function detailMatcher(segments: UrlSegment[]): UrlMatchResult {
 
   function takeSegment(name: string): void {
     const segment = segments.shift();
+    (segment as LocalizedMatcherUrlSegment).localizedParamName = name;
     result.consumed.push(segment);
     result.posParams[name] = segment;
   }
