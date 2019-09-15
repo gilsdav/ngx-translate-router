@@ -71,8 +71,8 @@ export const routes: Routes = [
     { path: 'bob', children: [
         { path: 'home/:test', component: HomeComponent }
     ] },
-    // { path: '404', component: NotFoundComponent },
-    { path: '**', component: NotFoundComponent }
+    { path: '404', component: NotFoundComponent },
+    { path: '**', redirectTo: '/404' }
 ];
 
 export function shouldTranslateMap(param: string): string {
