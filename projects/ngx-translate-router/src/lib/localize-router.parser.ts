@@ -203,7 +203,7 @@ export abstract class LocalizeParser {
     }
 
     const result = this.translateRoute(routeData.localizeRouter[property]);
-    (<any>route)[property] = prefixLang ? `/${this.urlPrefix}${result}` : result;
+    (<any>route)[property] = prefixLang ? this.addPrefixToUrl(result) : result;
   }
 
   get urlPrefix() {
@@ -212,6 +212,15 @@ export abstract class LocalizeParser {
     } else {
       return '';
     }
+  }
+
+  /**
+   * Add current lang as prefix to given url.
+   */
+  addPrefixToUrl(url: string): string {
+    const plitedUrl = url.split('?');
+    plitedUrl[0] = plitedUrl[0].replace(/\/$/, '');
+    return `/${this.urlPrefix}${plitedUrl.join('?')}`;
   }
 
   /**
