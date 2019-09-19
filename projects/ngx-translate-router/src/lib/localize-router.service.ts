@@ -184,7 +184,7 @@ export class LocalizeRouterService {
   translateRoute(path: string | any[]): string | any[] {
     if (typeof path === 'string') {
       const url = this.parser.translateRoute(path);
-      return !path.indexOf('/') ? `/${this.parser.urlPrefix}${url}` : url;
+      return !path.indexOf('/') ? this.parser.addPrefixToUrl(url) : url;
     }
     // it's an array
     const result: any[] = [];
@@ -192,7 +192,7 @@ export class LocalizeRouterService {
       if (typeof segment === 'string') {
         const res = this.parser.translateRoute(segment);
         if (!index && !segment.indexOf('/')) {
-          result.push(`/${this.parser.urlPrefix}${res}`);
+          result.push(this.parser.addPrefixToUrl(res));
         } else {
           result.push(res);
         }

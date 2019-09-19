@@ -42,6 +42,10 @@ export const routes: Routes = [
     data: { discriminantPathKey: 'TEST3PATH' }
   },
   {
+    path: 'root-redirection',
+    redirectTo: '/'
+  },
+  {
     path: 'matcher',
     children: [
       {
@@ -97,7 +101,8 @@ export function shouldTranslateMap(param: string): string {
               deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
             },
             cacheMechanism: CacheMechanism.Cookie,
-            cookieFormat: '{{value}};{{expires:20}};path=/'
+            cookieFormat: '{{value}};{{expires:20}};path=/',
+            // alwaysSetPrefix: false
         })
     ],
     exports: [RouterModule, LocalizeRouterModule]

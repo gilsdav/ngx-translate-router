@@ -5,5 +5,6 @@
     "ROUTES.bob": "george",
     "ROUTES.map": "map",
     "ROUTES.matcher": "mymatcher",
-    "CHANGE_LANGUAGE": "Change language"
+    "CHANGE_LANGUAGE": "Change language",
+    "GO_HOME": "Go home"
 }
