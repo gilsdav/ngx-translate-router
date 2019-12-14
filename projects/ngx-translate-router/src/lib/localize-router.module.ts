@@ -20,6 +20,7 @@ import {
 // import { LocalizeRouterConfigLoader } from './localize-router-config-loader';
 import { GilsdavReuseStrategy } from './gilsdav-reuse-strategy';
 import { setupRouter } from './localized-router';
+import { deepCopy } from './util';
 
 @Injectable()
 export class ParserInitializer {
@@ -50,7 +51,9 @@ export class ParserInitializer {
 }
 
 export function getAppInitializer(p: ParserInitializer, parser: LocalizeParser, routes: Routes[]): any {
-  return p.generateInitializer(parser, routes).bind(p);
+  // DeepCopy needed to prevent RAW_ROUTES mutation
+  const routesCopy = deepCopy(routes);
+  return p.generateInitializer(parser, routesCopy).bind(p);
 }
 
 @NgModule({
