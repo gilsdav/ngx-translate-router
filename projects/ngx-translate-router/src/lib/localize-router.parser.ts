@@ -4,6 +4,7 @@ import { Observable, Observer } from 'rxjs';
 import { Location } from '@angular/common';
 import { CacheMechanism, LocalizeRouterSettings } from './localize-router.config';
 import { Inject } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 
 const COOKIE_EXPIRY = 30; // 1 month
 
@@ -392,7 +393,7 @@ export abstract class LocalizeParser {
    * @param params query params object
    */
   public formatQueryParams(params: Params): string {
-    return Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    return new HttpParams({ fromObject: params }).toString();
   }
 
   /**
