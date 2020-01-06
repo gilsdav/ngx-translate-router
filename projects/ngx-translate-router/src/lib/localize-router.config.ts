@@ -77,18 +77,22 @@ const DEFAULT_COOKIE_FORMAT = '{{value}};{{expires}}';
 @Injectable()
 export class LocalizeRouterSettings implements LocalizeRouterConfig {
 
-  public cacheMechanism: CacheMechanism = CacheMechanism.LocalStorage;
-  public defaultLangFunction: DefaultLanguageFunction = void 0;
+  public cacheMechanism: CacheMechanism;
+  public defaultLangFunction: DefaultLanguageFunction;
+
   /**
    * Settings for localize router
    */
   constructor(
-    @Optional() @Inject(USE_CACHED_LANG) public useCachedLang: boolean = true,
-    @Optional() @Inject(ALWAYS_SET_PREFIX) public alwaysSetPrefix: boolean = true,
-    // @Optional() @Inject(CACHE_MECHANISM) public cacheMechanism: CacheMechanism = CacheMechanism.LocalStorage,
-    @Optional() @Inject(CACHE_NAME) public cacheName: string = LOCALIZE_CACHE_NAME,
-    // @Optional() @Inject(DEFAULT_LANG_FUNCTION) public defaultLangFunction: DefaultLanguageFunction = void 0,
-    @Optional() @Inject(COOKIE_FORMAT) public cookieFormat: string = DEFAULT_COOKIE_FORMAT
+    @Inject(USE_CACHED_LANG) public useCachedLang: boolean = true,
+    @Inject(ALWAYS_SET_PREFIX) public alwaysSetPrefix: boolean = true,
+    @Inject(CACHE_MECHANISM) cacheMechanism = CacheMechanism.LocalStorage,
+    @Inject(CACHE_NAME) public cacheName: string = LOCALIZE_CACHE_NAME,
+    @Inject(DEFAULT_LANG_FUNCTION) defaultLangFunction = void 0,
+    @Inject(COOKIE_FORMAT) public cookieFormat: string = DEFAULT_COOKIE_FORMAT
   ) {
+    this.cacheMechanism = cacheMechanism;
+    this.defaultLangFunction = defaultLangFunction;
   }
+
 }
