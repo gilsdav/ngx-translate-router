@@ -7,7 +7,8 @@ import { BobComponent } from './bob/bob.component';
 
 const routes: Routes = [
   { path: '', component: BobComponent },
-  { path: 'bob', component: BobComponent }
+  { path: 'bob', component: BobComponent },
+  { path: ':id/:slug', component: BobComponent }
 ];
 
 @NgModule({

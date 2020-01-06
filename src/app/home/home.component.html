@@ -6,4 +6,7 @@
 <p><a [routerLink]="['/test', 'bob'] | localize">test</a></p>
 <p><a [routerLink]="['/!test', 'bob'] | localize">test2</a></p>
 
+<p><a [routerLink]="['/test', id, slug] | localize">Double params</a></p>
+<p><a [routerLink]="[id, slug] | localize">Double params only</a></p>
+
 <router-outlet (activate)="routerOutletActivation(true)" (deactivate)="routerOutletActivation(false)"></router-outlet>

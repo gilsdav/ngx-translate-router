@@ -7,6 +7,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
+  public id = '1234';
+  public slug = 'mySlug';
+
   constructor() { }
 
   ngOnInit() {
