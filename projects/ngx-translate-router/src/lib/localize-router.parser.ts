@@ -357,19 +357,42 @@ export abstract class LocalizeParser {
   }
 
   /**
-   * Get translated value
+   * Search translated value by prefix('s)
    */
   private translateText(key: string): string {
     if (this.escapePrefix && key.startsWith(this.escapePrefix)) {
       return key.replace(this.escapePrefix, '');
     } else {
       if (!this._translationObject) {
-        return key;
+          return key;
       }
-      const fullKey = this.prefix + key;
-      const res = this.translate.getParsedResult(this._translationObject, fullKey);
-      return res !== fullKey ? res : key;
+
+      let prefixes: string | string[] = this.prefix;
+      if (!Array.isArray(prefixes)) {
+        prefixes = [prefixes];
+      }
+
+      let fullKey;
+      let res;
+      for(let prefix of prefixes) {
+        fullKey = prefix + key;
+        res = this.getTranslation(fullKey);
+        if(res !== fullKey) {
+          break;
+        }
+      }
+
+      return res && fullKey && res !== fullKey ? res : key;
     }
+  }
+
+  /**
+   * Get translated value
+   */
+  private getTranslation(key) {
+      /** @type {?} */
+      const res = this.translate.getParsedResult(this._translationObject, key);
+      return res;
   }
 
   /**
