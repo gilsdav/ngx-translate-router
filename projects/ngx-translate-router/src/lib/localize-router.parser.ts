@@ -17,7 +17,7 @@ export abstract class LocalizeParser {
   routes: Routes;
   defaultLang: string;
 
-  protected prefix: string;
+  protected prefix: string|string[];
   protected escapePrefix: string;
 
   private _translationObject: any;
@@ -422,7 +422,7 @@ export abstract class LocalizeParser {
   /**
    * Get translation key prefix from config
    */
-  public getPrefix(): string {
+  public getPrefix(): string|string[] {
     return this.prefix;
   }
 
@@ -443,7 +443,7 @@ export class ManualParserLoader extends LocalizeParser {
    * CTOR
    */
   constructor(translate: TranslateService, location: Location, settings: LocalizeRouterSettings,
-    locales: string[] = ['en'], prefix: string = 'ROUTES.', escapePrefix: string = '') {
+    locales: string[] = ['en'], prefix: string|string[] = 'ROUTES.', escapePrefix: string = '') {
     super(translate, location, settings);
     this.locales = locales;
     this.prefix = prefix || '';
