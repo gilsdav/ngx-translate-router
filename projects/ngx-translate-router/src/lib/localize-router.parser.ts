@@ -376,7 +376,7 @@ export abstract class LocalizeParser {
       let res;
       for(let prefix of prefixes) {
         fullKey = prefix + key;
-        res = this.getTranslation(fullKey);
+        res = this.translate.getParsedResult(this._translationObject, fullKey);
         if(res !== fullKey) {
           break;
         }
@@ -384,15 +384,6 @@ export abstract class LocalizeParser {
 
       return res && fullKey && res !== fullKey ? res : key;
     }
-  }
-
-  /**
-   * Get translated value
-   */
-  private getTranslation(key) {
-      /** @type {?} */
-      const res = this.translate.getParsedResult(this._translationObject, key);
-      return res;
   }
 
   /**
