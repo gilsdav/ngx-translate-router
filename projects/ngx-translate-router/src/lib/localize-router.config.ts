@@ -1,4 +1,4 @@
-import { Inject, InjectionToken, Provider } from '@angular/core';
+import { Inject, InjectionToken, Provider, Injectable, Optional } from '@angular/core';
 import { Routes } from '@angular/router';
 import { LocalizeRouterModule } from './localize-router.module';
 
@@ -15,14 +15,14 @@ export const RAW_ROUTES: InjectionToken<Routes[]> = new InjectionToken<Routes[]>
 /**
  * Type for Caching of default language
  */
-export type CacheMechanism = 'LocalStorage' | 'Cookie';
+// export type CacheMechanism = 'LocalStorage' | 'Cookie';
 
 /**
  * Namespace for fail proof access of CacheMechanism
  */
-export namespace CacheMechanism {
-  export const LocalStorage: CacheMechanism = 'LocalStorage';
-  export const Cookie: CacheMechanism = 'Cookie';
+export enum CacheMechanism {
+  LocalStorage = 'LocalStorage',
+  Cookie = 'Cookie'
 }
 
 /**
@@ -74,17 +74,25 @@ export interface LocalizeRouterConfig {
 const LOCALIZE_CACHE_NAME = 'LOCALIZE_DEFAULT_LANGUAGE';
 const DEFAULT_COOKIE_FORMAT = '{{value}};{{expires}}';
 
+@Injectable()
 export class LocalizeRouterSettings implements LocalizeRouterConfig {
+
+  public cacheMechanism: CacheMechanism;
+  public defaultLangFunction: DefaultLanguageFunction;
+
   /**
    * Settings for localize router
    */
   constructor(
     @Inject(USE_CACHED_LANG) public useCachedLang: boolean = true,
     @Inject(ALWAYS_SET_PREFIX) public alwaysSetPrefix: boolean = true,
-    @Inject(CACHE_MECHANISM) public cacheMechanism: CacheMechanism = CacheMechanism.LocalStorage,
+    @Inject(CACHE_MECHANISM) cacheMechanism = CacheMechanism.LocalStorage,
     @Inject(CACHE_NAME) public cacheName: string = LOCALIZE_CACHE_NAME,
-    @Inject(DEFAULT_LANG_FUNCTION) public defaultLangFunction: DefaultLanguageFunction = void 0,
+    @Inject(DEFAULT_LANG_FUNCTION) defaultLangFunction = void 0,
     @Inject(COOKIE_FORMAT) public cookieFormat: string = DEFAULT_COOKIE_FORMAT
   ) {
+    this.cacheMechanism = cacheMechanism;
+    this.defaultLangFunction = defaultLangFunction;
   }
+
 }
