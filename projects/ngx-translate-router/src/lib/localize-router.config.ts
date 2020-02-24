@@ -15,14 +15,9 @@ export const RAW_ROUTES: InjectionToken<Routes[]> = new InjectionToken<Routes[]>
 /**
  * Type for Caching of default language
  */
-export type CacheMechanism = 'LocalStorage' | 'Cookie';
-
-/**
- * Namespace for fail proof access of CacheMechanism
- */
-export namespace CacheMechanism {
-  export const LocalStorage: CacheMechanism = 'LocalStorage';
-  export const Cookie: CacheMechanism = 'Cookie';
+export enum CacheMechanism {
+  LocalStorage = 'LocalStorage',
+  Cookie = 'Cookie'
 }
 
 /**
