@@ -1,4 +1,4 @@
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 // import { Location } from '@angular/common';
 import {
   Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
@@ -15,6 +15,7 @@ import { LocalizedMatcherUrlSegment } from './localized-matcher-url-segment';
  * Localization service
  * modifyRoutes
  */
+@Injectable()
 export class LocalizeRouterService {
   routerEvents: Subject<string>;
 
