@@ -32,5 +32,8 @@
         "dist/ngx-translate-router-http-loader/*"
       ]
     }
+  },
+  "angularCompilerOptions": {
+    "enableIvy": true
   }
 }
