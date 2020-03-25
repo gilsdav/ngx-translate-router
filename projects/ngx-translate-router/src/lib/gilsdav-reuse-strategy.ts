@@ -50,6 +50,15 @@ export class GilsdavReuseStrategy implements RouteReuseStrategy {
         key = `${key}-${route.data.discriminantPathKey}`;
       }
       return key;
+    } else {
+      let key = route.routeConfig.path;
+      if (route.parent) {
+        key = `${this.getKey(route.parent)}/${route.routeConfig.path}`;
+      }
+      if (route.data.discriminantPathKey) {
+        key = `${key}-${route.data.discriminantPathKey}`;
+      }
+      return key;
     }
   }
 }

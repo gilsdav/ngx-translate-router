@@ -61,6 +61,16 @@ In order to use `@gilsdav/ngx-translate-router` you must initialize it with foll
 `import {LocalizeRouterModule} from '@gilsdav/ngx-translate-router';`
 Module can be initialized either using static file or manually by passing necessary values.
 
+*Be careful to import this module after the standard RouterModule and the TranslateModule. This should be done for the main router as well as for lazy loaded ones.*
+
+```ts
+imports: [
+  TranslateModule.forRoot(),
+  RouterModule.forRoot(routes),
+  LocalizeRouterModule.forRoot(routes)
+]
+```
+
 #### Http loader
 
 In order to use Http loader for config files, you must include `@gilsdav/ngx-translate-router-http-loader` package and use its `LocalizeRouterHttpLoader`. 
