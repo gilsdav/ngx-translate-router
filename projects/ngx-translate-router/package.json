@@ -12,6 +12,6 @@
     "@angular/common": ">=8.0.0",
     "@angular/core": ">=8.0.0",
     "@angular/router": ">=8.0.0",
-    "@ngx-translate/core": "^11.0.1"
+    "@ngx-translate/core": ">=11.0.1"
   }
 }
