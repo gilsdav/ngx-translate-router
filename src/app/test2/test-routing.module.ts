@@ -11,8 +11,10 @@ const routes: Routes = [
     path: '',
     component: Test2Component,
     children: [
-      { path: 'sarah', component: BobComponent },
-      { path: 'both', component: BobComponent }
+      // { path: 'sarah', component: BobComponent },
+      // { path: 'both', component: BobComponent },
+      { path: 'sarah', component: BobComponent, data: { skipRouteLocalization: true } },
+      { path: 'both', component: BobComponent, data: { skipRouteLocalization: true } }
     ]
   }
 ];

@@ -151,6 +151,10 @@ export class LocalizeRouterService {
       const path = snapshot.data.localizeRouter.path;
       const subPathSegments = path.split('/');
       return this.buildUrlFromSegments(snapshot, subPathSegments);
+    } else if (snapshot.parent && snapshot.parent.parent) { // Not lang route and no localizeRouter data = excluded path
+      const path = snapshot.routeConfig.path;
+      const subPathSegments = path.split('/');
+      return this.buildUrlFromSegments(snapshot, subPathSegments);
     } else {
       return '';
     }
