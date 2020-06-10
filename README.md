@@ -1,6 +1,12 @@
 # ngx-translate-router
-
 > An implementation of routes localization for Angular.
+
+* ngx-translate-router
+[![npm version](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router.svg)](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router)
+* ngx-translate-router-http-loader
+[![npm version](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router-http-loader.svg)](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router-http-loader)
+
+
 
 **Fork of [localize-router](https://github.com/Greentube/localize-router).**
 
