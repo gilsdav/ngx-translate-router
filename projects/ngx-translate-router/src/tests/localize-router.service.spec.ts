@@ -90,7 +90,7 @@ export class FakeActivatedRoute implements ActivatedRoute {
   };
 }
 
-fdescribe('LocalizeRouterService', () => {
+describe('LocalizeRouterService', () => {
   let injector: Injector;
   let parser: LocalizeParser;
   let router: Router;
