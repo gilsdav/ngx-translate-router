@@ -7,7 +7,9 @@
     "build": "npm run build:main && npm run build:http-loader",
     "build:main": "ng build --prod ngx-translate-router",
     "build:http-loader": "ng build --prod ngx-translate-router-http-loader",
-    "test": "ng test",
+    "test": "npm run test:main -- --watch=false --browsers=ChromeHeadless && npm run test:http-loader -- --watch=false --browsers=ChromeHeadless",
+    "test:main": "ng test ngx-translate-router",
+    "test:http-loader": "ng test ngx-translate-router-http-loader",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
