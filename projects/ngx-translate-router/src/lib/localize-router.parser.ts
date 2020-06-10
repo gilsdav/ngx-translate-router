@@ -245,7 +245,8 @@ export abstract class LocalizeParser {
    * Get language from url
    */
   getLocationLang(url?: string): string {
-    const queryParamSplit = (url || this.location.path()).split('?');
+    const anchorSplit = (url || this.location.path()).split('#');
+    const queryParamSplit = anchorSplit[0].split('?');
     let pathSlices: string[] = [];
     if (queryParamSplit.length > 0) {
       pathSlices = queryParamSplit[0].split('/');
@@ -368,7 +369,7 @@ export abstract class LocalizeParser {
       }
       const fullKey = this.prefix + key;
       const res = this.translate.getParsedResult(this._translationObject, fullKey);
-      return res !== fullKey ? res : key;
+      return res !== undefined && res !== fullKey ? res : key;
     }
   }
 
