@@ -2,5 +2,9 @@
     "TITLE": "hello",
     "ROUTES.home": "home",
     "ROUTES.test": "mytest",
-    "ROUTES.bob": "george"
+    "ROUTES.bob": "george",
+    "ROUTES.map": "map",
+    "ROUTES.matcher": "mymatcher",
+    "CHANGE_LANGUAGE": "Change language",
+    "GO_HOME": "Go home"
 }

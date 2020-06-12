@@ -1,3 +1,6 @@
+<button (click)="switchLang()">{{ 'CHANGE_LANGUAGE' | translate }}</button>
+<br/>
+<a [routerLink]="['/'] | localize" >{{ 'GO_HOME' | translate }}</a>
 
 <div style="text-align:center">
   <h1>

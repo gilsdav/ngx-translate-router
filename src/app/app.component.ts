@@ -15,11 +15,20 @@ export class AppComponent implements OnInit {
       // should be triggered on every language change
       this.localize.routerEvents.subscribe((language: string) => {
         console.log(language);
+        console.log('app-comp', this.localize.translateRoute('/'));
+        console.log('app-comp', this.localize.translateRoute('/?test=ok'));
+        console.log('app-comp', this.localize.translateRoute('/bob?test=coucou'));
+        console.log('app-comp', this.localize.translateRoute('bob?test=coucou'));
       });
     }
 
     public routerOutletActivation(active: boolean) {
       console.log('routerOutletActivation', active);
+    }
+
+    public switchLang() {
+      console.log('change lang');
+      this.localize.changeLanguage(this.localize.parser.currentLang === 'fr' ? 'en' : 'fr');
     }
 
 }

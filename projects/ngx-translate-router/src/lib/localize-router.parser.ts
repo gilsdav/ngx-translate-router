@@ -4,6 +4,7 @@ import { Observable, Observer } from 'rxjs';
 import { Location } from '@angular/common';
 import { CacheMechanism, LocalizeRouterSettings } from './localize-router.config';
 import { Inject } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 
 const COOKIE_EXPIRY = 30; // 1 month
 
@@ -203,7 +204,7 @@ export abstract class LocalizeParser {
     }
 
     const result = this.translateRoute(routeData.localizeRouter[property]);
-    (<any>route)[property] = prefixLang ? `/${this.urlPrefix}${result}` : result;
+    (<any>route)[property] = prefixLang ? this.addPrefixToUrl(result) : result;
   }
 
   get urlPrefix() {
@@ -212,6 +213,15 @@ export abstract class LocalizeParser {
     } else {
       return '';
     }
+  }
+
+  /**
+   * Add current lang as prefix to given url.
+   */
+  addPrefixToUrl(url: string): string {
+    const plitedUrl = url.split('?');
+    plitedUrl[0] = plitedUrl[0].replace(/\/$/, '');
+    return `/${this.urlPrefix}${plitedUrl.join('?')}`;
   }
 
   /**
@@ -316,11 +326,15 @@ export abstract class LocalizeParser {
       const name = encodeURIComponent(this.settings.cacheName);
       if (value) {
         let cookieTemplate = `${this.settings.cookieFormat}`;
-        const d: Date = new Date();
-        d.setTime(d.getTime() + COOKIE_EXPIRY * 86400000); // * days
         cookieTemplate = cookieTemplate
           .replace('{{value}}', `${name}=${encodeURIComponent(value)}`)
-          .replace('{{expires}}', `expires=${d.toUTCString()}`);
+          .replace(/{{expires:?(\d+)?}}/g, (fullMatch, groupMatch) => {
+              const days = groupMatch === undefined ? COOKIE_EXPIRY : parseInt(groupMatch, 10);
+              const date: Date = new Date();
+              date.setTime(date.getTime() + days * 86400000);
+              return `expires=${date.toUTCString()}`;
+          });
+
         document.cookie = cookieTemplate;
         return;
       }
@@ -379,7 +393,21 @@ export abstract class LocalizeParser {
    * @param params query params object
    */
   public formatQueryParams(params: Params): string {
-    return Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    return new HttpParams({ fromObject: params }).toString();
+  }
+
+  /**
+   * Get translation key prefix from config
+   */
+  public getPrefix(): string {
+    return this.prefix;
+  }
+
+  /**
+   * Get escape translation prefix from config
+   */
+  public getEscapePrefix(): string {
+    return this.escapePrefix;
   }
 }
 

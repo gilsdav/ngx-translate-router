@@ -64,3 +64,17 @@ export function isPromise(obj: any): obj is Promise<any> {
   // It's up to the caller to ensure that obj.then conforms to the spec
   return !!obj && typeof obj.then === 'function';
 }
+
+/**
+ * Deep copy of object and array
+ */
+export function deepCopy<t>(object: t): t {
+  const output = Array.isArray(object) ? [] : {};
+  for (const data in object) {
+    if (data) {
+      const value = object[data];
+      output[data as string] = (typeof value === 'object') ? deepCopy(value) : value;
+    }
+  }
+  return output as t;
+}

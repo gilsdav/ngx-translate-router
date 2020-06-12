@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/ngx-translate-router-demo",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -29,6 +30,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -131,7 +138,8 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/ngx-translate-router/ng-package.prod.json"
+              "project": "projects/ngx-translate-router/ng-package.prod.json",
+              "tsConfig": "projects/ngx-translate-router/tsconfig.lib.prod.json"
             }
           }
         },
@@ -171,7 +179,8 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/ngx-translate-router-http-loader/ng-package.prod.json"
+              "project": "projects/ngx-translate-router-http-loader/ng-package.prod.json",
+              "tsConfig": "projects/ngx-translate-router-http-loader/tsconfig.lib.prod.json"
             }
           }
         },

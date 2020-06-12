@@ -1,17 +1,21 @@
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 // import { Location } from '@angular/common';
-import { Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
-  Event, NavigationCancel } from '@angular/router';
+import {
+  Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
+  Event, NavigationCancel
+} from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, pairwise } from 'rxjs/operators';
 
 import { LocalizeParser } from './localize-router.parser';
 import { LocalizeRouterSettings } from './localize-router.config';
+import { LocalizedMatcherUrlSegment } from './localized-matcher-url-segment';
 
 /**
  * Localization service
  * modifyRoutes
  */
+@Injectable()
 export class LocalizeRouterService {
   routerEvents: Subject<string>;
 
@@ -130,13 +134,27 @@ export class LocalizeRouterService {
   }
 
   /**
+   * Build URL from segments and snapshot (for params)
+   */
+  private buildUrlFromSegments(snapshot: ActivatedRouteSnapshot, segments: string[]): string {
+    return segments.map((s: string, i: number) => s.indexOf(':') === 0 ? snapshot.url[i].path : s).join('/');
+  }
+
+  /**
    * Extracts new segment value based on routeConfig and url
    */
   private parseSegmentValue(snapshot: ActivatedRouteSnapshot): string {
-    if (snapshot.data.localizeRouter) {
+    if (snapshot.routeConfig && snapshot.routeConfig.matcher) {
+      const subPathMatchedSegments = this.parseSegmentValueMatcher(snapshot);
+      return this.buildUrlFromSegments(snapshot, subPathMatchedSegments);
+    } else if (snapshot.data.localizeRouter) {
       const path = snapshot.data.localizeRouter.path;
       const subPathSegments = path.split('/');
-      return subPathSegments.map((s: string, i: number) => s.indexOf(':') === 0 ? snapshot.url[i].path : s).join('/');
+      return this.buildUrlFromSegments(snapshot, subPathSegments);
+    } else if (snapshot.parent && snapshot.parent.parent) { // Not lang route and no localizeRouter data = excluded path
+      const path = snapshot.routeConfig.path;
+      const subPathSegments = path.split('/');
+      return this.buildUrlFromSegments(snapshot, subPathSegments);
     } else {
       return '';
     }
@@ -151,6 +169,19 @@ export class LocalizeRouterService {
     return ''; */
   }
 
+  private parseSegmentValueMatcher(snapshot: ActivatedRouteSnapshot): string[] {
+    const localizeMatcherParams = snapshot.data && snapshot.data.localizeMatcher && snapshot.data.localizeMatcher.params || { };
+    const subPathSegments: string[] = snapshot.url
+      .map((segment: LocalizedMatcherUrlSegment) => {
+        const currentPath = segment.path;
+        const matchedParamName = segment.localizedParamName;
+        const val = (matchedParamName && localizeMatcherParams[matchedParamName]) ?
+          localizeMatcherParams[matchedParamName](currentPath) : null;
+        return val || `${this.parser.getEscapePrefix()}${currentPath}`;
+      });
+    return subPathSegments;
+  }
+
   /**
    * Translate route to current language
    * If new language is explicitly provided then replace language part in url with new language
@@ -158,7 +189,7 @@ export class LocalizeRouterService {
   translateRoute(path: string | any[]): string | any[] {
     if (typeof path === 'string') {
       const url = this.parser.translateRoute(path);
-      return !path.indexOf('/') ? `/${this.parser.urlPrefix}${url}` : url;
+      return !path.indexOf('/') ? this.parser.addPrefixToUrl(url) : url;
     }
     // it's an array
     const result: any[] = [];
@@ -166,7 +197,7 @@ export class LocalizeRouterService {
       if (typeof segment === 'string') {
         const res = this.parser.translateRoute(segment);
         if (!index && !segment.indexOf('/')) {
-          result.push(`/${this.parser.urlPrefix}${res}`);
+          result.push(this.parser.addPrefixToUrl(res));
         } else {
           result.push(res);
         }

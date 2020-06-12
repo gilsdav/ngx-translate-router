@@ -1,6 +1,12 @@
 # ngx-translate-router
-
 > An implementation of routes localization for Angular.
+
+* ngx-translate-router
+[![npm version](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router.svg)](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router)
+* ngx-translate-router-http-loader
+[![npm version](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router-http-loader.svg)](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router-http-loader)
+
+
 
 **Fork of [localize-router](https://github.com/Greentube/localize-router).**
 
@@ -11,8 +17,9 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 | angular version | translate-router | http-loader | type |
 | --------------- | ---------------- | ----------- | ---- |
 | 6 - 7           | 1.0.2            | 1.0.1       | legacy |
-| 7               | 1.7.2            | 1.1.0       | active |
-| 8               | 2.1.0            | 1.1.0       | active |
+| 7               | 1.7.3            | 1.1.0       | legacy |
+| 8               | 2.2.3            | 1.1.0       | legacy |
+| 8 - 9           | 3.0.1            | 1.1.2       | active |
 
 
 Demo project can be found under sub folder `src`.
@@ -28,8 +35,11 @@ Demo project can be found under sub folder `src`.
         - [Manual initialization](#manual-initialization)
         - [Server side initialization](#server-side-initialization)
     - [How it works](#how-it-works)
-        - [excluding-routes](#excluding-routes)
+        - [Excluding routes](#excluding-routes)
         - [ngx-translate integration](#ngx-translate-integration)
+        - [Path discrimination](#path-discrimination)
+        - [WildCard path](#wildcard-path)
+        - [Matcher params translation](#matcher-params-translation)
     - [Pipe](#pipe)
     - [Service](#service)
     - [AOT](#aot)
@@ -56,6 +66,16 @@ In order to use `@gilsdav/ngx-translate-router` you must initialize it with foll
 ### Initialize module
 `import {LocalizeRouterModule} from '@gilsdav/ngx-translate-router';`
 Module can be initialized either using static file or manually by passing necessary values.
+
+*Be careful to import this module after the standard RouterModule and the TranslateModule. This should be done for the main router as well as for lazy loaded ones.*
+
+```ts
+imports: [
+  TranslateModule.forRoot(),
+  RouterModule.forRoot(routes),
+  LocalizeRouterModule.forRoot(routes)
+]
+```
 
 #### Http loader
 
@@ -246,6 +266,121 @@ this.translate.use(languageFromUrl || cachedLanguage || languageOfBrowser || fir
 
 Both `languageOfBrowser` and `languageFromUrl` are cross-checked with locales from config.
 
+#### Path discrimination
+
+Do you use same path to load multiple lazy-loaded modules and you have wrong component tree ?
+`discriminantPathKey` will help ngx-translate-router to generate good component tree. 
+
+```ts
+  {
+    path: '',
+    loadChildren: () => import('app/home/home.module').then(m => m.HomeModule),
+    data: {
+        discriminantPathKey: 'HOMEPATH'
+    }
+  },
+  {
+    path: '',
+    loadChildren: () => import('app/information/information.module').then(m => m.InformationModule),
+    data: {
+        discriminantPathKey: 'INFOPATH'
+    }
+  }
+```
+
+#### WildCard Path
+##### Favored way
+
+The favored way to use WildCard ( `'**'` path ) is to use the `redirectTo`. It will let the user to translate the "not found" page message.
+
+```ts
+{
+  path: '404',
+  component: NotFoundComponent
+},
+{
+  path: '**',
+  redirectTo: '/404'
+}
+```
+
+##### Alternative
+
+If you need to keep the wrong url you will face to a limitation: ***You can not translate current page.***
+This limitation is because we can not determine the language from a wrong url.
+
+```ts
+{
+  path: '**',
+  component: NotFoundComponent
+}
+```
+
+#### Matcher params translation
+
+##### Configure routes
+In case you want to translate some params of matcher, `localizeMatcher` provides you the way to do it through a function per each param. Make sure that the key is the same as the one used in the navigate path (example: if the function returns "map", it must be contained in the not localized path: `[routerLink]="['/matcher', 'aaa', 'map'] | localize"`) otherwise you will not be able to use `routerLinkActiveOptions`. 
+
+Example: 
+
+```ts
+{
+  path: 'matcher',
+  children: [
+    {
+      matcher: detailMatcher,
+      loadChildren: () => import('./matcher/matcher-detail/matcher-detail.module').then(mod => mod.MatcherDetailModule)
+    },
+    {
+      matcher: baseMatcher,
+      loadChildren: () => import('./matcher/matcher.module').then(mod => mod.MatcherModule),
+      data: {
+        localizeMatcher: {
+          params: {
+            mapPage: shouldTranslateMap
+          }
+        }
+      }
+    }
+  ]
+}
+
+...
+
+export function shouldTranslateMap(param: string): string {
+  if (isNaN(+param)) {
+    return 'map';
+  }
+  return null;
+}
+```
+
+The output of the function should be `falsy` if the param must not be translated or should return the `key` (without prefix) you want to use when translating if you want to translate the param. 
+
+Notice that any function that you use in `localizeMatcher` must be exported to be compatible with AOT.
+
+##### Small changes to your matcher
+
+We work with `UrlSegment` to split URL into "params" in basic `UrlMatchResult` but there is not enough information to apply the translations.
+
+You must use the `LocalizedMatcherUrlSegment` type to more strongly associate a segment with a parameter. It contains only the `localizedParamName` attribute in addition to basic UrlSegment. Set this attribute before adding the segment into `consumed` and` posParams`.
+
+```ts
+const result: UrlMatchResult = {
+  consumed: [],
+  posParams: { }
+};
+
+...
+
+(segment as LocalizedMatcherUrlSegment).localizedParamName = name;
+result.consumed.push(segment);
+result.posParams[name] = segment;
+```
+
+##### Matcher params translated without localizeMatcher issue
+If the URL is accidentally translated from a language to another which creates an inconsistent state you have to enable `escapePrefix` mechanism. (example: `escapePrefix: '!'`)
+
 ### Pipe
 
 `LocalizeRouterPipe` is used to translate `routerLink` directive's content. Pipe can be appended to partial strings in the routerLink's definition or to entire array element:
@@ -305,6 +440,7 @@ export function localizeLoaderFactory(translate: TranslateService, location: Loc
 - `cookieFormat`: string. Format of cookie to store. Default value is `'{{value}};{{expires}}'`. (Extended format e.g : `'{{value}};{{expires}};path=/'`) 
   - `{{value}}` will be replaced by the value to save (`CACHE_NAME=language`). Must be present into format.
   - `{{expires}}` will be replaced by `expires=currentDate+30days`. Optional if you want session cookie.
+    - you can configure the number of expiration days by using this synthax: `{{expires:365}}`. It will result as `expires=currentDate+365days`.
   - results to : `LOCALIZE_DEFAULT_LANGUAGE=en;expires=Wed, 11 Sep 2019 21:19:23 GMT`. 
 ### LocalizeRouterService
 #### Properties:
