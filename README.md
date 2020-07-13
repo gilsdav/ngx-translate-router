@@ -31,9 +31,9 @@ Demo project can be found under sub folder `src`.
 - [Usage](#usage)
     - [Initialize module](#initialize-module)
         - [Http loader](#http-loader)
-        - [Initialization config](#initialization-config)
         - [Manual initialization](#manual-initialization)
-        - [Server side initialization](#server-side-initialization)
+        - [Initialization config](#initialization-config)
+    - [Server side](#server-side)
     - [How it works](#how-it-works)
         - [Excluding routes](#excluding-routes)
         - [ngx-translate integration](#ngx-translate-integration)
@@ -128,10 +128,6 @@ If you are using child modules or routes you need to initialize them with `forCh
 export class ChildModule { }
 ```
 
-#### Initialization config
-Apart from providing routes which are mandatory, and parser loader you can provide additional configuration for more granular setting of `localize router`. More information at [LocalizeRouterConfig](#localizerouterconfig). 
-
-
 #### Manual initialization
    With manual initialization you need to provide information directly:
    ```ts
@@ -144,67 +140,93 @@ Apart from providing routes which are mandatory, and parser loader you can provi
        }
    })
    ```
+   
+#### Initialization config
+Apart from providing routes which are mandatory, and parser loader you can provide additional configuration for more granular setting of `@gilsdav/ngx-translate-router`. More information at [LocalizeRouterConfig](#localizerouterconfig). 
 
-<!-- #### Server side initialization
-In order to use server side initialization in isomorphic/universal projects you need to create loader similar to this:
-```ts
-export class LocalizeUniversalLoader extends LocalizeParser {
-  /**
-   * Gets config from the server
-   * @param routes
-   */
-  public load(routes: Routes): Promise<any> {
-    return new Promise((resolve: any) => {
-      let data: any = JSON.parse(fs.readFileSync(`assets/locales.json`, 'utf8'));
-      this.locales = data.locales;
-      this.prefix = data.prefix;
-      this.init(routes).then(resolve);
+### Server side initialization
+
+In order to use `@gilsdav/ngx-translate-router` in Angular universal application (SSR) you need to:
+
+1. [Initialize the module](#initialize-module)
+2. In case you opted for initializing with Http loader, you need to take care of static file location. `@gilsdav/ngx-translate-router-http-loader` by default will try loading the config file from `assets/locales.json`. This is a relative path which won't work with SSR. You could use one of the following approaches,
+    1. Creating a factory function to override the default location with an absolute URL 
+        ```ts
+        export function localizeLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings, http: HttpClient) {
+          return new LocalizeRouterHttpLoader(translate, location, settings, http, 'http://example.com/assets/locales.json');
+        }
+         
+        LocalizeRouterModule.forRoot(routes, {
+          parser: {
+            provide: LocalizeParser,
+            useFactory: localizeLoaderFactory,
+            deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
+          }
+        })
+        ```
+    2. Using an HTTP interceptor in your `server.module` to convert relative paths to absolute ons, ex:
+        ```ts
+        intercept(request: HttpRequest<any>, next: HttpHandler) {
+          if (request.url.startsWith('assets') && isPlatformServer(this.platformId)) {
+            const req = this.injector.get(REQUEST);
+            const url = req.protocol + '://' + req.get('host') + '/' + request.url;
+            request = request.clone({
+              url: url
+            });
+          }
+          return next.handle(request);
+        }
+        
+        ```
+3. Let node server knows about the new routes:
+    ```ts
+    let fs = require('fs');
+    let data: any = JSON.parse(fs.readFileSync(`src/assets/locales.json`, 'utf8'));
+     
+    app.get('/', ngApp);
+    data.locales.forEach(route => {
+      app.get(`/${route}`, ngApp);
+      app.get(`/${route}/*`, ngApp);
     });
-  }
-}
+    ```
+4. In case you want to use `cacheMechanism = CacheMechanism.Cookie` you will need to handle the cookie in your node server. Something like,
 
-export function localizeLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings) {
-  return new LocalizeUniversalLoader(translate, location, settings);
-}
-```
-
-Don't forget to create similar loader for `ngx-translate` as well:
-```ts
-export class TranslateUniversalLoader implements TranslateLoader {
-  /**
-   * Gets the translations from the server
-   * @param lang
-   * @returns {any}
-   */
-  public getTranslation(lang: string): Observable<any> {
-    return Observable.create(observer => {
-      observer.next(JSON.parse(fs.readFileSync(`src/assets/locales/${lang}.json`, 'utf8')));
-      observer.complete();
+    ```ts
+    app.use(cookieParser());
+    
+    app.get('/', (req, res) => {
+      const defaultLang = 'de';
+      const lang = req.acceptsLanguages('de', 'en');
+      const cookieLang = req.cookies.LOCALIZE_DEFAULT_LANGUAGE; // This is the default name of cookie
+    
+      const definedLang = cookieLang || lang || defaultLang;
+    
+      res.redirect(301, `/${definedLang}/`);
     });
-  }
-}
-export function translateLoaderFactory() {
-  return new TranslateUniversalLoader();
-}
-```
+    ``` 
 
-Since node server expects to know which routes are allowed you can feed it like this:
-```ts
-let fs = require('fs');
-let data: any = JSON.parse(fs.readFileSync(`src/assets/locales.json`, 'utf8'));
+**Gotchas**
 
-app.get('/', ngApp);
-data.locales.forEach(route => {
-  app.get(`/${route}`, ngApp);
-  app.get(`/${route}/*`, ngApp);
-});
-```
+- In case you are using [domino](https://www.npmjs.com/package/domino) in your project, you will face the following error
 
-Working example can be found [here](https://github.com/meeroslav/universal-localize-example). -->
+  ```ts
+  ERROR TypeError: Cannot read property 'indexOf' of undefined
+  at TranslateService.getBrowserLang
+  ```
+
+  to overcome this, use the following:
+
+  ```ts
+  // language is readonly so normally you can't assign a value to it.
+  // The following comments remove the compile time error and the IDE warning
+  // @ts-ignore
+  // noinspection JSAnnotator
+  window.navigator.language = 'en';
+  ```
 
 ### How it works
 
-`Localize router` intercepts Router initialization and translates each `path` and `redirectTo` path of Routes.
+`@gilsdav/ngx-translate-router` intercepts Router initialization and translates each `path` and `redirectTo` path of Routes.
 The translation process is done with [ngx-translate](https://github.com/ngx-translate/core). In order to separate 
 router translations from normal application translations we use `prefix`. Default value for prefix is `ROUTES.`. Finally, in order to avoid accidentally translating a URL segment that should not be translated, you can optionally use `escapePrefix` so the prefix gets stripped and the segment doesn't get translated. Default `escapePrefix` is unset. 
 
@@ -220,7 +242,7 @@ Example to escape the translation of the segment with `escapePrefix: '!'`
 { path: '!home/first' ... } -> '/fr/home/premier'
 ```
 
-Upon every route change `Localize router` kicks in to check if there was a change to language. Translated routes are prepended with two letter language code:
+Upon every route change `@gilsdav/ngx-translate-router` kicks in to check if there was a change to language. Translated routes are prepended with two letter language code:
 ```
 http://yourpath/home -> http://yourpath/en/home
 ```
@@ -426,7 +448,7 @@ export function localizeLoaderFactory(translate: TranslateService, location: Loc
 ## API
 ### LocalizeRouterModule
 #### Methods:
-- `forRoot(routes: Routes, config: LocalizeRouterConfig = {}): ModuleWithProviders`: Main initializer for localize router. Can provide custom configuration for more granular settings.
+- `forRoot(routes: Routes, config: LocalizeRouterConfig = {}): ModuleWithProviders`: Main initializer for @gilsdav/ngx-translate-router. Can provide custom configuration for more granular settings.
 - `forChild(routes: Routes): ModuleWithProviders`: Child module initializer for providing child routes.
 ### LocalizeRouterConfig
 #### Properties
