@@ -145,7 +145,7 @@ export class ChildModule { }
 #### Initialization config
 Apart from providing routes which are mandatory, and parser loader you can provide additional configuration for more granular setting of `@gilsdav/ngx-translate-router`. More information at [LocalizeRouterConfig](#localizerouterconfig). 
 
-### Server side initialization
+### Server side
 
 In order to use `@gilsdav/ngx-translate-router` in Angular universal application (SSR) you need to:
 
