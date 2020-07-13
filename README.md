@@ -227,7 +227,7 @@ In order to use `@gilsdav/ngx-translate-router` in Angular universal application
 
 #### Deal with initialNavigation
 
-When you add Universal to your app you will have initialNavigation set to `"enabled"`. This is to avoid the flickering of the lazy-load.
+When you add Universal into your app you will have `initialNavigation` set to `"enabled"`. This is to avoid the flickering of the lazy-load.
 
 Unfortunatly it doesn't help with this library and can cause issues.
 So you need to set it to `"disabled"` and add the ngx-translate-router option `initialNavigation: true` to have this desired behavior.
