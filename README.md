@@ -34,6 +34,7 @@ Demo project can be found under sub folder `src`.
         - [Manual initialization](#manual-initialization)
         - [Initialization config](#initialization-config)
     - [Server side](#server-side)
+        - [Deal with initialNavigation](#deal-with-initialNavigation)
     - [How it works](#how-it-works)
         - [Excluding routes](#excluding-routes)
         - [ngx-translate integration](#ngx-translate-integration)
@@ -223,6 +224,23 @@ In order to use `@gilsdav/ngx-translate-router` in Angular universal application
   // noinspection JSAnnotator
   window.navigator.language = 'en';
   ```
+
+#### Deal with initialNavigation
+
+When you add Universal to your app you will have initialNavigation set to `"enabled"`. This is to avoid the flickering of the lazy-load.
+
+Unfortunatly it doesn't help with this library and can cause issues.
+So you need to set it to `"disabled"` and add the ngx-translate-router option `initialNavigation: true` to have this desired behavior.
+
+```ts
+imports: [
+  RouterModule.forRoot(routes, { initialNavigation: 'disabled' }),
+  LocalizeRouterModule.forRoot(routes, {
+    ...
+    initialNavigation: true
+  })
+]
+```
 
 ### How it works
 
