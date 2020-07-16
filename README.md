@@ -7,6 +7,7 @@
 [![npm version](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router-http-loader.svg)](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router-http-loader)
 * ngx-translate-router-scully-plugin
 [![npm version](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router-scully-plugin.svg)](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router-scully-plugin)
+([Documentation here](https://github.com/gilsdav/ngx-translate-router/tree/master/projects/ngx-translate-router-scully-plugin#readme))
 
 
 
