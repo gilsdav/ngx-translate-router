@@ -1,7 +1,7 @@
 {
   "name": "@gilsdav/ngx-translate-router-scully-plugin",
   "version": "0.0.2",
-  "homepage": "https://github.com/gilsdav/ngx-translate-router#readme",
+  "homepage": "https://github.com/gilsdav/ngx-translate-router/tree/master/projects/ngx-translate-router-scully-plugin#readme",
   "license" : "MIT",
   "author": {
     "name": "David Gilson",
