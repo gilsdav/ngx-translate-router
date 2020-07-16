@@ -2,6 +2,8 @@
 
 This Scully plugin allow you to use NgxTranslateRouter into your Angular project.
 
+[![npm version](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router-scully-plugin.svg)](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router-scully-plugin)
+
 ## Installation
 
 ```
