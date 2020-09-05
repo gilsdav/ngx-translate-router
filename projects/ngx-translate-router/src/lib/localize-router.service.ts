@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 // import { Location } from '@angular/common';
 import {
   Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
-  Event, NavigationCancel
+  Event, NavigationCancel, Routes
 } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, pairwise } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { filter, pairwise } from 'rxjs/operators';
 import { LocalizeParser } from './localize-router.parser';
 import { LocalizeRouterSettings } from './localize-router.config';
 import { LocalizedMatcherUrlSegment } from './localized-matcher-url-segment';
+import { deepCopy } from './util';
 
 /**
  * Localization service
@@ -38,7 +39,7 @@ export class LocalizeRouterService {
    * Start up the service
    */
   init(): void {
-    this.router.resetConfig(this.parser.routes);
+    this.applyConfigToRouter(this.parser.routes);
     if (this.settings.initialNavigation) {
       this.router.initialNavigation();
     }
@@ -97,7 +98,7 @@ export class LocalizeRouterService {
 
         const queryParamsObj = this.parser.chooseQueryParams(extras, this.route.snapshot.queryParams);
 
-        this.router.resetConfig(this.parser.routes);
+        this.applyConfigToRouter(this.parser.routes);
 
         if (useNavigateMethod) {
           const extrasToApply: NavigationExtras = extras ? {...extras} : {};
@@ -225,7 +226,7 @@ export class LocalizeRouterService {
         this.parser.translateRoutes(currentLang)
           .subscribe(() => {
             // Reset routes again once they are all translated
-            this.router.resetConfig(this.parser.routes);
+            this.applyConfigToRouter(this.parser.routes);
             // Init new navigation with same url to take new congif in consideration
             this.router.navigateByUrl(currentEvent.url);
             // Fire route change event
@@ -244,6 +245,14 @@ export class LocalizeRouterService {
     const url = this.router.serializeUrl(currentNavigation.extractedUrl);
     (this.router.events as Subject<Event>).next(new NavigationCancel(currentNavigation.id, url, ''));
     (this.router as any).transitions.next({...(this.router as any).transitions.getValue(), id: 0});
+  }
+
+  /**
+   * Apply config to Angular RouterModule
+   * @param config routes to apply
+   */
+  private applyConfigToRouter(config: Routes) {
+    this.router.resetConfig(deepCopy(config));
   }
 
 }
