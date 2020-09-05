@@ -15,7 +15,8 @@ import {
   LocalizeRouterConfig, LocalizeRouterSettings,
   RAW_ROUTES,
   USE_CACHED_LANG,
-  COOKIE_FORMAT
+  COOKIE_FORMAT,
+  INITIAL_NAVIGATION
 } from './localize-router.config';
 // import { LocalizeRouterConfigLoader } from './localize-router-config-loader';
 import { GilsdavReuseStrategy } from './gilsdav-reuse-strategy';
@@ -35,12 +36,31 @@ export class ParserInitializer {
 
   appInitializer(): Promise<any> {
     const res = this.parser.load(this.routes);
-    res.then(() => {
-      const localize: LocalizeRouterService = this.injector.get(LocalizeRouterService);
-      localize.init();
-    });
 
-    return res;
+    return res.then(() => {
+      const localize = this.injector.get(LocalizeRouterService);
+      const router = this.injector.get(Router);
+      const settings = this.injector.get(LocalizeRouterSettings);
+      localize.init();
+
+      if (settings.initialNavigation) {
+        return new Promise(resolve => {
+          // @ts-ignore
+          const oldAfterPreactivation = router.hooks.afterPreactivation;
+          let firstInit = true;
+          // @ts-ignore
+          router.hooks.afterPreactivation = () => {
+            if (oldAfterPreactivation) {
+              oldAfterPreactivation();
+            }
+            if (firstInit) {
+              resolve();
+              firstInit = false;
+            }
+          };
+        });
+      }
+    });
   }
 
   generateInitializer(parser: LocalizeParser, routes: Routes[]): () => Promise<any> {
@@ -87,6 +107,7 @@ export class LocalizeRouterModule {
         { provide: CACHE_MECHANISM, useValue: config.cacheMechanism },
         { provide: DEFAULT_LANG_FUNCTION, useValue: config.defaultLangFunction },
         { provide: COOKIE_FORMAT, useValue: config.cookieFormat },
+        { provide: INITIAL_NAVIGATION, useValue: config.initialNavigation },
         LocalizeRouterSettings,
         config.parser || { provide: LocalizeParser, useClass: DummyLocalizeParser },
         {

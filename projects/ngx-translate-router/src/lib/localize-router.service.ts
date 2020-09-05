@@ -39,6 +39,9 @@ export class LocalizeRouterService {
    */
   init(): void {
     this.router.resetConfig(this.parser.routes);
+    if (this.settings.initialNavigation) {
+      this.router.initialNavigation();
+    }
     // subscribe to router events
     this.router.events
       .pipe(

@@ -30,6 +30,10 @@
       ],
       "@gilsdav/ngx-translate-router-http-loader/*": [
         "dist/ngx-translate-router-http-loader/*"
+      ],
+      "@gilsdav/ngx-translate-router-scully-plugin": [
+        "dist/ngx-translate-router-scully-plugin/ngx-translate-router-scully-plugin",
+        "dist/ngx-translate-router-scully-plugin"
       ]
     }
   },
