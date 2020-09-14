@@ -24,7 +24,8 @@ export class LocalizedRouter extends Router {
     ) {
     super(_rootComponentType, _urlSerializer, _rootContexts, _location, injector, loader, compiler, config);
     // const oldLoadModuleFactory = (this as any).configLoader.__proto__.loadModuleFactory;
-    (this as any).configLoader.__proto__.loadModuleFactory = function (loadChildren: LoadChildren) {
+    //@ts-ignore
+    this.configLoader.loadModuleFactory = function (loadChildren: LoadChildren) {
       if (typeof loadChildren === 'string') {
         return from(this.loader.load(loadChildren));
       } else {
