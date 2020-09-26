@@ -2,8 +2,8 @@ import {
   Router, UrlSerializer, ChildrenOutletContexts, Routes,
   Route, ExtraOptions, UrlHandlingStrategy, RouteReuseStrategy, RouterEvent, LoadChildren, ROUTES
 } from '@angular/router';
-import { Type, Injector, NgModuleFactoryLoader, Compiler, ApplicationRef, NgModuleFactory } from '@angular/core';
-import { Location } from '@angular/common';
+import { Type, Injector, NgModuleFactoryLoader, Compiler, ApplicationRef, NgModuleFactory, PLATFORM_ID } from '@angular/core';
+import { Location, isPlatformBrowser } from '@angular/common';
 import { flatten } from '@angular/compiler';
 import { ɵgetDOM as getDOM } from '@angular/platform-browser';
 import { from, of, isObservable, Observable } from 'rxjs';
@@ -23,18 +23,22 @@ export class LocalizedRouter extends Router {
     localize: LocalizeParser
     ) {
     super(_rootComponentType, _urlSerializer, _rootContexts, _location, injector, loader, compiler, config);
-    // const oldLoadModuleFactory = (this as any).configLoader.__proto__.loadModuleFactory;
-    //@ts-ignore
-    this.configLoader.loadModuleFactory = function (loadChildren: LoadChildren) {
+    // Custom configuration
+    const platformId = injector.get(PLATFORM_ID);
+    const isBrowser = isPlatformBrowser(platformId);
+    // __proto__ is needed for preloaded modules be doesn't work with SSR
+    // @ts-ignore
+    const configLoader = isBrowser ? this.configLoader.__proto__ : this.configLoader;
+    configLoader.loadModuleFactory = (loadChildren: LoadChildren) => {
       if (typeof loadChildren === 'string') {
-        return from(this.loader.load(loadChildren));
+        return from(loader.load(loadChildren));
       } else {
         return wrapIntoObservable(loadChildren()).pipe(mergeMap((t: any) => {
           let compiled: Observable<NgModuleFactory<any>>;
           if (t instanceof NgModuleFactory) {
             compiled = of(t);
           } else {
-            compiled = from(this.compiler.compileModuleAsync(t)) as Observable<NgModuleFactory<any>>;
+            compiled = from(compiler.compileModuleAsync(t)) as Observable<NgModuleFactory<any>>;
           }
           return compiled.pipe(map(factory => {
             return {
