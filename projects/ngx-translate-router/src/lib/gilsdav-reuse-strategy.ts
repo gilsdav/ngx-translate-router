@@ -36,7 +36,7 @@ export class GilsdavReuseStrategy implements RouteReuseStrategy {
     if (route.firstChild && route.firstChild.routeConfig && route.firstChild.routeConfig.path &&
         route.firstChild.routeConfig.path.indexOf('**') !== -1) { // WildCard
       return 'WILDCARD';
-    } else if (!route.data.localizeRouter && (!route.parent || !route.parent.parent)) { // Lang route
+    } else if (!route.data.localizeRouter && (!route.parent || !route.parent.parent) && !route.data.skipRouteLocalization) { // Lang route
       return 'LANG';
     } else if (route.routeConfig.matcher) {
       let keyM = `${this.getKey(route.parent)}/${route.routeConfig.matcher.name}`;
