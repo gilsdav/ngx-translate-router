@@ -35,7 +35,8 @@
         "dist/ngx-translate-router-scully-plugin/ngx-translate-router-scully-plugin",
         "dist/ngx-translate-router-scully-plugin"
       ]
-    }
+    },
+    "stripInternal": true
   },
   "angularCompilerOptions": {
     "enableIvy": true
