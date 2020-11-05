@@ -526,3 +526,15 @@ language across the application.
 
 ## License
 Licensed under MIT
+
+## Thanks
+Thanks to all our contributors
+<a href="https://github.com/gilsdav/ngx-translate-router/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=gilsdav/ngx-translate-router" />
+</a>
+
+As well as to all the contributors of the initial project
+<a href="https://github.com/Greentube/localize-router/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=Greentube/localize-router" />
+</a>
+<sub>*Made with [contributors-img](https://contributors-img.web.app).*</sub>
