@@ -1,45 +1,32 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "projects",
   "projects": {
-    "ngx-translate-router-demo": {
-      "root": "",
-      "sourceRoot": "src",
+    "demo": {
       "projectType": "application",
-      "prefix": "app",
       "schematics": {},
+      "root": "apps/demo",
+      "sourceRoot": "apps/demo/src",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "outputPath": "dist/apps/demo",
+            "index": "apps/demo/src/index.html",
+            "main": "apps/demo/src/main.ts",
+            "polyfills": "apps/demo/src/polyfills.ts",
+            "tsConfig": "apps/demo/tsconfig.app.json",
             "aot": true,
-            "outputPath": "dist/ngx-translate-router-demo",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "assets": ["apps/demo/src/favicon.ico", "apps/demo/src/assets"],
+            "styles": ["apps/demo/src/styles.css"],
             "scripts": []
           },
           "configurations": {
             "production": {
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ],
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "apps/demo/src/environments/environment.ts",
+                  "with": "apps/demo/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -47,205 +34,248 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-translate-router-demo:build"
+            "browserTarget": "demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-translate-router-demo:build:production"
+              "browserTarget": "demo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-translate-router-demo:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "src/styles.css"
-            ],
-            "scripts": [],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ]
+            "browserTarget": "demo:build"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
+              "apps/demo/tsconfig.app.json",
+              "apps/demo/tsconfig.spec.json",
+              "apps/demo/tsconfig.editor.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/demo/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/demo/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
     },
-    "ngx-translate-router-demo-e2e": {
-      "root": "e2e/",
+    "demo-e2e": {
+      "root": "apps/demo-e2e",
+      "sourceRoot": "apps/demo-e2e/src",
       "projectType": "application",
       "architect": {
         "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
+          "builder": "@nrwl/cypress:cypress",
           "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ngx-translate-router-demo:serve"
+            "cypressConfig": "apps/demo-e2e/cypress.json",
+            "tsConfig": "apps/demo-e2e/tsconfig.e2e.json",
+            "devServerTarget": "demo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "demo:serve:production"
+            }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["apps/demo-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/demo-e2e/**/*"]
           }
         }
       }
     },
-    "ngx-translate-router": {
-      "root": "projects/ngx-translate-router",
-      "sourceRoot": "projects/ngx-translate-router/src",
+    "core": {
       "projectType": "library",
-      "prefix": "lib",
+      "root": "libs/core",
+      "sourceRoot": "libs/core/src",
+      "prefix": "ngx-translate-router",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@nrwl/angular:package",
           "options": {
-            "tsConfig": "projects/ngx-translate-router/tsconfig.lib.json",
-            "project": "projects/ngx-translate-router/ng-package.json"
+            "tsConfig": "libs/core/tsconfig.lib.json",
+            "project": "libs/core/ng-package.json"
           },
           "configurations": {
             "production": {
-              "project": "projects/ngx-translate-router/ng-package.prod.json",
-              "tsConfig": "projects/ngx-translate-router/tsconfig.lib.prod.json"
+              "tsConfig": "libs/core/tsconfig.lib.prod.json"
             }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/ngx-translate-router/src/test.ts",
-            "tsConfig": "projects/ngx-translate-router/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-translate-router/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/ngx-translate-router/tsconfig.lib.json",
-              "projects/ngx-translate-router/tsconfig.spec.json"
+              "libs/core/tsconfig.lib.json",
+              "libs/core/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "ngx-translate-router-http-loader": {
-      "root": "projects/ngx-translate-router-http-loader",
-      "sourceRoot": "projects/ngx-translate-router-http-loader/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/ngx-translate-router-http-loader/tsconfig.lib.json",
-            "project": "projects/ngx-translate-router-http-loader/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/ngx-translate-router-http-loader/ng-package.prod.json",
-              "tsConfig": "projects/ngx-translate-router-http-loader/tsconfig.lib.prod.json"
-            }
+            "exclude": ["**/node_modules/**", "!libs/core/**/*"]
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@nrwl/jest:jest",
           "options": {
-            "main": "projects/ngx-translate-router-http-loader/src/test.ts",
-            "tsConfig": "projects/ngx-translate-router-http-loader/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-translate-router-http-loader/karma.conf.js"
+            "jestConfig": "libs/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {}
+    },
+    "http-loader": {
+      "projectType": "library",
+      "root": "libs/http-loader",
+      "sourceRoot": "libs/http-loader/src",
+      "prefix": "ngx-translate-router",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/http-loader/tsconfig.lib.json",
+            "project": "libs/http-loader/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/http-loader/tsconfig.lib.prod.json"
+            }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/ngx-translate-router-http-loader/tsconfig.lib.json",
-              "projects/ngx-translate-router-http-loader/tsconfig.spec.json"
+              "libs/http-loader/tsconfig.lib.json",
+              "libs/http-loader/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "ngx-translate-router-scully-plugin": {
-      "projectType": "library",
-      "root": "projects/ngx-translate-router-scully-plugin",
-      "sourceRoot": "projects/ngx-translate-router-scully-plugin/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/ngx-translate-router-scully-plugin/tsconfig.lib.json",
-            "project": "projects/ngx-translate-router-scully-plugin/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/ngx-translate-router-scully-plugin/tsconfig.lib.prod.json"
-            }
+            "exclude": ["**/node_modules/**", "!libs/http-loader/**/*"]
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@nrwl/jest:jest",
           "options": {
-            "main": "projects/ngx-translate-router-scully-plugin/src/test.ts",
-            "tsConfig": "projects/ngx-translate-router-scully-plugin/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-translate-router-scully-plugin/karma.conf.js"
+            "jestConfig": "libs/http-loader/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {}
+    },
+    "scully-plugin": {
+      "projectType": "library",
+      "root": "libs/scully-plugin",
+      "sourceRoot": "libs/scully-plugin/src",
+      "prefix": "ngx-translate-router",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/scully-plugin/tsconfig.lib.json",
+            "project": "libs/scully-plugin/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/scully-plugin/tsconfig.lib.prod.json"
+            }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/ngx-translate-router-scully-plugin/tsconfig.lib.json",
-              "projects/ngx-translate-router-scully-plugin/tsconfig.spec.json"
+              "libs/scully-plugin/tsconfig.lib.json",
+              "libs/scully-plugin/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/scully-plugin/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/scully-plugin/jest.config.js",
+            "passWithNoTests": true
           }
         }
-      }
+      },
+      "schematics": {}
     }
   },
-  "defaultProject": "ngx-translate-router-demo"
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/workspace": {
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/cypress": {
+      "cypress-project": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/node": {
+      "application": {
+        "linter": "tslint"
+      },
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/nest": {
+      "application": {
+        "linter": "tslint"
+      },
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/express": {
+      "application": {
+        "linter": "tslint"
+      },
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "demo"
 }
