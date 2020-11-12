@@ -14,14 +14,7 @@ export interface ILocalizeRouterParserConfig {
 }
 
 export class LocalizeRouterHttpLoader extends LocalizeParser {
-  /**
-   * CTOR
-   * @param translate
-   * @param location
-   * @param settings
-   * @param http
-   * @param path
-   */
+
   constructor(
     translate: TranslateService,
     location: Location,
@@ -34,7 +27,6 @@ export class LocalizeRouterHttpLoader extends LocalizeParser {
 
   /**
    * Initialize or append routes
-   * @param routes
    */
   load(routes: Routes): Promise<any> {
     return new Promise((resolve: any) => {
