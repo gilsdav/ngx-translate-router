@@ -511,6 +511,32 @@ For german language and route defined as `:lang/users/:user_name/profile`
 ```
 yoursite.com/en/users/John%20Doe/profile -> yoursite.com/de/benutzer/John%20Doe/profil
 ```
+#### Hooks:
+For now there is only one hook which is only interesting if you are using `initialNavigation` flag (and more specifically, if you are making an `AppInitializer` that uses Angular's `Router` or `ngx-translate-router`).
+- `hooks.initialized`: an observable with event sent when initialNavigation is executed.
+
+Usage example:
+```ts
+export const appInitializerFactory = (injector: Injector) => {
+  return () => {
+    const localize = injector.get(LocalizeRouterService);
+    return localize.hooks.initialized
+      .pipe(
+        tap(() => {
+          const router = injector.get(Router);
+          router.events.pipe(
+            filter(url => url instanceof NavigationEnd),
+            first()
+          ).subscribe((route: NavigationEnd) => {
+            console.log(router.url, route.url);
+            router.navigate(['/fr/accueil']);
+          });
+        })
+      )
+      .toPromise();
+  }
+};
+```
 ### LocalizeParser
 #### Properties:
 - `locales`: Array of used language codes
