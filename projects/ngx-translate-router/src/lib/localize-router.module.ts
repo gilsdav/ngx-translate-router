@@ -50,15 +50,18 @@ export class ParserInitializer {
           let firstInit = true;
           // @ts-ignore
           router.hooks.afterPreactivation = () => {
-            if (oldAfterPreactivation) {
-              oldAfterPreactivation();
-            }
             if (firstInit) {
               resolve();
               firstInit = false;
+              localize.hooks._initializedSubject.next(true);
+              localize.hooks._initializedSubject.complete();
             }
+            return oldAfterPreactivation();
           };
         });
+      } else {
+        localize.hooks._initializedSubject.next(true);
+        localize.hooks._initializedSubject.complete();
       }
     });
   }

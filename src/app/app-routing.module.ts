@@ -88,7 +88,7 @@ export function shouldTranslateMap(param: string): string {
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes),
+        RouterModule.forRoot(routes/*, { initialNavigation: 'disabled' }*/),
         LocalizeRouterModule.forRoot(routes, {
             // parser: {
             //     provide: LocalizeParser,
@@ -101,8 +101,9 @@ export function shouldTranslateMap(param: string): string {
               deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
             },
             cacheMechanism: CacheMechanism.Cookie,
-            cookieFormat: '{{value}};{{expires:20}};path=/'
+            cookieFormat: '{{value}};{{expires:20}};path=/',
             // alwaysSetPrefix: false
+            // initialNavigation: true
         })
     ],
     exports: [RouterModule, LocalizeRouterModule]

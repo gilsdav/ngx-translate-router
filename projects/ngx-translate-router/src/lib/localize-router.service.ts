@@ -4,7 +4,7 @@ import {
   Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
   Event, NavigationCancel, Routes
 } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { filter, pairwise } from 'rxjs/operators';
 
 import { LocalizeParser } from './localize-router.parser';
@@ -19,6 +19,12 @@ import { deepCopy } from './util';
 @Injectable()
 export class LocalizeRouterService {
   routerEvents: Subject<string>;
+  hooks: {
+    /** @internal */
+    _initializedSubject: ReplaySubject<boolean>;
+    initialized: Observable<boolean>;
+  };
+
 
   private latestUrl: string;
 
@@ -33,6 +39,11 @@ export class LocalizeRouterService {
       @Inject(Location) private location: Location*/
     ) {
       this.routerEvents = new Subject<string>();
+      const initializedSubject = new ReplaySubject<boolean>(1);
+      this.hooks = {
+        _initializedSubject: initializedSubject,
+        initialized: initializedSubject.asObservable()
+      };
   }
 
   /**
@@ -40,9 +51,6 @@ export class LocalizeRouterService {
    */
   init(): void {
     this.applyConfigToRouter(this.parser.routes);
-    if (this.settings.initialNavigation) {
-      this.router.initialNavigation();
-    }
     // subscribe to router events
     this.router.events
       .pipe(
@@ -50,6 +58,10 @@ export class LocalizeRouterService {
         pairwise()
       )
       .subscribe(this._routeChanged());
+
+    if (this.settings.initialNavigation) {
+      this.router.initialNavigation();
+    }
   }
 
   /**
