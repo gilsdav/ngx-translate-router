@@ -201,7 +201,7 @@ export abstract class LocalizeParser {
       routeData.localizeRouter = {};
     }
     if (!routeData.localizeRouter[property]) {
-      routeData.localizeRouter[property] = (<any>route)[property];
+      routeData.localizeRouter = {...routeData.localizeRouter, [property]: route[property] };
     }
 
     const result = this.translateRoute(routeData.localizeRouter[property]);
