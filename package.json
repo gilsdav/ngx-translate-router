@@ -8,7 +8,9 @@
     "build:main": "ng build --prod ngx-translate-router",
     "build:http-loader": "ng build --prod ngx-translate-router-http-loader",
     "build:scully-plugin": "mkdir dist/ngx-translate-router-scully-plugin/ && cp ./projects/ngx-translate-router-scully-plugin/package.json dist/ngx-translate-router-scully-plugin/ && tsc ./projects/ngx-translate-router-scully-plugin/src/lib/scully-plugin.ts -d --outDir dist/ngx-translate-router-scully-plugin/",
-    "test": "ng test",
+    "test": "npm run test:main -- --watch=false --browsers=ChromeHeadless && npm run test:http-loader -- --watch=false --browsers=ChromeHeadless",
+    "test:main": "ng test ngx-translate-router",
+    "test:http-loader": "ng test ngx-translate-router-http-loader",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
