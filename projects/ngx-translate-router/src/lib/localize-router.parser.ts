@@ -246,7 +246,7 @@ export abstract class LocalizeParser {
    * Get language from url
    */
   getLocationLang(url?: string): string {
-    const queryParamSplit = (url || this.location.path()).split('?');
+    const queryParamSplit = (url || this.location.path()).split(/[\?;]/);
     let pathSlices: string[] = [];
     if (queryParamSplit.length > 0) {
       pathSlices = queryParamSplit[0].split('/');
