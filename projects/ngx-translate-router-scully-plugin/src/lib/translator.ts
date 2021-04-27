@@ -71,16 +71,10 @@ async function translateRoutes(lang, filePath, routeList, defaultLang) {
     parser._translationObject = translation;
     parser.currentLang = lang;
     parser.defaultLang = defaultLang;
-    return routeList.reduce((result, element) => {
-      if (element.type === 'default') {
-        const translatedRoute = '/' + parser.currentLang + parser.translateRoute(element.route);
-        result.push({...element, route: translatedRoute});
-      } else if (element?.data?.lang === parser.currentLang) {
-        const translatedRoute = '/' + parser.currentLang + parser.translateRoute(element.route);
-        result.push({...element, route: translatedRoute});
-      }
-      return result;
-    }, []);
+    return routeList.map(element => {
+      const translatedRoute = '/' + parser.currentLang + parser.translateRoute(element.route);
+      return { ...element, route: translatedRoute };
+    });
   });
 
 }
