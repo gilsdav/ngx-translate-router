@@ -45,7 +45,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -87,18 +86,6 @@
               "src/assets"
             ]
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -112,15 +99,6 @@
             "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "ngx-translate-router-demo:serve"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -131,7 +109,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/ngx-translate-router/tsconfig.lib.json",
             "project": "projects/ngx-translate-router/ng-package.json"
@@ -150,18 +128,6 @@
             "tsConfig": "projects/ngx-translate-router/tsconfig.spec.json",
             "karmaConfig": "projects/ngx-translate-router/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngx-translate-router/tsconfig.lib.json",
-              "projects/ngx-translate-router/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -172,7 +138,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/ngx-translate-router-http-loader/tsconfig.lib.json",
             "project": "projects/ngx-translate-router-http-loader/ng-package.json"
@@ -191,18 +157,6 @@
             "tsConfig": "projects/ngx-translate-router-http-loader/tsconfig.spec.json",
             "karmaConfig": "projects/ngx-translate-router-http-loader/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngx-translate-router-http-loader/tsconfig.lib.json",
-              "projects/ngx-translate-router-http-loader/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -213,7 +167,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/ngx-translate-router-scully-plugin/tsconfig.lib.json",
             "project": "projects/ngx-translate-router-scully-plugin/ng-package.json"
@@ -230,18 +184,6 @@
             "main": "projects/ngx-translate-router-scully-plugin/src/test.ts",
             "tsConfig": "projects/ngx-translate-router-scully-plugin/tsconfig.spec.json",
             "karmaConfig": "projects/ngx-translate-router-scully-plugin/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngx-translate-router-scully-plugin/tsconfig.lib.json",
-              "projects/ngx-translate-router-scully-plugin/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
