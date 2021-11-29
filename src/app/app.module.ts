@@ -4,8 +4,9 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { LocalizeRouterService } from '@gilsdav/ngx-translate-router';
+// import { LocalizeRouterService } from '@gilsdav/ngx-translate-router/src/lib/localize-router.service';
 
+import { LocalizeRouterService } from '@gilsdav/ngx-translate-router';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';

@@ -9,6 +9,11 @@ import {
   LocalizeRouterModule, LocalizeParser, ManualParserLoader, CacheMechanism,
   LocalizeRouterSettings
 } from '@gilsdav/ngx-translate-router';
+// import {
+//    LocalizeRouterModule, LocalizeParser, ManualParserLoader, CacheMechanism,
+//    LocalizeRouterSettings 
+//  } from 'projects/ngx-translate-router/src/public_api'
+
 import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loader';
 
 import { HomeComponent } from './home/home.component';
@@ -94,14 +99,15 @@ export function shouldTranslateMap(param: string): string {
             //     provide: LocalizeParser,
             //     useFactory: ManualLoaderFactory,
             //     deps: [TranslateService, Location, LocalizeRouterSettings]
-            // }
+            // },
             parser: {
               provide: LocalizeParser,
               useFactory: HttpLoaderFactory,
               deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
             },
+            // cacheMechanism: CacheMechanism.SessionStorage
             cacheMechanism: CacheMechanism.Cookie,
-            cookieFormat: '{{value}};{{expires:20}};path=/',
+            // cookieFormat: '{{value}};{{expires:20}};path=/',
             // alwaysSetPrefix: false
             // initialNavigation: true
         })
