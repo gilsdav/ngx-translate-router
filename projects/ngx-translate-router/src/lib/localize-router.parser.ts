@@ -278,7 +278,7 @@ export abstract class LocalizeParser {
       return this._cacheWithLocalStorage();
     }
     if (this.settings.cacheMechanism === CacheMechanism.SessionStorage) {
-      this._cacheWithSessionStorage();
+      return this._cacheWithSessionStorage();
     }
     if (this.settings.cacheMechanism === CacheMechanism.Cookie) {
       return this._cacheWithCookies();

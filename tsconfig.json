@@ -20,12 +20,10 @@
     ],
     "paths": {
       "@gilsdav/ngx-translate-router": [
-        "dist/ngx-translate-router",
-        "./projects/ngx-translate-router"
+        "dist/ngx-translate-router"
       ],
       "@gilsdav/ngx-translate-router/*": [
-        "dist/ngx-translate-router/*",
-        "./projects/ngx-translate-router/src/public_api.ts"
+        "dist/ngx-translate-router/*"
       ],
       "@gilsdav/ngx-translate-router-http-loader": [
         "dist/ngx-translate-router-http-loader"
