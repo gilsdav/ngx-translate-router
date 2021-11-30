@@ -22,6 +22,7 @@ export const RAW_ROUTES: InjectionToken<Routes[]> = new InjectionToken<Routes[]>
  */
 export enum CacheMechanism {
   LocalStorage = 'LocalStorage',
+  SessionStorage = 'SessionStorage',
   Cookie = 'Cookie'
 }
 

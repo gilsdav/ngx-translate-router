@@ -27,6 +27,7 @@ export class LocalizeRouterService {
 
 
   private latestUrl: string;
+  private lastExtras?: NavigationExtras;
 
   /**
    * CTOR
@@ -68,9 +69,7 @@ export class LocalizeRouterService {
    * Change language and navigate to translated route
    */
   changeLanguage(lang: string, extras?: NavigationExtras, useNavigateMethod?: boolean): void {
-    // if (this.route) {
-    //   console.log(this.route);
-    // }
+
     if (lang !== this.parser.currentLang) {
       const rootSnapshot: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
 
@@ -112,6 +111,7 @@ export class LocalizeRouterService {
 
         this.applyConfigToRouter(this.parser.routes);
 
+        this.lastExtras = extras;
         if (useNavigateMethod) {
           const extrasToApply: NavigationExtras = extras ? {...extras} : {};
           if (queryParamsObj) {
@@ -231,6 +231,7 @@ export class LocalizeRouterService {
     return ([previousEvent, currentEvent]: [NavigationStart, NavigationStart]) => {
       const previousLang = this.parser.getLocationLang(previousEvent.url) || this.parser.defaultLang;
       const currentLang = this.parser.getLocationLang(currentEvent.url) || this.parser.defaultLang;
+      const lastExtras = this.lastExtras;
 
       if (currentLang !== previousLang && this.latestUrl !== currentEvent.url) {
         this.latestUrl = currentEvent.url;
@@ -239,8 +240,10 @@ export class LocalizeRouterService {
           .subscribe(() => {
             // Reset routes again once they are all translated
             this.applyConfigToRouter(this.parser.routes);
+            // Clear global extras
+            this.lastExtras = undefined;
             // Init new navigation with same url to take new congif in consideration
-            this.router.navigateByUrl(currentEvent.url);
+            this.router.navigateByUrl(currentEvent.url, lastExtras);
             // Fire route change event
             this.routerEvents.next(currentLang);
           });

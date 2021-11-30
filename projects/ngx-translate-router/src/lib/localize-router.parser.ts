@@ -277,6 +277,9 @@ export abstract class LocalizeParser {
     if (this.settings.cacheMechanism === CacheMechanism.LocalStorage) {
       return this._cacheWithLocalStorage();
     }
+    if (this.settings.cacheMechanism === CacheMechanism.SessionStorage) {
+      return this._cacheWithSessionStorage();
+    }
     if (this.settings.cacheMechanism === CacheMechanism.Cookie) {
       return this._cacheWithCookies();
     }
@@ -291,6 +294,9 @@ export abstract class LocalizeParser {
     }
     if (this.settings.cacheMechanism === CacheMechanism.LocalStorage) {
       this._cacheWithLocalStorage(value);
+    }
+    if (this.settings.cacheMechanism === CacheMechanism.SessionStorage) {
+      this._cacheWithSessionStorage(value);
     }
     if (this.settings.cacheMechanism === CacheMechanism.Cookie) {
       this._cacheWithCookies(value);
@@ -312,6 +318,24 @@ export abstract class LocalizeParser {
       return this._returnIfInLocales(window.localStorage.getItem(this.settings.cacheName));
     } catch (e) {
       // weird Safari issue in private mode, where LocalStorage is defined but throws error on access
+      return;
+    }
+  }
+
+  /**
+   * Cache value to session storage
+   */
+  private _cacheWithSessionStorage(value?: string): string {
+    try {
+      if (typeof window === 'undefined' || typeof window.sessionStorage === 'undefined') {
+        return;
+      }
+      if (value) {
+        window.sessionStorage.setItem(this.settings.cacheName, value);
+        return;
+      }
+      return this._returnIfInLocales(window.sessionStorage.getItem(this.settings.cacheName));
+    } catch (e) {
       return;
     }
   }
