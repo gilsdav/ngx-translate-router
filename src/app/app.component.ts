@@ -27,8 +27,8 @@ export class AppComponent implements OnInit {
     }
 
     public switchLang() {
-      console.log('change lang');
-      this.localize.changeLanguage(this.localize.parser.currentLang === 'fr' ? 'en' : 'fr');
+      console.log('change lang replaceUrl');
+      this.localize.changeLanguage(this.localize.parser.currentLang === 'fr' ? 'en' : 'fr', { replaceUrl: true });
     }
 
 }
