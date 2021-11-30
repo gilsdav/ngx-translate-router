@@ -19,7 +19,7 @@ export class LocalizedRouter extends Router {
     compiler: Compiler,
     public config: Routes,
     localize: LocalizeParser
-    ) {
+    ) {
     super(_rootComponentType, _urlSerializer, _rootContexts, _location, injector, compiler, config);
     // Custom configuration
     const platformId = injector.get(PLATFORM_ID);
@@ -88,9 +88,10 @@ export function setupRouter(
 
   if (opts.enableTracing) {
     router.events.subscribe((e: RouterEvent) => {
-      console.log(`Router Event: ${(<any>e.constructor).name}`);
+      console.group(`Router Event: ${(<any>e.constructor).name}`);
       console.log(e.toString());
       console.log(e);
+      console.groupEnd();
     });
   }
 
