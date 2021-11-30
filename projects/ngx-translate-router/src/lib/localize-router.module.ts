@@ -44,7 +44,7 @@ export class ParserInitializer {
       localize.init();
 
       if (settings.initialNavigation) {
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
           // @ts-ignore
           const oldAfterPreactivation = router.hooks.afterPreactivation;
           let firstInit = true;

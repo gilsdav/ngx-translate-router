@@ -9,6 +9,7 @@ import {
   LocalizeRouterModule, LocalizeParser, ManualParserLoader, CacheMechanism,
   LocalizeRouterSettings
 } from '@gilsdav/ngx-translate-router';
+
 import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loader';
 
 import { HomeComponent } from './home/home.component';
@@ -94,7 +95,7 @@ export function shouldTranslateMap(param: string): string {
             //     provide: LocalizeParser,
             //     useFactory: ManualLoaderFactory,
             //     deps: [TranslateService, Location, LocalizeRouterSettings]
-            // }
+            // },
             parser: {
               provide: LocalizeParser,
               useFactory: HttpLoaderFactory,

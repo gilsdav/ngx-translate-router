@@ -22,7 +22,7 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 | 6 - 7           | 1.0.2            | 1.0.1       | legacy |
 | 7               | 1.7.3            | 1.1.0       | legacy |
 | 8               | 2.2.3            | 1.1.0       | legacy |
-| 8 - 12          | 3.1.6            | 1.1.2       | active |
+| 8 - 12          | 3.1.9            | 1.1.2       | active |
 
 
 Demo project can be found under sub folder `src`.
@@ -269,7 +269,7 @@ http://yourpath/home -> http://yourpath/en/home
 ```
 
 If no language is provided in the url path, application uses: 
-* cached language in LocalStorage (browser only) or
+* cached language in LocalStorage/SessionStorage/Cookie (browser only) or
 * current language of the browser (browser only) or 
 * first locale in the config
 
@@ -477,7 +477,7 @@ export function localizeLoaderFactory(translate: TranslateService, location: Loc
 - `useCachedLang`: boolean. Flag whether default language should be cached. Default value is `true`.
 - `alwaysSetPrefix`: boolean. Flag whether language should always prefix the url. Default value is `true`.  
   When value is `false`, prefix will not be used for for default language (this includes the situation when there is only one language).
-- `cacheMechanism`: CacheMechanism.LocalStorage || CacheMechanism.Cookie. Default value is `CacheMechanism.LocalStorage`.
+- `cacheMechanism`: CacheMechanism.LocalStorage || CacheMechanism.SessionStorage || CacheMechanism.Cookie. Default value is `CacheMechanism.LocalStorage`.
 - `cacheName`: string. Name of cookie/local store. Default value is `LOCALIZE_DEFAULT_LANGUAGE`.
 - `defaultLangFunction`: (languages: string[], cachedLang?: string, browserLang?: string) => string. Override method for custom logic for picking default language, when no language is provided via url. Default value is `undefined`.
 - `cookieFormat`: string. Format of cookie to store. Default value is `'{{value}};{{expires}}'`. (Extended format e.g : `'{{value}};{{expires}};path=/'`) 
