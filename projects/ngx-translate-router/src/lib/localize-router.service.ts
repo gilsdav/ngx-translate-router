@@ -229,7 +229,7 @@ export class LocalizeRouterService {
    */
   private _routeChanged(): (eventPair: [NavigationStart, NavigationStart]) => void {
     return ([previousEvent, currentEvent]: [NavigationStart, NavigationStart]) => {
-      const previousLang = this.parser.getLocationLang(previousEvent.url) || this.parser.defaultLang; // this.parser.currentLang || this.parser.defaultLang;
+      const previousLang = this.parser.getLocationLang(previousEvent.url) || this.parser.defaultLang;
       const currentLang = this.parser.getLocationLang(currentEvent.url) || this.parser.defaultLang;
       const lastExtras = this.lastExtras;
 
