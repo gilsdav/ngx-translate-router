@@ -29,7 +29,8 @@ export const routes: Routes = [
   // { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
     path: '',
-    component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule),
+    component: HomeComponent,
+    loadChildren: () => import('./test/test.module').then(mod => mod.TestModule),
     data: { discriminantPathKey: 'TESTPATH' }
   },
   {
@@ -67,7 +68,6 @@ export const routes: Routes = [
     ]
   },
   { path: 'home', component: HomeComponent },
-  // { path: 'test', component: HomeComponent, loadChildren: './test/test.module#TestModule' },
   { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
   { path: '!test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
 
