@@ -7,7 +7,8 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { MatcherDetailComponent } from './matcher-detail.component';
 
-export function detailMatcher(segments: UrlSegment[]): UrlMatchResult {
+export function detailMatcher(baseSegments: UrlSegment[]): UrlMatchResult {
+  const segments = [...baseSegments];
   // /:id
   // /:a/:id
   // /:a/:b/:id

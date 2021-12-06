@@ -9,9 +9,9 @@
     "url": "https://github.com/gilsdav"
   },
   "peerDependencies": {
-    "@angular/common": ">=8.0.0",
-    "@angular/core": ">=8.0.0",
-    "@angular/router": ">=8.0.0",
+    "@angular/common": ">=13.0.0",
+    "@angular/core": ">=13.0.0",
+    "@angular/router": ">=13.0.0",
     "@ngx-translate/core": ">=11.0.1"
   }
 }
