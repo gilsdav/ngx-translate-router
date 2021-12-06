@@ -1,6 +1,6 @@
 import {
   NgModule, ModuleWithProviders, APP_INITIALIZER, Optional, SkipSelf,
-  Injectable, Injector, NgModuleFactoryLoader, ApplicationRef, Compiler
+  Injectable, Injector, ApplicationRef, Compiler
 } from '@angular/core';
 import { LocalizeRouterService } from './localize-router.service';
 import { DummyLocalizeParser, LocalizeParser } from './localize-router.parser';
@@ -18,7 +18,6 @@ import {
   COOKIE_FORMAT,
   INITIAL_NAVIGATION
 } from './localize-router.config';
-// import { LocalizeRouterConfigLoader } from './localize-router-config-loader';
 import { GilsdavReuseStrategy } from './gilsdav-reuse-strategy';
 import { setupRouter } from './localized-router';
 import { deepCopy } from './util';
@@ -94,9 +93,17 @@ export class LocalizeRouterModule {
           provide: Router,
           useFactory: setupRouter,
           deps: [
-            ApplicationRef, UrlSerializer, ChildrenOutletContexts, Location, Injector,
-            NgModuleFactoryLoader, Compiler, ROUTES, LocalizeParser, ROUTER_CONFIGURATION,
-            [UrlHandlingStrategy, new Optional()], [RouteReuseStrategy, new Optional()]
+            ApplicationRef,
+            UrlSerializer,
+            ChildrenOutletContexts,
+            Location,
+            Injector,
+            Compiler,
+            ROUTES,
+            LocalizeParser,
+            ROUTER_CONFIGURATION,
+            [UrlHandlingStrategy, new Optional()],
+            [RouteReuseStrategy, new Optional()]
           ]
         },
         {
@@ -120,7 +127,6 @@ export class LocalizeRouterModule {
         },
         LocalizeRouterService,
         ParserInitializer,
-        // { provide: NgModuleFactoryLoader, useClass: LocalizeRouterConfigLoader },
         {
           provide: APP_INITIALIZER,
           multi: true,

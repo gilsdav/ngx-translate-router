@@ -7,7 +7,8 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { MatcherComponent } from './matcher.component';
 
-export function baseMatcher(segments: UrlSegment[]): UrlMatchResult {
+export function baseMatcher(baseSegments: UrlSegment[]): UrlMatchResult {
+  const segments = [...baseSegments];
   // /
   // /:mapPage
   // /:a

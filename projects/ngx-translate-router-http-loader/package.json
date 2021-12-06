@@ -1,6 +1,6 @@
 {
   "name": "@gilsdav/ngx-translate-router-http-loader",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "homepage": "https://github.com/gilsdav/ngx-translate-router#readme",
   "license" : "MIT",
   "author": {
@@ -9,10 +9,10 @@
     "url": "https://github.com/gilsdav"
   },
   "peerDependencies": {
-    "@gilsdav/ngx-translate-router": ">=2.1.0",
-    "@angular/common": ">=8.0.0",
-    "@angular/core": ">=8.0.0",
-    "@angular/router": ">=8.0.0",
+    "@gilsdav/ngx-translate-router": ">=4.0.0",
+    "@angular/common": ">=13.0.0",
+    "@angular/core": ">=13.0.0",
+    "@angular/router": ">=13.0.0",
     "@ngx-translate/core": ">=11.0.1"
   }
 }
