@@ -4,10 +4,9 @@ import {
 } from '@angular/router';
 import { Type, Injector, Compiler, ApplicationRef, NgModuleFactory, PLATFORM_ID } from '@angular/core';
 import { Location, isPlatformBrowser } from '@angular/common';
-import { flatten } from '@angular/compiler';
 import { from, of, isObservable, Observable } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
-import { isPromise } from './util';
+import { flatten, isPromise } from './util';
 import { LocalizeParser } from './localize-router.parser';
 
 export class LocalizedRouter extends Router {

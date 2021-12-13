@@ -78,3 +78,10 @@ export function deepCopy<t>(object: t): t {
   }
   return output as t;
 }
+
+export function flatten<T>(list: Array<T|T[]>): T[] {
+  return list.reduce((flat: any[], item: T|T[]): T[] => {
+    const flatItem = Array.isArray(item) ? flatten(item) : item;
+    return (<T[]>flat).concat(flatItem);
+  }, []);
+}
