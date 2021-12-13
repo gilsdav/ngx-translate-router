@@ -23,7 +23,7 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 | 7               | 1.7.3            | 1.1.0       | legacy |
 | 8               | 2.2.3            | 1.1.0       | legacy |
 | 8 - 12          | 3.1.9            | 1.1.2       | active |
-| 13              | 4.0.0            | 2.0.0       | active |
+| 13              | 4.0.1            | 2.0.0       | active |
 
 
 Demo project can be found under sub folder `src`.
