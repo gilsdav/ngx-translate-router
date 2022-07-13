@@ -189,6 +189,5 @@
         }
       }
     }
-  },
-  "defaultProject": "ngx-translate-router-demo"
+  }
 }

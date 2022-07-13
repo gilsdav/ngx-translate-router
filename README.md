@@ -521,20 +521,21 @@ Usage example:
 export const appInitializerFactory = (injector: Injector) => {
   return () => {
     const localize = injector.get(LocalizeRouterService);
-    return localize.hooks.initialized
-      .pipe(
-        tap(() => {
-          const router = injector.get(Router);
-          router.events.pipe(
-            filter(url => url instanceof NavigationEnd),
-            first()
-          ).subscribe((route: NavigationEnd) => {
-            console.log(router.url, route.url);
-            router.navigate(['/fr/accueil']);
-          });
-        })
+    return firstValueFrom(
+      localize.hooks.initialized
+        .pipe(
+          tap(() => {
+            const router = injector.get(Router);
+            router.events.pipe(
+              filter(url => url instanceof NavigationEnd),
+              first()
+            ).subscribe((route: NavigationEnd) => {
+              console.log(router.url, route.url);
+              router.navigate(['/fr/accueil']);
+            });
+          })
+        )
       )
-      .toPromise();
   }
 };
 ```
