@@ -131,7 +131,6 @@ export class LocalizeRouterService {
    * Traverses through the tree to assemble new translated url
    */
   private traverseRouteSnapshot(snapshot: ActivatedRouteSnapshot): string {
-
     if (snapshot.firstChild && snapshot.routeConfig) {
       return `${this.parseSegmentValue(snapshot)}/${this.traverseRouteSnapshot(snapshot.firstChild)}`;
     } else if (snapshot.firstChild) {
@@ -242,7 +241,7 @@ export class LocalizeRouterService {
             this.applyConfigToRouter(this.parser.routes);
             // Clear global extras
             this.lastExtras = undefined;
-            // Init new navigation with same url to take new congif in consideration
+            // Init new navigation with same url to take new config in consideration
             this.router.navigateByUrl(currentEvent.url, lastExtras);
             // Fire route change event
             this.routerEvents.next(currentLang);

@@ -45,10 +45,10 @@ export class ParserInitializer {
       if (settings.initialNavigation) {
         return new Promise<void>(resolve => {
           // @ts-ignore
-          const oldAfterPreactivation = router.hooks.afterPreactivation;
+          const oldAfterPreactivation = router.afterPreactivation;
           let firstInit = true;
           // @ts-ignore
-          router.hooks.afterPreactivation = () => {
+          router.afterPreactivation = () => {
             if (firstInit) {
               resolve();
               firstInit = false;
