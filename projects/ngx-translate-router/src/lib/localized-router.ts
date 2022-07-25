@@ -25,16 +25,20 @@ export class LocalizedRouter extends Router {
     const isBrowser = isPlatformBrowser(platformId);
     // __proto__ is needed for preloaded modules be doesn't work with SSR
     // @ts-ignore
-    const configLoader = isBrowser ? this.configLoader.__proto__ : this.configLoader;
-    configLoader.loadModuleFactory = (loadChildren: LoadChildren) => {
+    const configLoader = (isBrowser ? this.configLoader.__proto__ : this.configLoader);
+
+    configLoader.loadModuleFactoryOrRoutes = (loadChildren: LoadChildren) => {
       return wrapIntoObservable(loadChildren()).pipe(mergeMap((t: any) => {
-        let compiled: Observable<NgModuleFactory<any>>;
-        if (t instanceof NgModuleFactory) {
+        let compiled: Observable<NgModuleFactory<any> | Array<any>>;
+        if (t instanceof NgModuleFactory || Array.isArray(t)) {
           compiled = of(t);
         } else {
           compiled = from(compiler.compileModuleAsync(t)) as Observable<NgModuleFactory<any>>;
         }
         return compiled.pipe(map(factory => {
+          if (Array.isArray(factory)) {
+            return factory;
+          }
           return {
             moduleType: factory.moduleType,
             create: (parentInjector: Injector) => {

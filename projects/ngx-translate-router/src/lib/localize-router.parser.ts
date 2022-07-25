@@ -1,6 +1,6 @@
 import { Routes, Route, NavigationExtras, Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, Observer } from 'rxjs';
+import { firstValueFrom, Observable, Observer } from 'rxjs';
 import { Location } from '@angular/common';
 import { CacheMechanism, LocalizeRouterSettings } from './localize-router.config';
 import { Inject, Injectable } from '@angular/core';
@@ -83,7 +83,7 @@ export abstract class LocalizeParser {
     let children: Routes = [];
     /** if set prefix is enforced */
     if (this.settings.alwaysSetPrefix) {
-      const baseRoute = { path: '', redirectTo: this.defaultLang, pathMatch: 'full' };
+      const baseRoute: Route = { path: '', redirectTo: this.defaultLang, pathMatch: 'full' };
 
       /** extract potential wildcard route */
       const wildcardIndex = routes.findIndex((route: Route) => route.path === '**');
@@ -123,8 +123,9 @@ export abstract class LocalizeParser {
     }
 
     /** translate routes */
-    const res = this.translateRoutes(selectedLanguage);
-    return res.toPromise();
+    return firstValueFrom(
+      this.translateRoutes(selectedLanguage)
+    );
   }
 
   initChildRoutes(routes: Routes) {
@@ -169,23 +170,25 @@ export abstract class LocalizeParser {
    */
   private _translateRouteTree(routes: Routes): void {
     routes.forEach((route: Route) => {
-      const skipRouteLocalization = (route.data && route.data['skipRouteLocalization']);
+      const skipRouteLocalization = (route.data && route.data['skipRouteLocalization']);
       const localizeRedirection = !skipRouteLocalization || skipRouteLocalization['localizeRedirectTo'];
 
       if (route.redirectTo && localizeRedirection) {
         this._translateProperty(route, 'redirectTo', !route.redirectTo.indexOf('/'));
       }
 
-      if (!skipRouteLocalization) {
-        if (route.path !== null && route.path !== undefined/* && route.path !== '**'*/) {
-          this._translateProperty(route, 'path');
-        }
-        if (route.children) {
-          this._translateRouteTree(route.children);
-        }
-        if (route.loadChildren && (<any>route)._loadedConfig) {
-          this._translateRouteTree((<any>route)._loadedConfig.routes);
-        }
+      if (skipRouteLocalization) {
+        return;
+      }
+
+      if (route.path !== null && route.path !== undefined/* && route.path !== '**'*/) {
+        this._translateProperty(route, 'path');
+      }
+      if (route.children) {
+        this._translateRouteTree(route.children);
+      }
+      if (route.loadChildren && (<any>route)._loadedRoutes?.length) {
+        this._translateRouteTree((<any>route)._loadedRoutes);
       }
     });
   }
