@@ -1,6 +1,6 @@
 import {
-  Router, UrlSerializer, ChildrenOutletContexts, Routes,
-  Route, ExtraOptions, UrlHandlingStrategy, RouteReuseStrategy, RouterEvent, LoadChildren, ROUTES
+  Router, UrlSerializer, ChildrenOutletContexts, Routes, Route, ExtraOptions, UrlHandlingStrategy,
+  RouteReuseStrategy, RouterEvent, LoadChildren, ROUTES, DefaultTitleStrategy, TitleStrategy
 } from '@angular/router';
 import { Type, Injector, Compiler, ApplicationRef, NgModuleFactory, PLATFORM_ID } from '@angular/core';
 import { Location, isPlatformBrowser } from '@angular/common';
@@ -11,14 +11,14 @@ import { LocalizeParser } from './localize-router.parser';
 
 export class LocalizedRouter extends Router {
   constructor(
-    _rootComponentType: Type<any>|null,
+    _rootComponentType: Type<any> | null,
     _urlSerializer: UrlSerializer,
     _rootContexts: ChildrenOutletContexts,
     _location: Location, injector: Injector,
     compiler: Compiler,
     public config: Routes,
     localize: LocalizeParser
-    ) {
+  ) {
     super(_rootComponentType, _urlSerializer, _rootContexts, _location, injector, compiler, config);
     // Custom configuration
     const platformId = injector.get(PLATFORM_ID);
@@ -66,12 +66,13 @@ export class LocalizedRouter extends Router {
 
 }
 export function setupRouter(
-    ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts,
-    location: Location, injector: Injector, compiler: Compiler,
-    config: Route[][], localize: LocalizeParser, opts: ExtraOptions = {}, urlHandlingStrategy?: UrlHandlingStrategy,
-    routeReuseStrategy?: RouteReuseStrategy) {
+  ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts,
+  location: Location, injector: Injector, compiler: Compiler,
+  config: Route[][], localize: LocalizeParser, opts: ExtraOptions = {},
+  defaultTitleStrategy: DefaultTitleStrategy, titleStrategy?: TitleStrategy,
+  urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy) {
   const router = new LocalizedRouter(
-      null, urlSerializer, contexts, location, injector, compiler, flatten(config), localize);
+    null, urlSerializer, contexts, location, injector, compiler, flatten(config), localize);
 
   if (urlHandlingStrategy) {
     router.urlHandlingStrategy = urlHandlingStrategy;
@@ -80,6 +81,8 @@ export function setupRouter(
   if (routeReuseStrategy) {
     router.routeReuseStrategy = routeReuseStrategy;
   }
+
+  router.titleStrategy = titleStrategy ?? defaultTitleStrategy;
 
   if (opts.errorHandler) {
     router.errorHandler = opts.errorHandler;
@@ -117,7 +120,7 @@ export function setupRouter(
   return router;
 }
 
-export function wrapIntoObservable<T>(value: T | NgModuleFactory<T>| Promise<T>| Observable<T>) {
+export function wrapIntoObservable<T>(value: T | NgModuleFactory<T> | Promise<T> | Observable<T>) {
   if (isObservable(value)) {
     return value;
   }
@@ -129,5 +132,5 @@ export function wrapIntoObservable<T>(value: T | NgModuleFactory<T>| Promise<T>|
     return from(Promise.resolve(value));
   }
 
-  return of (value);
+  return of(value);
 }
