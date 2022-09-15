@@ -29,6 +29,7 @@ export const routes: Routes = [
   // { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
     path: '',
+    title: 'HOME_TITLE',
     component: HomeComponent,
     loadChildren: () => import('./test/test.module').then(mod => mod.TestModule),
     data: { discriminantPathKey: 'TESTPATH' }
