@@ -148,15 +148,13 @@ export abstract class LocalizeParser {
         this.currentLang = language;
 
         if (this._languageRoute) {
-          if (this._languageRoute) {
-            this._translateRouteTree(this._languageRoute.children);
-          }
+          this._translateRouteTree(this._languageRoute.children, true);
           // if there is wildcard route
           if (this._wildcardRoute && this._wildcardRoute.redirectTo) {
             this._translateProperty(this._wildcardRoute, 'redirectTo', true);
           }
         } else {
-          this._translateRouteTree(this.routes);
+          this._translateRouteTree(this.routes, true);
         }
 
         observer.next(void 0);
@@ -168,13 +166,14 @@ export abstract class LocalizeParser {
   /**
    * Translate the route node and recursively call for all it's children
    */
-  private _translateRouteTree(routes: Routes): void {
+  private _translateRouteTree(routes: Routes, isRootTree?: boolean): void {
     routes.forEach((route: Route) => {
       const skipRouteLocalization = (route.data && route.data['skipRouteLocalization']);
       const localizeRedirection = !skipRouteLocalization || skipRouteLocalization['localizeRedirectTo'];
 
       if (route.redirectTo && localizeRedirection) {
-        this._translateProperty(route, 'redirectTo', !route.redirectTo.indexOf('/'));
+        const prefixLang = route.redirectTo.indexOf('/') === 0 || isRootTree;
+        this._translateProperty(route, 'redirectTo', prefixLang);
       }
 
       if (skipRouteLocalization) {
@@ -204,7 +203,7 @@ export abstract class LocalizeParser {
       routeData.localizeRouter = {};
     }
     if (!routeData.localizeRouter[property]) {
-      routeData.localizeRouter = {...routeData.localizeRouter, [property]: route[property] };
+      routeData.localizeRouter = { ...routeData.localizeRouter, [property]: route[property] };
     }
 
     const result = this.translateRoute(routeData.localizeRouter[property]);
@@ -223,9 +222,18 @@ export abstract class LocalizeParser {
    * Add current lang as prefix to given url.
    */
   addPrefixToUrl(url: string): string {
-    const plitedUrl = url.split('?');
-    plitedUrl[0] = plitedUrl[0].replace(/\/$/, '');
-    return `/${this.urlPrefix}${plitedUrl.join('?')}`;
+    const splitUrl = url.split('?');
+    splitUrl[0] = splitUrl[0].replace(/\/$/, '');
+
+    const joinedUrl = splitUrl.join('?');
+    if (this.urlPrefix === '') {
+      return joinedUrl;
+    }
+
+    if (!joinedUrl.startsWith('/')) {
+      return `${this.urlPrefix}/${joinedUrl}`;
+    }
+    return `/${this.urlPrefix}${joinedUrl}`;
   }
 
   /**
@@ -348,7 +356,7 @@ export abstract class LocalizeParser {
    */
   private _cacheWithCookies(value?: string): string {
     try {
-      if (  typeof document === 'undefined' || typeof document.cookie === 'undefined') {
+      if (typeof document === 'undefined' || typeof document.cookie === 'undefined') {
         return;
       }
       const name = encodeURIComponent(this.settings.cacheName);
@@ -357,10 +365,10 @@ export abstract class LocalizeParser {
         cookieTemplate = cookieTemplate
           .replace('{{value}}', `${name}=${encodeURIComponent(value)}`)
           .replace(/{{expires:?(\d+)?}}/g, (fullMatch, groupMatch) => {
-              const days = groupMatch === undefined ? COOKIE_EXPIRY : parseInt(groupMatch, 10);
-              const date: Date = new Date();
-              date.setTime(date.getTime() + days * 86400000);
-              return `expires=${date.toUTCString()}`;
+            const days = groupMatch === undefined ? COOKIE_EXPIRY : parseInt(groupMatch, 10);
+            const date: Date = new Date();
+            date.setTime(date.getTime() + days * 86400000);
+            return `expires=${date.toUTCString()}`;
           });
 
         document.cookie = cookieTemplate;
