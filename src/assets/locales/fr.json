@@ -6,5 +6,7 @@
     "ROUTES.map": "carte",
     "ROUTES.matcher": "monmatcher",
     "CHANGE_LANGUAGE": "Changer de langue",
-    "GO_HOME": "Retourner à l'accueil"
+    "GO_HOME": "Retourner à l'accueil",
+    "DEFAULT_TITLE": "Mon titre",
+    "HOME_TITLE": "Acceuil"
 }

@@ -12,7 +12,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { firstValueFrom } from 'rxjs';
 import { filter, first, tap } from 'rxjs/operators';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterStateSnapshot, TitleStrategy } from '@angular/router';
+import { TranslateTitleStrategy } from './translate-title-strategy';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/locales/', '.json');
@@ -57,14 +58,15 @@ export const appInitializerFactory = (injector: Injector) => {
       }
     })
   ],
-  // providers: [
+  providers: [
+    { provide: TitleStrategy, useClass: TranslateTitleStrategy }
   //   {
   //     provide: APP_INITIALIZER,
   //     useFactory: appInitializerFactory,
   //     deps: [ Injector ],
   //     multi: true
   //   }
-  // ],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

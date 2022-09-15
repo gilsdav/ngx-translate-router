@@ -6,5 +6,7 @@
     "ROUTES.map": "map",
     "ROUTES.matcher": "mymatcher",
     "CHANGE_LANGUAGE": "Change language",
-    "GO_HOME": "Go home"
+    "GO_HOME": "Go home",
+    "DEFAULT_TITLE": "My title",
+    "HOME_TITLE": "Home"
 }

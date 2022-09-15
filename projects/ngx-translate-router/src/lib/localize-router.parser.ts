@@ -223,6 +223,7 @@ export abstract class LocalizeParser {
    */
   addPrefixToUrl(url: string): string {
     const splitUrl = url.split('?');
+    const isRootPath = splitUrl[0].length === 1 && splitUrl[0] === '/';
     splitUrl[0] = splitUrl[0].replace(/\/$/, '');
 
     const joinedUrl = splitUrl.join('?');
@@ -230,7 +231,7 @@ export abstract class LocalizeParser {
       return joinedUrl;
     }
 
-    if (!joinedUrl.startsWith('/')) {
+    if (!joinedUrl.startsWith('/') && !isRootPath) {
       return `${this.urlPrefix}/${joinedUrl}`;
     }
     return `/${this.urlPrefix}${joinedUrl}`;
