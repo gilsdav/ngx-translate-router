@@ -4,8 +4,10 @@ import {
 } from '@angular/core';
 import { LocalizeRouterService } from './localize-router.service';
 import { DummyLocalizeParser, LocalizeParser } from './localize-router.parser';
-import { RouterModule, Routes, RouteReuseStrategy, Router, UrlSerializer, ChildrenOutletContexts,
-  ROUTES, ROUTER_CONFIGURATION, UrlHandlingStrategy } from '@angular/router';
+import {
+  RouterModule, Routes, RouteReuseStrategy, Router, UrlSerializer, ChildrenOutletContexts,
+  ROUTES, ROUTER_CONFIGURATION, UrlHandlingStrategy, DefaultTitleStrategy, TitleStrategy
+} from '@angular/router';
 import { LocalizeRouterPipe } from './localize-router.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule, Location } from '@angular/common';
@@ -102,6 +104,8 @@ export class LocalizeRouterModule {
             ROUTES,
             LocalizeParser,
             ROUTER_CONFIGURATION,
+            DefaultTitleStrategy,
+            [TitleStrategy, new Optional()],
             [UrlHandlingStrategy, new Optional()],
             [RouteReuseStrategy, new Optional()]
           ]
