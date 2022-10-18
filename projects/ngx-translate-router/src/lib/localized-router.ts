@@ -45,8 +45,8 @@ export class LocalizedRouter extends Router {
               const module = factory.create(parentInjector);
               const getMethod = module.injector.get.bind(module.injector);
 
-              module.injector['get'] = (token: any, notFoundValue: any) => {
-                const getResult = getMethod(token, notFoundValue);
+              module.injector['get'] = (token: any, notFoundValue: any, flag: any) => {
+                const getResult = getMethod(token, notFoundValue, flag);
 
                 if (token === ROUTES) {
                   // translate lazy routes
