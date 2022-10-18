@@ -9,6 +9,7 @@ import {
   LocalizeRouterModule, LocalizeParser, ManualParserLoader, CacheMechanism,
   LocalizeRouterSettings
 } from '@gilsdav/ngx-translate-router';
+
 import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loader';
 
 import { HomeComponent } from './home/home.component';
@@ -28,7 +29,9 @@ export const routes: Routes = [
   // { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
     path: '',
-    component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule),
+    title: 'HOME_TITLE',
+    component: HomeComponent,
+    loadChildren: () => import('./test/test.module').then(mod => mod.TestModule),
     data: { discriminantPathKey: 'TESTPATH' }
   },
   {
@@ -66,7 +69,6 @@ export const routes: Routes = [
     ]
   },
   { path: 'home', component: HomeComponent },
-  // { path: 'test', component: HomeComponent, loadChildren: './test/test.module#TestModule' },
   { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
   { path: '!test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
 
@@ -88,21 +90,22 @@ export function shouldTranslateMap(param: string): string {
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes),
+        RouterModule.forRoot(routes/*, { initialNavigation: 'disabled' }*/),
         LocalizeRouterModule.forRoot(routes, {
             // parser: {
             //     provide: LocalizeParser,
             //     useFactory: ManualLoaderFactory,
             //     deps: [TranslateService, Location, LocalizeRouterSettings]
-            // }
+            // },
             parser: {
               provide: LocalizeParser,
               useFactory: HttpLoaderFactory,
               deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
             },
             cacheMechanism: CacheMechanism.Cookie,
-            cookieFormat: '{{value}};{{expires:20}};path=/'
+            cookieFormat: '{{value}};{{expires:20}};path=/',
             // alwaysSetPrefix: false
+            // initialNavigation: true
         })
     ],
     exports: [RouterModule, LocalizeRouterModule]

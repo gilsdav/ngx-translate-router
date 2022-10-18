@@ -51,7 +51,10 @@ export class LocalizeRouterPipe implements PipeTransform, OnDestroy {
     if (view && (view.state & VIEW_DESTROYED_STATE)) {
       return this.value;
     }
-    this._ref.detectChanges();
+    setTimeout(() => {
+      this._ref.detectChanges();
+    }, 0)
+
     return this.value;
   }
 }

@@ -22,6 +22,7 @@ export const RAW_ROUTES: InjectionToken<Routes[]> = new InjectionToken<Routes[]>
  */
 export enum CacheMechanism {
   LocalStorage = 'LocalStorage',
+  SessionStorage = 'SessionStorage',
   Cookie = 'Cookie'
 }
 
@@ -41,6 +42,10 @@ export const CACHE_NAME = new InjectionToken<string>('CACHE_NAME');
  * Cookie cache format
  */
 export const COOKIE_FORMAT = new InjectionToken<boolean>('COOKIE_FORMAT');
+/**
+ * Cookie cache format
+ */
+export const INITIAL_NAVIGATION = new InjectionToken<boolean>('INITIAL_NAVIGATION');
 
 /**
  * Type for default language function
@@ -69,10 +74,12 @@ export interface LocalizeRouterConfig {
   defaultLangFunction?: DefaultLanguageFunction;
   alwaysSetPrefix?: boolean;
   cookieFormat?: string;
+  initialNavigation?: boolean;
 }
 
 const LOCALIZE_CACHE_NAME = 'LOCALIZE_DEFAULT_LANGUAGE';
 const DEFAULT_COOKIE_FORMAT = '{{value}};{{expires}}';
+const DEFAULT_INITIAL_NAVIGATION = false;
 
 @Injectable()
 export class LocalizeRouterSettings implements LocalizeRouterConfig {
@@ -89,7 +96,8 @@ export class LocalizeRouterSettings implements LocalizeRouterConfig {
     @Inject(CACHE_MECHANISM) cacheMechanism = CacheMechanism.LocalStorage,
     @Inject(CACHE_NAME) public cacheName: string = LOCALIZE_CACHE_NAME,
     @Inject(DEFAULT_LANG_FUNCTION) defaultLangFunction = void 0,
-    @Inject(COOKIE_FORMAT) public cookieFormat: string = DEFAULT_COOKIE_FORMAT
+    @Inject(COOKIE_FORMAT) public cookieFormat: string = DEFAULT_COOKIE_FORMAT,
+    @Inject(INITIAL_NAVIGATION) public initialNavigation: boolean = DEFAULT_INITIAL_NAVIGATION,
   ) {
     this.cacheMechanism = cacheMechanism;
     this.defaultLangFunction = defaultLangFunction;

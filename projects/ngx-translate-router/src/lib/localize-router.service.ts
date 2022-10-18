@@ -2,14 +2,15 @@ import { Inject, Injectable } from '@angular/core';
 // import { Location } from '@angular/common';
 import {
   Router, NavigationStart, ActivatedRouteSnapshot, NavigationExtras, ActivatedRoute,
-  Event, NavigationCancel
+  Event, NavigationCancel, Routes
 } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { filter, pairwise } from 'rxjs/operators';
 
 import { LocalizeParser } from './localize-router.parser';
 import { LocalizeRouterSettings } from './localize-router.config';
 import { LocalizedMatcherUrlSegment } from './localized-matcher-url-segment';
+import { deepCopy } from './util';
 
 /**
  * Localization service
@@ -18,8 +19,15 @@ import { LocalizedMatcherUrlSegment } from './localized-matcher-url-segment';
 @Injectable()
 export class LocalizeRouterService {
   routerEvents: Subject<string>;
+  hooks: {
+    /** @internal */
+    _initializedSubject: ReplaySubject<boolean>;
+    initialized: Observable<boolean>;
+  };
+
 
   private latestUrl: string;
+  private lastExtras?: NavigationExtras;
 
   /**
    * CTOR
@@ -32,13 +40,18 @@ export class LocalizeRouterService {
       @Inject(Location) private location: Location*/
     ) {
       this.routerEvents = new Subject<string>();
+      const initializedSubject = new ReplaySubject<boolean>(1);
+      this.hooks = {
+        _initializedSubject: initializedSubject,
+        initialized: initializedSubject.asObservable()
+      };
   }
 
   /**
    * Start up the service
    */
   init(): void {
-    this.router.resetConfig(this.parser.routes);
+    this.applyConfigToRouter(this.parser.routes);
     // subscribe to router events
     this.router.events
       .pipe(
@@ -46,15 +59,17 @@ export class LocalizeRouterService {
         pairwise()
       )
       .subscribe(this._routeChanged());
+
+    if (this.settings.initialNavigation) {
+      this.router.initialNavigation();
+    }
   }
 
   /**
    * Change language and navigate to translated route
    */
   changeLanguage(lang: string, extras?: NavigationExtras, useNavigateMethod?: boolean): void {
-    // if (this.route) {
-    //   console.log(this.route);
-    // }
+
     if (lang !== this.parser.currentLang) {
       const rootSnapshot: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
 
@@ -94,8 +109,9 @@ export class LocalizeRouterService {
 
         const queryParamsObj = this.parser.chooseQueryParams(extras, this.route.snapshot.queryParams);
 
-        this.router.resetConfig(this.parser.routes);
+        this.applyConfigToRouter(this.parser.routes);
 
+        this.lastExtras = extras;
         if (useNavigateMethod) {
           const extrasToApply: NavigationExtras = extras ? {...extras} : {};
           if (queryParamsObj) {
@@ -115,7 +131,6 @@ export class LocalizeRouterService {
    * Traverses through the tree to assemble new translated url
    */
   private traverseRouteSnapshot(snapshot: ActivatedRouteSnapshot): string {
-
     if (snapshot.firstChild && snapshot.routeConfig) {
       return `${this.parseSegmentValue(snapshot)}/${this.traverseRouteSnapshot(snapshot.firstChild)}`;
     } else if (snapshot.firstChild) {
@@ -215,6 +230,7 @@ export class LocalizeRouterService {
     return ([previousEvent, currentEvent]: [NavigationStart, NavigationStart]) => {
       const previousLang = this.parser.getLocationLang(previousEvent.url) || this.parser.defaultLang;
       const currentLang = this.parser.getLocationLang(currentEvent.url) || this.parser.defaultLang;
+      const lastExtras = this.lastExtras;
 
       if (currentLang !== previousLang && this.latestUrl !== currentEvent.url) {
         this.latestUrl = currentEvent.url;
@@ -222,9 +238,11 @@ export class LocalizeRouterService {
         this.parser.translateRoutes(currentLang)
           .subscribe(() => {
             // Reset routes again once they are all translated
-            this.router.resetConfig(this.parser.routes);
-            // Init new navigation with same url to take new congif in consideration
-            this.router.navigateByUrl(currentEvent.url);
+            this.applyConfigToRouter(this.parser.routes);
+            // Clear global extras
+            this.lastExtras = undefined;
+            // Init new navigation with same url to take new config in consideration
+            this.router.navigateByUrl(currentEvent.url, lastExtras);
             // Fire route change event
             this.routerEvents.next(currentLang);
           });
@@ -241,6 +259,14 @@ export class LocalizeRouterService {
     const url = this.router.serializeUrl(currentNavigation.extractedUrl);
     (this.router.events as Subject<Event>).next(new NavigationCancel(currentNavigation.id, url, ''));
     (this.router as any).transitions.next({...(this.router as any).transitions.getValue(), id: 0});
+  }
+
+  /**
+   * Apply config to Angular RouterModule
+   * @param config routes to apply
+   */
+  private applyConfigToRouter(config: Routes) {
+    this.router.resetConfig(deepCopy(config));
   }
 
 }

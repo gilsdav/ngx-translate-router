@@ -1,11 +1,13 @@
 import {
   NgModule, ModuleWithProviders, APP_INITIALIZER, Optional, SkipSelf,
-  Injectable, Injector, NgModuleFactoryLoader, ApplicationRef, Compiler
+  Injectable, Injector, ApplicationRef, Compiler
 } from '@angular/core';
 import { LocalizeRouterService } from './localize-router.service';
 import { DummyLocalizeParser, LocalizeParser } from './localize-router.parser';
-import { RouterModule, Routes, RouteReuseStrategy, Router, UrlSerializer, ChildrenOutletContexts,
-  ROUTES, ROUTER_CONFIGURATION, UrlHandlingStrategy } from '@angular/router';
+import {
+  RouterModule, Routes, RouteReuseStrategy, Router, UrlSerializer, ChildrenOutletContexts,
+  ROUTES, ROUTER_CONFIGURATION, UrlHandlingStrategy, DefaultTitleStrategy, TitleStrategy
+} from '@angular/router';
 import { LocalizeRouterPipe } from './localize-router.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule, Location } from '@angular/common';
@@ -15,9 +17,9 @@ import {
   LocalizeRouterConfig, LocalizeRouterSettings,
   RAW_ROUTES,
   USE_CACHED_LANG,
-  COOKIE_FORMAT
+  COOKIE_FORMAT,
+  INITIAL_NAVIGATION
 } from './localize-router.config';
-// import { LocalizeRouterConfigLoader } from './localize-router-config-loader';
 import { GilsdavReuseStrategy } from './gilsdav-reuse-strategy';
 import { setupRouter } from './localized-router';
 import { deepCopy } from './util';
@@ -35,12 +37,34 @@ export class ParserInitializer {
 
   appInitializer(): Promise<any> {
     const res = this.parser.load(this.routes);
-    res.then(() => {
-      const localize: LocalizeRouterService = this.injector.get(LocalizeRouterService);
-      localize.init();
-    });
 
-    return res;
+    return res.then(() => {
+      const localize = this.injector.get(LocalizeRouterService);
+      const router = this.injector.get(Router);
+      const settings = this.injector.get(LocalizeRouterSettings);
+      localize.init();
+
+      if (settings.initialNavigation) {
+        return new Promise<void>(resolve => {
+          // @ts-ignore
+          const oldAfterPreactivation = router.afterPreactivation;
+          let firstInit = true;
+          // @ts-ignore
+          router.afterPreactivation = () => {
+            if (firstInit) {
+              resolve();
+              firstInit = false;
+              localize.hooks._initializedSubject.next(true);
+              localize.hooks._initializedSubject.complete();
+            }
+            return oldAfterPreactivation();
+          };
+        });
+      } else {
+        localize.hooks._initializedSubject.next(true);
+        localize.hooks._initializedSubject.complete();
+      }
+    });
   }
 
   generateInitializer(parser: LocalizeParser, routes: Routes[]): () => Promise<any> {
@@ -71,9 +95,19 @@ export class LocalizeRouterModule {
           provide: Router,
           useFactory: setupRouter,
           deps: [
-            ApplicationRef, UrlSerializer, ChildrenOutletContexts, Location, Injector,
-            NgModuleFactoryLoader, Compiler, ROUTES, LocalizeParser, ROUTER_CONFIGURATION,
-            [UrlHandlingStrategy, new Optional()], [RouteReuseStrategy, new Optional()]
+            ApplicationRef,
+            UrlSerializer,
+            ChildrenOutletContexts,
+            Location,
+            Injector,
+            Compiler,
+            ROUTES,
+            LocalizeParser,
+            ROUTER_CONFIGURATION,
+            DefaultTitleStrategy,
+            [TitleStrategy, new Optional()],
+            [UrlHandlingStrategy, new Optional()],
+            [RouteReuseStrategy, new Optional()]
           ]
         },
         {
@@ -87,6 +121,7 @@ export class LocalizeRouterModule {
         { provide: CACHE_MECHANISM, useValue: config.cacheMechanism },
         { provide: DEFAULT_LANG_FUNCTION, useValue: config.defaultLangFunction },
         { provide: COOKIE_FORMAT, useValue: config.cookieFormat },
+        { provide: INITIAL_NAVIGATION, useValue: config.initialNavigation },
         LocalizeRouterSettings,
         config.parser || { provide: LocalizeParser, useClass: DummyLocalizeParser },
         {
@@ -96,7 +131,6 @@ export class LocalizeRouterModule {
         },
         LocalizeRouterService,
         ParserInitializer,
-        // { provide: NgModuleFactoryLoader, useClass: LocalizeRouterConfigLoader },
         {
           provide: APP_INITIALIZER,
           multi: true,
