@@ -19,13 +19,15 @@ export class LocalizedRouter extends Router {
     public config: Routes,
     localize: LocalizeParser
   ) {
-    super(_rootComponentType, _urlSerializer, _rootContexts, _location, injector, compiler, config);
+    super();
     // Custom configuration
     const platformId = injector.get(PLATFORM_ID);
     const isBrowser = isPlatformBrowser(platformId);
     // __proto__ is needed for preloaded modules be doesn't work with SSR
     // @ts-ignore
-    const configLoader = (isBrowser ? this.configLoader.__proto__ : this.configLoader);
+    const configLoader = isBrowser
+      ? (this as any).navigationTransitions.configLoader.__proto__
+      : (this as any).navigationTransitions.configLoader;
 
     configLoader.loadModuleFactoryOrRoutes = (loadChildren: LoadChildren) => {
       return wrapIntoObservable(loadChildren()).pipe(mergeMap((t: any) => {
@@ -63,7 +65,6 @@ export class LocalizedRouter extends Router {
     };
     // (this as any).navigations = (this as any).setupNavigations((this as any).transitions);
   }
-
 }
 export function setupRouter(
   ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts,
@@ -111,10 +112,6 @@ export function setupRouter(
 
   if (opts.urlUpdateStrategy) {
     router.urlUpdateStrategy = opts.urlUpdateStrategy;
-  }
-
-  if (opts.relativeLinkResolution) {
-    router.relativeLinkResolution = opts.relativeLinkResolution;
   }
 
   return router;
