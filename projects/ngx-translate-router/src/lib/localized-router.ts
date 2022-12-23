@@ -1,28 +1,22 @@
-import {
-  Router, UrlSerializer, ChildrenOutletContexts, Routes, Route, ExtraOptions, UrlHandlingStrategy,
-  RouteReuseStrategy, RouterEvent, LoadChildren, ROUTES, DefaultTitleStrategy, TitleStrategy
-} from '@angular/router';
-import { Type, Injector, Compiler, ApplicationRef, NgModuleFactory, PLATFORM_ID } from '@angular/core';
-import { Location, isPlatformBrowser } from '@angular/common';
+import { Router, LoadChildren, ROUTES } from '@angular/router';
+import { Injector, Compiler, NgModuleFactory, PLATFORM_ID, inject, Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { from, of, isObservable, Observable } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
-import { flatten, isPromise } from './util';
+import { isPromise } from './util';
 import { LocalizeParser } from './localize-router.parser';
 
+@Injectable({providedIn: 'root'})
 export class LocalizedRouter extends Router {
-  constructor(
-    _rootComponentType: Type<any> | null,
-    _urlSerializer: UrlSerializer,
-    _rootContexts: ChildrenOutletContexts,
-    _location: Location, injector: Injector,
-    compiler: Compiler,
-    public config: Routes,
-    localize: LocalizeParser
-  ) {
+
+  private platformId = inject(PLATFORM_ID);
+  private compiler = inject(Compiler);
+  private localize = inject(LocalizeParser);
+
+  constructor() {
     super();
     // Custom configuration
-    const platformId = injector.get(PLATFORM_ID);
-    const isBrowser = isPlatformBrowser(platformId);
+    const isBrowser = isPlatformBrowser(this.platformId);
     // __proto__ is needed for preloaded modules be doesn't work with SSR
     // @ts-ignore
     const configLoader = isBrowser
@@ -35,7 +29,7 @@ export class LocalizedRouter extends Router {
         if (t instanceof NgModuleFactory || Array.isArray(t)) {
           compiled = of(t);
         } else {
-          compiled = from(compiler.compileModuleAsync(t)) as Observable<NgModuleFactory<any>>;
+          compiled = from(this.compiler.compileModuleAsync(t)) as Observable<NgModuleFactory<any>>;
         }
         return compiled.pipe(map(factory => {
           if (Array.isArray(factory)) {
@@ -52,7 +46,7 @@ export class LocalizedRouter extends Router {
 
                 if (token === ROUTES) {
                   // translate lazy routes
-                  return localize.initChildRoutes([].concat(...getResult));
+                  return this.localize.initChildRoutes([].concat(...getResult));
                 } else {
                   return getResult;
                 }
@@ -66,56 +60,7 @@ export class LocalizedRouter extends Router {
     // (this as any).navigations = (this as any).setupNavigations((this as any).transitions);
   }
 }
-export function setupRouter(
-  ref: ApplicationRef, urlSerializer: UrlSerializer, contexts: ChildrenOutletContexts,
-  location: Location, injector: Injector, compiler: Compiler,
-  config: Route[][], localize: LocalizeParser, opts: ExtraOptions = {},
-  defaultTitleStrategy: DefaultTitleStrategy, titleStrategy?: TitleStrategy,
-  urlHandlingStrategy?: UrlHandlingStrategy, routeReuseStrategy?: RouteReuseStrategy) {
-  const router = new LocalizedRouter(
-    null, urlSerializer, contexts, location, injector, compiler, flatten(config), localize);
 
-  if (urlHandlingStrategy) {
-    router.urlHandlingStrategy = urlHandlingStrategy;
-  }
-
-  if (routeReuseStrategy) {
-    router.routeReuseStrategy = routeReuseStrategy;
-  }
-
-  router.titleStrategy = titleStrategy ?? defaultTitleStrategy;
-
-  if (opts.errorHandler) {
-    router.errorHandler = opts.errorHandler;
-  }
-
-  if (opts.malformedUriErrorHandler) {
-    router.malformedUriErrorHandler = opts.malformedUriErrorHandler;
-  }
-
-  if (opts.enableTracing) {
-    router.events.subscribe((e: RouterEvent) => {
-      console.group(`Router Event: ${(<any>e.constructor).name}`);
-      console.log(e.toString());
-      console.log(e);
-      console.groupEnd();
-    });
-  }
-
-  if (opts.onSameUrlNavigation) {
-    router.onSameUrlNavigation = opts.onSameUrlNavigation;
-  }
-
-  if (opts.paramsInheritanceStrategy) {
-    router.paramsInheritanceStrategy = opts.paramsInheritanceStrategy;
-  }
-
-  if (opts.urlUpdateStrategy) {
-    router.urlUpdateStrategy = opts.urlUpdateStrategy;
-  }
-
-  return router;
-}
 
 export function wrapIntoObservable<T>(value: T | NgModuleFactory<T> | Promise<T> | Observable<T>) {
   if (isObservable(value)) {
