@@ -258,7 +258,10 @@ export class LocalizeRouterService {
     const currentNavigation = this.router.getCurrentNavigation();
     const url = this.router.serializeUrl(currentNavigation.extractedUrl);
     (this.router.events as Subject<Event>).next(new NavigationCancel(currentNavigation.id, url, ''));
-    (this.router as any).transitions.next({...(this.router as any).transitions.getValue(), id: 0});
+    (this.router as any).navigationTransitions.transitions.next({
+      ...(this.router as any).navigationTransitions.transitions.getValue(),
+      id: 0,
+    });
   }
 
   /**

@@ -1,12 +1,11 @@
 import {
   NgModule, ModuleWithProviders, APP_INITIALIZER, Optional, SkipSelf,
-  Injectable, Injector, ApplicationRef, Compiler
+  Injectable, Injector
 } from '@angular/core';
 import { LocalizeRouterService } from './localize-router.service';
 import { DummyLocalizeParser, LocalizeParser } from './localize-router.parser';
 import {
-  RouterModule, Routes, RouteReuseStrategy, Router, UrlSerializer, ChildrenOutletContexts,
-  ROUTES, ROUTER_CONFIGURATION, UrlHandlingStrategy, DefaultTitleStrategy, TitleStrategy
+  RouterModule, Routes, RouteReuseStrategy, Router
 } from '@angular/router';
 import { LocalizeRouterPipe } from './localize-router.pipe';
 import { TranslateModule } from '@ngx-translate/core';
@@ -21,8 +20,8 @@ import {
   INITIAL_NAVIGATION
 } from './localize-router.config';
 import { GilsdavReuseStrategy } from './gilsdav-reuse-strategy';
-import { setupRouter } from './localized-router';
 import { deepCopy } from './util';
+import { LocalizedRouter } from './localized-router';
 
 @Injectable()
 export class ParserInitializer {
@@ -93,22 +92,7 @@ export class LocalizeRouterModule {
       providers: [
         {
           provide: Router,
-          useFactory: setupRouter,
-          deps: [
-            ApplicationRef,
-            UrlSerializer,
-            ChildrenOutletContexts,
-            Location,
-            Injector,
-            Compiler,
-            ROUTES,
-            LocalizeParser,
-            ROUTER_CONFIGURATION,
-            DefaultTitleStrategy,
-            [TitleStrategy, new Optional()],
-            [UrlHandlingStrategy, new Optional()],
-            [RouteReuseStrategy, new Optional()]
-          ]
+          useClass: LocalizedRouter
         },
         {
           provide: LOCALIZE_ROUTER_FORROOT_GUARD,

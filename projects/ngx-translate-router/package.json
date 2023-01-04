@@ -1,6 +1,6 @@
 {
   "name": "@gilsdav/ngx-translate-router",
-  "version": "5.1.1",
+  "version": "6.0.0",
   "homepage": "https://github.com/gilsdav/ngx-translate-router#readme",
   "license" : "MIT",
   "author": {
@@ -9,9 +9,9 @@
     "url": "https://github.com/gilsdav"
   },
   "peerDependencies": {
-    "@angular/common": ">=14.0.0",
-    "@angular/core": ">=14.0.0",
-    "@angular/router": ">=14.0.0",
+    "@angular/common": ">=15.0.3",
+    "@angular/core": ">=15.0.3",
+    "@angular/router": ">=15.0.3",
     "@ngx-translate/core": ">=11.0.1"
   }
 }
