@@ -136,7 +136,7 @@ export class LocalizeRouterService {
     } else if (snapshot.firstChild) {
       return this.traverseRouteSnapshot(snapshot.firstChild);
     } else {
-      return this.parseSegmentValue(snapshot);
+      return '';
     }
     /* if (snapshot.firstChild && snapshot.firstChild.routeConfig && snapshot.firstChild.routeConfig.path) {
       if (snapshot.firstChild.routeConfig.path !== '**') {
