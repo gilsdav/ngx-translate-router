@@ -27,6 +27,7 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 | 14              | 5.1.1            | 2.0.0       | active | need rxjs 7 or higher  |
 | 15              | 6.0.0            | 2.0.0       | active | minimum angular 15.0.3 |
 | 15.1            | 6.1.0            | 2.0.0       | active | minimum angular 15.1.0 |
+| 16.1            | 6.1.1            | 2.0.0       | active | minimum angular 16.0.0 |
 
 Demo project can be found under sub folder `src`.
 
