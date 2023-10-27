@@ -33,7 +33,7 @@ export class LocalizedRouter extends Router {
         }
         return compiled.pipe(map(factory => {
           if (Array.isArray(factory)) {
-            return factory;
+            return this.localize.initChildRoutes([...factory]);
           }
           return {
             moduleType: factory.moduleType,
