@@ -1,11 +1,10 @@
-import { Router, ROUTES, Route, DefaultExport, Routes, PRIMARY_OUTLET } from '@angular/router';
+import { Router, ROUTES, Route, DefaultExport, Routes, PRIMARY_OUTLET, ɵEmptyOutletComponent as EmptyOutletComponent } from '@angular/router';
 import { Injector, Compiler, NgModuleFactory, PLATFORM_ID, inject, Injectable, EnvironmentInjector } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { from, of, isObservable, Observable, ConnectableObservable, Subject } from 'rxjs';
 import { mergeMap, map, refCount, finalize } from 'rxjs/operators';
 import { isPromise } from './util';
 import { LocalizeParser } from './localize-router.parser';
-import { EmptyOutletComponent } from './empty_outlet';
 
 @Injectable({providedIn: 'root'})
 export class LocalizedRouter extends Router {
