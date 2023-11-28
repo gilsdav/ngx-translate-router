@@ -3,6 +3,8 @@
     "ROUTES.home": "acceuil",
     "ROUTES.test": "testounet",
     "ROUTES.bob": "bobie",
+    "ROUTES.yoyo": "yoyo",
+    "ROUTES.sub": "sous",
     "ROUTES.map": "carte",
     "ROUTES.matcher": "monmatcher",
     "CHANGE_LANGUAGE": "Changer de langue",

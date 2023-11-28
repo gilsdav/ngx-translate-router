@@ -1,4 +1,4 @@
-import { Router, LoadChildren, ROUTES, Route, DefaultExport, Routes, PRIMARY_OUTLET } from '@angular/router';
+import { Router, ROUTES, Route, DefaultExport, Routes, PRIMARY_OUTLET } from '@angular/router';
 import { Injector, Compiler, NgModuleFactory, PLATFORM_ID, inject, Injectable, EnvironmentInjector } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { from, of, isObservable, Observable, ConnectableObservable, Subject } from 'rxjs';
@@ -32,24 +32,23 @@ export class LocalizedRouter extends Router {
       } else if (route._loadedRoutes) {
         return of({routes: route._loadedRoutes, injector: route._loadedInjector});
       }
-  
       if (this.onLoadStartListener) {
         this.onLoadStartListener(route);
       }
       const moduleFactoryOrRoutes$ =
       this.loadModuleFactoryOrRoutes(parentInjector, route);
       const loadRunner = moduleFactoryOrRoutes$.pipe(
-          finalize(() => {  
+          finalize(() => {
             this.childrenLoaders.delete(route);
           }),
       );
       const loader = new ConnectableObservable(loadRunner, () => new Subject<any>())
                          .pipe(refCount());
       this.childrenLoaders.set(route, loader);
-      return loader;      
+      return loader;
    }
   }
-  
+
   loadModuleFactoryOrRoutes = (parentInjector: Injector, route: Route) => {
     return wrapIntoObservable(route.loadChildren!())
     .pipe(
@@ -68,7 +67,7 @@ export class LocalizedRouter extends Router {
           let injector: EnvironmentInjector|undefined;
           let rawRoutes: Route[];
           if (Array.isArray(factoryOrRoutes)) {
-            rawRoutes = factoryOrRoutes;
+            rawRoutes = this.localize.initChildRoutes([].concat(...factoryOrRoutes));
           } else {
             injector = factoryOrRoutes.create(parentInjector).injector;
             const getMethod = injector.get.bind(injector);
@@ -90,7 +89,6 @@ export class LocalizedRouter extends Router {
 }
 
 
- 
 export function standardizeConfig(r: Route): Route {
   const children = r.children && r.children.map(standardizeConfig);
   const c = children ? {...r, children} : {...r};
