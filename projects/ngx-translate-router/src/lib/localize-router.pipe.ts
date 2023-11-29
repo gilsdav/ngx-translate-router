@@ -7,7 +7,8 @@ const VIEW_DESTROYED_STATE = 128;
 
 @Pipe({
   name: 'localize',
-  pure: false // required to update the value when the promise is resolved
+  pure: false, // required to update the value when the promise is resolved
+  standalone: true
 })
 export class LocalizeRouterPipe implements PipeTransform, OnDestroy {
   private value: string | any[] = '';

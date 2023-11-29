@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, provideRouter } from '@angular/router';
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import {
   LocalizeRouterModule, LocalizeParser, ManualParserLoader, CacheMechanism,
-  LocalizeRouterSettings
+  LocalizeRouterSettings, withLocalizeRouter
 } from '@gilsdav/ngx-translate-router';
 
 import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loader';
@@ -92,24 +92,26 @@ export function shouldTranslateMap(param: string): string {
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes/*, { initialNavigation: 'disabled' }*/),
-        LocalizeRouterModule.forRoot(routes, {
-            // parser: {
-            //     provide: LocalizeParser,
-            //     useFactory: ManualLoaderFactory,
-            //     deps: [TranslateService, Location, LocalizeRouterSettings]
-            // },
-            parser: {
-              provide: LocalizeParser,
-              useFactory: HttpLoaderFactory,
-              deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
-            },
-            cacheMechanism: CacheMechanism.Cookie,
-            cookieFormat: '{{value}};{{expires:20}};path=/',
-            // alwaysSetPrefix: false
-            // initialNavigation: true
-        })
+        RouterModule //.forRoot(routes/*, { initialNavigation: 'disabled' }*/),
+        // LocalizeRouterModule.forRoot(routes, {
+        //     parser: {
+        //       provide: LocalizeParser,
+        //       useFactory: HttpLoaderFactory,
+        //       deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
+        //     },
+        //     cacheMechanism: CacheMechanism.Cookie,
+        //     cookieFormat: '{{value}};{{expires:20}};path=/',
+        // })
     ],
+    providers: [provideRouter(routes, withLocalizeRouter(routes, {
+      parser: {
+        provide: LocalizeParser,
+        useFactory: HttpLoaderFactory,
+        deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
+      },
+      cacheMechanism: CacheMechanism.Cookie,
+      cookieFormat: '{{value}};{{expires:20}};path=/',
+    }))],
     exports: [RouterModule, LocalizeRouterModule]
 })
 export class AppRoutingModule { }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { LocalizeRouterModule } from '@gilsdav/ngx-translate-router';
+import { LocalizeRouterPipe } from '@gilsdav/ngx-translate-router';
 
 @Component({
   selector: 'app-yoyo',
@@ -10,7 +10,7 @@ import { LocalizeRouterModule } from '@gilsdav/ngx-translate-router';
   imports: [
     RouterOutlet,
     RouterLink,
-    LocalizeRouterModule
+    LocalizeRouterPipe
   ]
 })
 export class YoyoComponent implements OnInit {
