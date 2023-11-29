@@ -1,6 +1,6 @@
 import {
   NgModule, ModuleWithProviders, APP_INITIALIZER, Optional, SkipSelf,
-  Injectable, Injector, Provider, EnvironmentProviders
+  Injectable, Injector, Provider
 } from '@angular/core';
 import { LocalizeRouterService } from './localize-router.service';
 import { DummyLocalizeParser, LocalizeParser } from './localize-router.parser';
