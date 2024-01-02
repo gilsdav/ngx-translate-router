@@ -15,9 +15,10 @@ import { firstValueFrom } from 'rxjs';
 import { filter, first, tap } from 'rxjs/operators';
 import { NavigationEnd, Router, RouterStateSnapshot, TitleStrategy } from '@angular/router';
 import { TranslateTitleStrategy } from './translate-title-strategy';
+import { environment } from '../environments/environment';
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/locales/', '.json');
+  return new TranslateHttpLoader(http, `${environment.locales}/assets/locales/`, '.json');
 }
 
 export const appInitializerFactory = (injector: Injector) => {

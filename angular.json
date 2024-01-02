@@ -51,6 +51,14 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "development": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": true,
+              "vendorChunk": false,
+              "buildOptimizer": false
             }
           }
         },
@@ -60,6 +68,9 @@
             "browserTarget": "ngx-translate-router-demo:build"
           },
           "configurations": {
+            "development": {
+              "browserTarget": "ngx-translate-router-demo:build:development"
+            },
             "production": {
               "browserTarget": "ngx-translate-router-demo:build:production"
             }
@@ -92,7 +103,7 @@
           "builder": "@angular-devkit/build-angular:server",
           "options": {
             "outputPath": "dist/ngx-translate-router-demo/server",
-            "main": "server.ts",
+            "main": "src/server.ts",
             "tsConfig": "src/tsconfig.server.json",
             "sourceMap": true
           },
@@ -110,6 +121,14 @@
               "sourceMap": false,
               "extractLicenses": true,
               "vendorChunk": false
+            },
+            "development": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": true,
+              "vendorChunk": false,
+              "buildOptimizer": false
             }
           },
           "defaultConfiguration": "production"
@@ -136,13 +155,13 @@
             ]
           },
           "configurations": {
-            "production": {
-              "browserTarget": "ngx-translate-router-demo:build:production",
-              "serverTarget": "ngx-translate-router-demo:server:production"
-            },
             "development": {
               "browserTarget": "ngx-translate-router-demo:build:development",
               "serverTarget": "ngx-translate-router-demo:server:development"
+            },
+            "production": {
+              "browserTarget": "ngx-translate-router-demo:build:production",
+              "serverTarget": "ngx-translate-router-demo:server:production"
             }
           },
           "defaultConfiguration": "production"
