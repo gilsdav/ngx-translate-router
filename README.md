@@ -38,6 +38,8 @@ Demo project can be found under sub folder `src`.
 - [Installation](#installation)
 - [Usage](#usage)
     - [Initialize module](#initialize-module)
+        - [Module mode](#module-mode)
+        - [Standalone mode](#standalone-mode)
         - [Http loader](#http-loader)
         - [Manual initialization](#manual-initialization)
         - [Initialization config](#initialization-config)
