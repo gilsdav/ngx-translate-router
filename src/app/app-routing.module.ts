@@ -16,13 +16,14 @@ import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { baseMatcher } from './matcher/matcher.module';
 import { detailMatcher } from './matcher/matcher-detail/matcher-detail.module';
+import { environment } from '../environments/environment';
 
 // export function ManualLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings) {
 //     return new ManualParserLoader(translate, location, settings, ['en', 'fr'], 'ROUTES.', '!');
 // }
 
 export function HttpLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings, http: HttpClient) {
-  return new LocalizeRouterHttpLoader(translate, location, { ...settings, alwaysSetPrefix: true }, http);
+  return new LocalizeRouterHttpLoader(translate, location, { ...settings, alwaysSetPrefix: true }, http, `${environment.locales}/assets/locales.json`);
 }
 
 export const routes: Routes = [
