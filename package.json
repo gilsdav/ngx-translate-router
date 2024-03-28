@@ -29,7 +29,7 @@
     "@nguniversal/express-engine": "^16.2.0",
     "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
-    "@scullyio/scully": "0.0.102",
+    "@scullyio/scully": "1.0.9",
     "express": "^4.15.2",
     "rxjs": "7.8.0",
     "tslib": "2.3.1",
