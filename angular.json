@@ -14,7 +14,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
-            "outputPath": "dist/ngx-translate-router-demo",
+            "outputPath": "dist/ngx-translate-router-demo/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -51,6 +51,14 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "development": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": true,
+              "vendorChunk": false,
+              "buildOptimizer": false
             }
           }
         },
@@ -60,6 +68,9 @@
             "browserTarget": "ngx-translate-router-demo:build"
           },
           "configurations": {
+            "development": {
+              "browserTarget": "ngx-translate-router-demo:build:development"
+            },
             "production": {
               "browserTarget": "ngx-translate-router-demo:build:production"
             }
@@ -87,6 +98,73 @@
               "src/assets"
             ]
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/ngx-translate-router-demo/server",
+            "main": "src/server.ts",
+            "tsConfig": "src/tsconfig.server.json",
+            "sourceMap": true
+          },
+          "configurations": {
+            "production": {
+              "buildOptimizer": true,
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "sourceMap": false,
+              "extractLicenses": true,
+              "vendorChunk": false
+            },
+            "development": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": true,
+              "vendorChunk": false,
+              "buildOptimizer": false
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "ngx-translate-router-demo:build:development",
+              "serverTarget": "ngx-translate-router-demo:server:development"
+            },
+            "production": {
+              "browserTarget": "ngx-translate-router-demo:build:production",
+              "serverTarget": "ngx-translate-router-demo:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "development": {
+              "browserTarget": "ngx-translate-router-demo:build:development",
+              "serverTarget": "ngx-translate-router-demo:server:development"
+            },
+            "production": {
+              "browserTarget": "ngx-translate-router-demo:build:production",
+              "serverTarget": "ngx-translate-router-demo:server:production"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     },

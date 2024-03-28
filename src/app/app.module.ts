@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER, Injector } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { provideClientHydration } from '@angular/platform-browser';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -14,9 +15,10 @@ import { firstValueFrom } from 'rxjs';
 import { filter, first, tap } from 'rxjs/operators';
 import { NavigationEnd, Router, RouterStateSnapshot, TitleStrategy } from '@angular/router';
 import { TranslateTitleStrategy } from './translate-title-strategy';
+import { environment } from '../environments/environment';
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/locales/', '.json');
+  return new TranslateHttpLoader(http, `${environment.locales}/assets/locales/`, '.json');
 }
 
 export const appInitializerFactory = (injector: Injector) => {
@@ -59,6 +61,7 @@ export const appInitializerFactory = (injector: Injector) => {
     })
   ],
   providers: [
+    provideClientHydration(),
     { provide: TitleStrategy, useClass: TranslateTitleStrategy }
   //   {
   //     provide: APP_INITIALIZER,

@@ -1,11 +1,11 @@
 import {
   NgModule, ModuleWithProviders, APP_INITIALIZER, Optional, SkipSelf,
-  Injectable, Injector
+  Injectable, Injector, Provider
 } from '@angular/core';
 import { LocalizeRouterService } from './localize-router.service';
 import { DummyLocalizeParser, LocalizeParser } from './localize-router.parser';
 import {
-  RouterModule, Routes, RouteReuseStrategy, Router
+  RouterModule, Routes, RouteReuseStrategy, Router, RouterConfigurationFeature
 } from '@angular/router';
 import { LocalizeRouterPipe } from './localize-router.pipe';
 import { TranslateModule } from '@ngx-translate/core';
@@ -79,9 +79,48 @@ export function getAppInitializer(p: ParserInitializer, parser: LocalizeParser, 
   return p.generateInitializer(parser, routesCopy).bind(p);
 }
 
+function createLocalizeRouterProviders(routes: Routes, config: LocalizeRouterConfig): Provider[] {
+  return [
+    {
+      provide: Router,
+      useClass: LocalizedRouter
+    },
+    {
+      provide: LOCALIZE_ROUTER_FORROOT_GUARD,
+      useFactory: provideForRootGuard,
+      deps: [[LocalizeRouterModule, new Optional(), new SkipSelf()]]
+    },
+    { provide: USE_CACHED_LANG, useValue: config.useCachedLang },
+    { provide: ALWAYS_SET_PREFIX, useValue: config.alwaysSetPrefix },
+    { provide: CACHE_NAME, useValue: config.cacheName },
+    { provide: CACHE_MECHANISM, useValue: config.cacheMechanism },
+    { provide: DEFAULT_LANG_FUNCTION, useValue: config.defaultLangFunction },
+    { provide: COOKIE_FORMAT, useValue: config.cookieFormat },
+    { provide: INITIAL_NAVIGATION, useValue: config.initialNavigation },
+    LocalizeRouterSettings,
+    config.parser || { provide: LocalizeParser, useClass: DummyLocalizeParser },
+    {
+      provide: RAW_ROUTES,
+      multi: true,
+      useValue: routes
+    },
+    LocalizeRouterService,
+    ParserInitializer,
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      useFactory: getAppInitializer,
+      deps: [ParserInitializer, LocalizeParser, RAW_ROUTES]
+    },
+    {
+      provide: RouteReuseStrategy,
+      useClass: GilsdavReuseStrategy
+    }
+  ];
+}
+
 @NgModule({
-  imports: [CommonModule, RouterModule, TranslateModule],
-  declarations: [LocalizeRouterPipe],
+  imports: [CommonModule, RouterModule, TranslateModule, LocalizeRouterPipe],
   exports: [LocalizeRouterPipe]
 })
 export class LocalizeRouterModule {
@@ -89,43 +128,7 @@ export class LocalizeRouterModule {
   static forRoot(routes: Routes, config: LocalizeRouterConfig = {}): ModuleWithProviders<LocalizeRouterModule> {
     return {
       ngModule: LocalizeRouterModule,
-      providers: [
-        {
-          provide: Router,
-          useClass: LocalizedRouter
-        },
-        {
-          provide: LOCALIZE_ROUTER_FORROOT_GUARD,
-          useFactory: provideForRootGuard,
-          deps: [[LocalizeRouterModule, new Optional(), new SkipSelf()]]
-        },
-        { provide: USE_CACHED_LANG, useValue: config.useCachedLang },
-        { provide: ALWAYS_SET_PREFIX, useValue: config.alwaysSetPrefix },
-        { provide: CACHE_NAME, useValue: config.cacheName },
-        { provide: CACHE_MECHANISM, useValue: config.cacheMechanism },
-        { provide: DEFAULT_LANG_FUNCTION, useValue: config.defaultLangFunction },
-        { provide: COOKIE_FORMAT, useValue: config.cookieFormat },
-        { provide: INITIAL_NAVIGATION, useValue: config.initialNavigation },
-        LocalizeRouterSettings,
-        config.parser || { provide: LocalizeParser, useClass: DummyLocalizeParser },
-        {
-          provide: RAW_ROUTES,
-          multi: true,
-          useValue: routes
-        },
-        LocalizeRouterService,
-        ParserInitializer,
-        {
-          provide: APP_INITIALIZER,
-          multi: true,
-          useFactory: getAppInitializer,
-          deps: [ParserInitializer, LocalizeParser, RAW_ROUTES]
-        },
-        {
-          provide: RouteReuseStrategy,
-          useClass: GilsdavReuseStrategy
-        }
-      ]
+      providers: createLocalizeRouterProviders(routes, config)
     };
   }
 
@@ -149,4 +152,12 @@ export function provideForRootGuard(localizeRouterModule: LocalizeRouterModule):
       `LocalizeRouterModule.forRoot() called twice. Lazy loaded modules should use LocalizeRouterModule.forChild() instead.`);
   }
   return 'guarded';
+}
+
+
+export function withLocalizeRouter(routes: Routes, config: LocalizeRouterConfig = {}): RouterConfigurationFeature {
+  return {
+    ɵkind: 'LocalizeRouter' as any,
+    ɵproviders: createLocalizeRouterProviders(routes, config)
+  };
 }
