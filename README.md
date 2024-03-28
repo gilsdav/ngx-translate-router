@@ -17,16 +17,18 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 
 **Version to choose :**
 
-| angular version | translate-router | http-loader | type   | remarks                |
-|-----------------|------------------|-------------|--------|------------------------|
+| angular version | translate-router | http-loader | type   | remarks                 |
+|-----------------|------------------|-------------|--------|-------------------------|
 | 6 - 7           | 1.0.2            | 1.0.1       | legacy |
 | 7               | 1.7.3            | 1.1.0       | legacy |
 | 8               | 2.2.3            | 1.1.0       | legacy |
 | 8 - 12          | 3.1.9            | 1.1.2       | active |
 | 13              | 4.0.1            | 2.0.0       | active |
-| 14              | 5.1.1            | 2.0.0       | active | need rxjs 7 or higher  |
-| 15              | 6.0.0            | 2.0.0       | active | minimum angular 15.0.3 |
-| 15.1            | 6.1.0            | 2.0.0       | active | minimum angular 15.1.0 |
+| 14              | 5.1.1            | 2.0.0       | active | need rxjs 7 or higher   |
+| 15              | 6.0.0            | 2.0.0       | active | minimum angular 15.0.3  |
+| 15.1            | 6.1.0            | 2.0.0       | active | minimum angular 15.1.0  |
+| 16              | 7.0.0            | 2.0.0       | active | minimum angular 16      |
+| 17              | 7.1.0            | 2.0.0       | active | optional standalone API |
 
 Demo project can be found under sub folder `src`.
 
@@ -70,7 +72,9 @@ In order to use `@gilsdav/ngx-translate-router` you must initialize it with foll
 * Prefix for route segment translations
 * Routes to be translated
 
-### Initialize module
+### Initialize "module"
+
+#### Module mode
 `import {LocalizeRouterModule} from '@gilsdav/ngx-translate-router';`
 Module can be initialized either using static file or manually by passing necessary values.
 
@@ -80,9 +84,40 @@ Module can be initialized either using static file or manually by passing necess
 imports: [
   TranslateModule.forRoot(),
   RouterModule.forRoot(routes),
-  LocalizeRouterModule.forRoot(routes)
+  LocalizeRouterModule.forRoot(routes) // <--
 ]
 ```
+
+#### Standalone mode
+
+Standalone mode is the new Angular API that allow you to manage your application without ng-modules.
+
+This library provide an additional "RouterConfigurationFeature" called `withLocalizeRouter` you can provide to `provideRouter` Angular built-in function.
+Parameters for this function are exactly the same as for `LocalizeRouterModule.forRoot()`.
+
+*Here is an example to configure it within an SSR app:*
+```ts
+providers: [
+  provideHttpClient(withFetch()),
+  importProvidersFrom(TranslateModule.forRoot()),
+  provideRouter(
+    routes,
+    withDisabledInitialNavigation(),
+    withLocalizeRouter(routes, { // <--
+      parser: {
+        provide: LocalizeParser,
+        useFactory: (createTranslateRouteLoader),
+        deps: [TranslateService, Location, LocalizeRouterSettings]
+      },
+      initialNavigation: true
+    })
+  ),
+  provideClientHydration()
+]
+```
+
+You are also able to import `LocalizeRouterPipe` into your standalone components.
+
 
 #### Http loader
 
