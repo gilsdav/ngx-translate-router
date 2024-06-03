@@ -11,12 +11,13 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "aot": true,
-            "outputPath": "dist/ngx-translate-router-demo/browser",
+            "outputPath": {
+              "base": "dist/ngx-translate-router-demo"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -29,7 +30,13 @@
               "src/styles.css"
             ],
             "scripts": [],
-            "sourceMap": true
+            "sourceMap": true,
+            "browser": "src/main.ts",
+            "server": "src/main.server.ts",
+            "prerender": true,
+            "ssr": {
+              "entry": "server.ts"
+            }
           },
           "configurations": {
             "production": {
@@ -50,17 +57,13 @@
               "sourceMap": false,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "extractLicenses": true
             },
             "development": {
               "optimization": false,
               "outputHashing": "none",
               "sourceMap": true,
-              "namedChunks": true,
-              "vendorChunk": false,
-              "buildOptimizer": false
+              "namedChunks": true
             }
           }
         },
@@ -102,73 +105,6 @@
               "src/assets"
             ]
           }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/ngx-translate-router-demo/server",
-            "main": "src/server.ts",
-            "tsConfig": "src/tsconfig.server.json",
-            "sourceMap": true
-          },
-          "configurations": {
-            "production": {
-              "buildOptimizer": true,
-              "outputHashing": "media",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "sourceMap": false,
-              "extractLicenses": true,
-              "vendorChunk": false
-            },
-            "development": {
-              "optimization": false,
-              "outputHashing": "none",
-              "sourceMap": true,
-              "namedChunks": true,
-              "vendorChunk": false,
-              "buildOptimizer": false
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve-ssr": {
-          "builder": "@angular-devkit/build-angular:ssr-dev-server",
-          "configurations": {
-            "development": {
-              "browserTarget": "ngx-translate-router-demo:build:development",
-              "serverTarget": "ngx-translate-router-demo:server:development"
-            },
-            "production": {
-              "browserTarget": "ngx-translate-router-demo:build:production",
-              "serverTarget": "ngx-translate-router-demo:server:production"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "prerender": {
-          "builder": "@angular-devkit/build-angular:prerender",
-          "options": {
-            "routes": [
-              "/"
-            ]
-          },
-          "configurations": {
-            "development": {
-              "browserTarget": "ngx-translate-router-demo:build:development",
-              "serverTarget": "ngx-translate-router-demo:server:development"
-            },
-            "production": {
-              "browserTarget": "ngx-translate-router-demo:build:production",
-              "serverTarget": "ngx-translate-router-demo:server:production"
-            }
-          },
-          "defaultConfiguration": "production"
         }
       }
     },
