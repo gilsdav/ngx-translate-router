@@ -103,7 +103,7 @@ export abstract class LocalizeParser {
           this.routes.push(children[i]);
         }
         // remove from routes to translate only if doesn't have to translate `redirectTo` property
-        if (children[i].redirectTo === undefined || !(children[i].data['skipRouteLocalization']['localizeRedirectTo'])) {
+        if (children[i].redirectTo === undefined || !(children[i].data['skipRouteLocalization']['localizeRedirectTo']) || typeof children[i].redirectTo === 'function') {
           children.splice(i, 1);
         }
       }
@@ -172,6 +172,9 @@ export abstract class LocalizeParser {
       const localizeRedirection = !skipRouteLocalization || skipRouteLocalization['localizeRedirectTo'];
 
       if (route.redirectTo && localizeRedirection) {
+        if (typeof route.redirectTo === 'function') {
+          return;
+        }
         const prefixLang = route.redirectTo.indexOf('/') === 0 || isRootTree;
         this._translateProperty(route, 'redirectTo', prefixLang);
       }
