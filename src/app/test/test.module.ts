@@ -7,11 +7,11 @@ import { TestRoutingModule } from './test-routing.module';
 import { BobComponent } from './bob/bob.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TestRoutingModule,
-    TranslateModule.forChild()
-  ],
-  declarations: [BobComponent]
+    imports: [
+        CommonModule,
+        TestRoutingModule,
+        TranslateModule.forChild(),
+        BobComponent
+    ]
 })
 export class TestModule { }

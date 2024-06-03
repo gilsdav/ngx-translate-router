@@ -8,11 +8,11 @@ import { BobComponent } from './bob/bob.component';
 import { Test3Component } from './test3/test3.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TestRoutingModule,
-    TranslateModule.forChild()
-  ],
-  declarations: [BobComponent, Test3Component]
+    imports: [
+        CommonModule,
+        TestRoutingModule,
+        TranslateModule.forChild(),
+        BobComponent, Test3Component
+    ]
 })
 export class TestModule { }
