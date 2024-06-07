@@ -52,6 +52,7 @@ Demo project can be found under sub folder `src`.
         - [Path discrimination](#path-discrimination)
         - [WildCard path](#wildcard-path)
         - [Matcher params translation](#matcher-params-translation)
+        - [RedirectTo with function](#redirectTo-with-function)
     - [Pipe](#pipe)
     - [Service](#service)
     - [AOT](#aot)
@@ -464,6 +465,22 @@ result.posParams[name] = segment;
 
 ##### Matcher params translated without localizeMatcher issue
 If the URL is accidentally translated from a language to another which creates an inconsistent state you have to enable `escapePrefix` mechanism. (example: `escapePrefix: '!'`)
+
+#### RedirectTo with function
+
+Starting in Angular 18 introduced redirectTo as a function in addition to a string. If you use this feature, you can use the `redirectTo` function to translate the path. However, the library translates the entire router at the start of the application statically, which means that the translate function has no yet the navigation context of the user in that moment as it should be evaluated dynamically once the user navigates to such route. If you want to use this feature, you can use the `LocalizeRouterService` to translate the path injecting the service as in this example.
+
+```ts
+{
+  path: 'conditionalRedirectTo', redirectTo: ({ queryParams }) => {
+    const localizeRouterService = inject(LocalizeRouterService);
+    if (queryParams['redirect']) {
+      return localizeRouterService.translateRoute('/test') as string;
+    }
+    return localizeRouterService.translateRoute('/home') as string;
+  }
+}
+```
 
 ### Pipe
 

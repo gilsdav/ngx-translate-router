@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { RouterModule, Routes, provideRouter } from '@angular/router';
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -7,7 +7,8 @@ import { TranslateService } from '@ngx-translate/core';
 
 import {
   LocalizeRouterModule, LocalizeParser, ManualParserLoader, CacheMechanism,
-  LocalizeRouterSettings, withLocalizeRouter
+  LocalizeRouterSettings, withLocalizeRouter,
+  LocalizeRouterService
 } from '@gilsdav/ngx-translate-router';
 
 import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loader';
@@ -72,16 +73,25 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
   { path: '!test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
-
-  { path: 'bil', loadChildren: () => import('./test4/test4.routes').then(mod => mod.routes)  },
-
+  { path: 'bil', loadChildren: () => import('./test4/test4.routes').then(mod => mod.routes) },
+  {
+    path: 'conditionalRedirectTo', redirectTo: ({ queryParams }) => {
+      const localizeRouterService = inject(LocalizeRouterService);
+      if (queryParams['redirect']) {
+        return localizeRouterService.translateRoute('/test') as string;
+      }
+      return localizeRouterService.translateRoute('/home') as string;
+    }
+  },
   { path: 'toredirect', redirectTo: '/home', data: { skipRouteLocalization: { localizeRedirectTo: true } } },
 
-    { path: 'bob', children: [
-        { path: 'home/:test', component: HomeComponent }
-    ] },
-    { path: '404', component: NotFoundComponent },
-    { path: '**', redirectTo: '/404' }
+  {
+    path: 'bob', children: [
+      { path: 'home/:test', component: HomeComponent }
+    ]
+  },
+  { path: '404', component: NotFoundComponent },
+  { path: '**', redirectTo: '/404' }
 ];
 
 export function shouldTranslateMap(param: string): string {
@@ -92,28 +102,28 @@ export function shouldTranslateMap(param: string): string {
 }
 
 @NgModule({
-    imports: [
-        RouterModule //.forRoot(routes/*, { initialNavigation: 'disabled' }*/),
-        // LocalizeRouterModule.forRoot(routes, {
-        //     parser: {
-        //       provide: LocalizeParser,
-        //       useFactory: HttpLoaderFactory,
-        //       deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
-        //     },
-        //     cacheMechanism: CacheMechanism.Cookie,
-        //     cookieFormat: '{{value}};{{expires:20}};path=/',
-        // })
-    ],
-    providers: [provideRouter(routes, withLocalizeRouter(routes, {
-      parser: {
-        provide: LocalizeParser,
-        useFactory: HttpLoaderFactory,
-        deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
-      },
-      cacheMechanism: CacheMechanism.Cookie,
-      cookieFormat: '{{value}};{{expires:20}};path=/',
-    }))],
-    exports: [RouterModule, LocalizeRouterModule]
+  imports: [
+    RouterModule //.forRoot(routes/*, { initialNavigation: 'disabled' }*/),
+    // LocalizeRouterModule.forRoot(routes, {
+    //     parser: {
+    //       provide: LocalizeParser,
+    //       useFactory: HttpLoaderFactory,
+    //       deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
+    //     },
+    //     cacheMechanism: CacheMechanism.Cookie,
+    //     cookieFormat: '{{value}};{{expires:20}};path=/',
+    // })
+  ],
+  providers: [provideRouter(routes, withLocalizeRouter(routes, {
+    parser: {
+      provide: LocalizeParser,
+      useFactory: HttpLoaderFactory,
+      deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
+    },
+    cacheMechanism: CacheMechanism.Cookie,
+    cookieFormat: '{{value}};{{expires:20}};path=/',
+  }))],
+  exports: [RouterModule, LocalizeRouterModule]
 })
 export class AppRoutingModule { }
 
