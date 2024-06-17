@@ -171,10 +171,7 @@ export abstract class LocalizeParser {
       const skipRouteLocalization = (route.data && route.data['skipRouteLocalization']);
       const localizeRedirection = !skipRouteLocalization || skipRouteLocalization['localizeRedirectTo'];
 
-      if (route.redirectTo && localizeRedirection) {
-        if (typeof route.redirectTo === 'function') {
-          return;
-        }
+      if (route.redirectTo && localizeRedirection && !(typeof route.redirectTo === 'function')) {
         const prefixLang = route.redirectTo.indexOf('/') === 0 || isRootTree;
         this._translateProperty(route, 'redirectTo', prefixLang);
       }

@@ -83,6 +83,15 @@ export const routes: Routes = [
       return localizeRouterService.translateRoute('/home') as string;
     }
   },
+  {
+    path: '!conditionalRedirectTo', redirectTo: ({ queryParams }) => {
+      const localizeRouterService = inject(LocalizeRouterService);
+      if (queryParams['redirect']) {
+        return localizeRouterService.translateRoute('/test') as string;
+      }
+      return localizeRouterService.translateRoute('/home') as string;
+    }
+  },
   { path: 'toredirect', redirectTo: '/home', data: { skipRouteLocalization: { localizeRedirectTo: true } } },
 
   {
