@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 
-import { LocalizeRouterService } from '@gilsdav/ngx-translate-router';
+import { LocalizeRouterService, LocalizeRouterPipe } from '@gilsdav/ngx-translate-router';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
-  selector: 'app-bob',
-  templateUrl: './bob.component.html',
-  styleUrls: ['./bob.component.css']
+    selector: 'app-bob',
+    templateUrl: './bob.component.html',
+    styleUrls: ['./bob.component.css'],
+    standalone: true,
+    imports: [RouterLink, LocalizeRouterPipe]
 })
 export class BobComponent implements OnInit {
 

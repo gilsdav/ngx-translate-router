@@ -7,6 +7,7 @@
     "ROUTES.sub": "sous",
     "ROUTES.map": "carte",
     "ROUTES.matcher": "monmatcher",
+    "ROUTES.conditionalRedirectTo": "redirectionConditionnelle",
     "CHANGE_LANGUAGE": "Changer de langue",
     "GO_HOME": "Retourner à l'accueil",
     "DEFAULT_TITLE": "Mon titre",

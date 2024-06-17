@@ -7,6 +7,7 @@
     "ROUTES.sub": "sub",
     "ROUTES.map": "map",
     "ROUTES.matcher": "mymatcher",
+    "ROUTES.conditionalRedirectTo": "trConditionalRedirectTo",
     "CHANGE_LANGUAGE": "Change language",
     "GO_HOME": "Go home",
     "DEFAULT_TITLE": "My title",

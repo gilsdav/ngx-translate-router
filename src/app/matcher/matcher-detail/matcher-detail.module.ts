@@ -46,18 +46,16 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    LocalizeRouterModule.forChild(routes),
-    TranslateModule.forChild()
-  ],
-  declarations: [
-    MatcherDetailComponent
-  ],
-  exports: [
-    RouterModule,
-    LocalizeRouterModule
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        LocalizeRouterModule.forChild(routes),
+        TranslateModule.forChild(),
+        MatcherDetailComponent
+    ],
+    exports: [
+        RouterModule,
+        LocalizeRouterModule
+    ]
 })
 export class MatcherDetailModule { }

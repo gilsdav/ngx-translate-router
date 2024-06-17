@@ -8,8 +8,8 @@ describe('MatcherDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MatcherDetailComponent ]
-    })
+    imports: [MatcherDetailComponent]
+})
     .compileComponents();
   }));
 
