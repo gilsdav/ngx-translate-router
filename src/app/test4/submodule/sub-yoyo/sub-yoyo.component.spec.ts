@@ -11,9 +11,9 @@ describe('SubYoyoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SubYoyoComponent ]
+      imports: [SubYoyoComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
