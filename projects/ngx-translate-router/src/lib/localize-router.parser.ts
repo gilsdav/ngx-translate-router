@@ -18,7 +18,7 @@ export abstract class LocalizeParser {
   routes: Routes;
   defaultLang: string;
 
-  protected prefix: string;
+  protected prefix: string|string[];
   protected escapePrefix: string;
 
   private _translationObject: any;
@@ -394,18 +394,32 @@ export abstract class LocalizeParser {
   }
 
   /**
-   * Get translated value
+   * Search translated value by prefix('s)
    */
   private translateText(key: string): string {
     if (this.escapePrefix && key.startsWith(this.escapePrefix)) {
       return key.replace(this.escapePrefix, '');
     } else {
       if (!this._translationObject) {
-        return key;
+          return key;
       }
-      const fullKey = this.prefix + key;
-      const res = this.translate.getParsedResult(this._translationObject, fullKey);
-      return res !== fullKey ? res : key;
+
+      let prefixes: string | string[] = this.prefix;
+      if (!Array.isArray(prefixes)) {
+        prefixes = [prefixes];
+      }
+
+      let fullKey;
+      let res;
+      for(let prefix of prefixes) {
+        fullKey = prefix + key;
+        res = this.translate.getParsedResult(this._translationObject, fullKey);
+        if(res !== fullKey) {
+          break;
+        }
+      }
+
+      return res && fullKey && res !== fullKey ? res : key;
     }
   }
 
@@ -436,7 +450,7 @@ export abstract class LocalizeParser {
   /**
    * Get translation key prefix from config
    */
-  public getPrefix(): string {
+  public getPrefix(): string|string[] {
     return this.prefix;
   }
 
@@ -457,7 +471,7 @@ export class ManualParserLoader extends LocalizeParser {
    * CTOR
    */
   constructor(translate: TranslateService, location: Location, settings: LocalizeRouterSettings,
-    locales: string[] = ['en'], prefix: string = 'ROUTES.', escapePrefix: string = '') {
+    locales: string[] = ['en'], prefix: string|string[] = 'ROUTES.', escapePrefix: string = '') {
     super(translate, location, settings);
     this.locales = locales;
     this.prefix = prefix || '';
