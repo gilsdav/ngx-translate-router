@@ -1,8 +1,8 @@
 import { Router, ROUTES, Route, DefaultExport, Routes, PRIMARY_OUTLET, ɵEmptyOutletComponent as EmptyOutletComponent } from '@angular/router';
 import { Injector, Compiler, NgModuleFactory, PLATFORM_ID, inject, Injectable, EnvironmentInjector } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { from, of, isObservable, Observable, ConnectableObservable, Subject } from 'rxjs';
-import { mergeMap, map, refCount, finalize } from 'rxjs/operators';
+import { from, of, isObservable, Observable, Subject } from 'rxjs';
+import { mergeMap, map, finalize, share } from 'rxjs/operators';
 import { isPromise } from './util';
 import { LocalizeParser } from './localize-router.parser';
 
@@ -41,8 +41,9 @@ export class LocalizedRouter extends Router {
             this.childrenLoaders.delete(route);
           }),
       );
-      const loader = new ConnectableObservable(loadRunner, () => new Subject<any>())
-                         .pipe(refCount());
+      const loader = loadRunner.pipe(
+        share({ connector: () => new Subject() })
+      );
       this.childrenLoaders.set(route, loader);
       return loader;
    }
