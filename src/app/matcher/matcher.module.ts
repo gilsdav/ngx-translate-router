@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { UrlSegment, UrlMatchResult, RouterModule, Routes } from '@angular/router';
 
 import { LocalizeRouterModule, LocalizedMatcherUrlSegment } from '@gilsdav/ngx-translate-router';
-import { TranslateModule } from '@ngx-translate/core';
 
 import { MatcherComponent } from './matcher.component';
 
@@ -57,7 +56,6 @@ const routes: Routes = [
         CommonModule,
         RouterModule.forChild(routes),
         LocalizeRouterModule.forChild(routes),
-        TranslateModule.forChild(),
         MatcherComponent
     ],
     providers: [],

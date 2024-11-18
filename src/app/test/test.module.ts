@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TranslateModule } from '@ngx-translate/core';
-
 import { TestRoutingModule } from './test-routing.module';
 import { BobComponent } from './bob/bob.component';
 
@@ -10,7 +8,6 @@ import { BobComponent } from './bob/bob.component';
     imports: [
         CommonModule,
         TestRoutingModule,
-        TranslateModule.forChild(),
         BobComponent
     ]
 })

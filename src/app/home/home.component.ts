@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LocalizeRouterPipe } from '@gilsdav/ngx-translate-router';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
@@ -8,7 +8,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
     standalone: true,
-    imports: [RouterLink, RouterOutlet, LocalizeRouterPipe, TranslateModule]
+    imports: [RouterLink, RouterOutlet, LocalizeRouterPipe, TranslatePipe]
 })
 export class HomeComponent implements OnInit, OnDestroy {
 

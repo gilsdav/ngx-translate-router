@@ -10,7 +10,7 @@
   },
   "peerDependencies": {
     "@angular/common": ">=16.2.12",
-    "@ngx-translate/core": ">=16.2.12",
+    "@ngx-translate/core": ">=16.0.0",
     "@gilsdav/ngx-translate-router": ">=7.1.0",
     "@scullyio/scully": ">=0.0.102"
   },

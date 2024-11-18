@@ -28,9 +28,11 @@ export abstract class LocalizeParser {
   /**
    * Loader constructor
    */
-  constructor(@Inject(TranslateService) private translate: TranslateService,
+  constructor(
+    @Inject(TranslateService) private translate: TranslateService,
     @Inject(Location) private location: Location,
-    @Inject(LocalizeRouterSettings) private settings: LocalizeRouterSettings) {
+    @Inject(LocalizeRouterSettings) private settings: LocalizeRouterSettings
+  ) {
   }
 
   /**
