@@ -7,8 +7,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     selector: 'app-bob',
     templateUrl: './bob.component.html',
     styleUrls: ['./bob.component.css'],
-    standalone: true,
-    imports: [ TranslatePipe ]
+    imports: [TranslatePipe]
 })
 export class BobComponent implements OnInit {
 

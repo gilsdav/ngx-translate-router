@@ -7,7 +7,6 @@ import { RouterLink, RouterOutlet } from '@angular/router';
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
-    standalone: true,
     imports: [RouterLink, RouterOutlet, LocalizeRouterPipe, TranslatePipe]
 })
 export class HomeComponent implements OnInit, OnDestroy {

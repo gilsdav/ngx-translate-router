@@ -5,7 +5,6 @@ import { RouterOutlet } from '@angular/router';
     selector: 'app-test3',
     templateUrl: './test3.component.html',
     styleUrls: ['./test3.component.css'],
-    standalone: true,
     imports: [RouterOutlet]
 })
 export class Test3Component implements OnInit {

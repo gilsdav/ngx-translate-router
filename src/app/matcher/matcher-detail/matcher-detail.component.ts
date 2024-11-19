@@ -8,7 +8,6 @@ import { NgFor } from '@angular/common';
     selector: 'app-matcher-detail',
     templateUrl: './matcher-detail.component.html',
     styleUrls: ['./matcher-detail.component.css'],
-    standalone: true,
     imports: [RouterLinkActive, RouterLink, NgFor, LocalizeRouterPipe]
 })
 export class MatcherDetailComponent implements OnInit, OnDestroy {

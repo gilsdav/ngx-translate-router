@@ -7,7 +7,6 @@ import { RouterLink } from '@angular/router';
     selector: 'app-bob',
     templateUrl: './bob.component.html',
     styleUrls: ['./bob.component.css'],
-    standalone: true,
     imports: [RouterLink, LocalizeRouterPipe]
 })
 export class BobComponent implements OnInit {
