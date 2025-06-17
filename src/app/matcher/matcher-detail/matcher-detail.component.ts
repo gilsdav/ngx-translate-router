@@ -2,13 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterLinkActive, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LocalizeRouterPipe } from '@gilsdav/ngx-translate-router';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-matcher-detail',
     templateUrl: './matcher-detail.component.html',
     styleUrls: ['./matcher-detail.component.css'],
-    imports: [RouterLinkActive, RouterLink, NgFor, LocalizeRouterPipe]
+    imports: [RouterLinkActive, RouterLink, LocalizeRouterPipe]
 })
 export class MatcherDetailComponent implements OnInit, OnDestroy {
 

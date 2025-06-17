@@ -4,14 +4,16 @@
     "outDir": "../../out-tsc/lib",
     "declaration": true,
     "inlineSources": true,
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "lib": [
       "dom",
       "es2018"
     ],
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": false,
     "module": "CommonJS"
   },

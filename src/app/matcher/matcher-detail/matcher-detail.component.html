@@ -23,7 +23,9 @@
 <h2>Matcher on detail</h2>
 
 <ul class="params">
-  <li *ngFor="let param of params">
-    {{ param }}
-  </li>
+  @for (param of params; track param) {
+    <li>
+      {{ param }}
+    </li>
+  }
 </ul>
