@@ -1,8 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { UrlSegment, UrlMatchResult, RouterModule, Routes } from '@angular/router';
+import { UrlSegment, UrlMatchResult, Routes } from '@angular/router';
 
-import { LocalizeRouterModule, LocalizedMatcherUrlSegment } from '@gilsdav/ngx-translate-router';
+import { LocalizedMatcherUrlSegment } from '@gilsdav/ngx-translate-router';
 
 import { MatcherComponent } from './matcher.component';
 
@@ -47,21 +45,6 @@ export function baseMatcher(baseSegments: UrlSegment[]): UrlMatchResult {
   }
 }
 
-const routes: Routes = [
+export const matcherRoutes: Routes = [
   { path: '', component: MatcherComponent, data: { discriminantPathKey: 'BASE' } }
 ];
-
-@NgModule({
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        LocalizeRouterModule.forChild(routes),
-        MatcherComponent
-    ],
-    providers: [],
-    exports: [
-        RouterModule,
-        LocalizeRouterModule
-    ]
-})
-export class MatcherModule { }

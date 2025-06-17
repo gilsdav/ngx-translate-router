@@ -4,10 +4,10 @@ import { LocalizeRouterPipe } from '@gilsdav/ngx-translate-router';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css'],
-    imports: [RouterLink, RouterOutlet, LocalizeRouterPipe, TranslatePipe]
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
+  imports: [RouterLink, RouterOutlet, LocalizeRouterPipe, TranslatePipe]
 })
 export class HomeComponent implements OnInit, OnDestroy {
 

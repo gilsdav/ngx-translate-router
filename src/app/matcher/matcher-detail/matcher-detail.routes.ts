@@ -1,8 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Routes, UrlSegment, UrlMatchResult } from '@angular/router';
+import { Routes, UrlSegment, UrlMatchResult } from '@angular/router';
 
-import { LocalizeRouterModule, LocalizedMatcherUrlSegment } from '@gilsdav/ngx-translate-router';
+import { LocalizedMatcherUrlSegment } from '@gilsdav/ngx-translate-router';
 
 import { MatcherDetailComponent } from './matcher-detail.component';
 
@@ -40,20 +38,6 @@ export function detailMatcher(baseSegments: UrlSegment[]): UrlMatchResult {
   }
 }
 
-const routes: Routes = [
+export const matcherDetailRoutes: Routes = [
   { path: '', component: MatcherDetailComponent, data: { discriminantPathKey: 'DETAIL' } }
 ];
-
-@NgModule({
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        LocalizeRouterModule.forChild(routes),
-        MatcherDetailComponent
-    ],
-    exports: [
-        RouterModule,
-        LocalizeRouterModule
-    ]
-})
-export class MatcherDetailModule { }

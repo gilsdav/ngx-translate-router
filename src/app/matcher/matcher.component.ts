@@ -5,10 +5,10 @@ import { LocalizeRouterPipe } from '@gilsdav/ngx-translate-router';
 
 
 @Component({
-    selector: 'app-matcher',
-    templateUrl: './matcher.component.html',
-    styleUrls: ['./matcher.component.css'],
-    imports: [RouterLinkActive, RouterLink, LocalizeRouterPipe]
+  selector: 'app-matcher',
+  templateUrl: './matcher.component.html',
+  styleUrls: ['./matcher.component.css'],
+  imports: [RouterLinkActive, RouterLink, LocalizeRouterPipe]
 })
 export class MatcherComponent implements OnInit, OnDestroy {
 

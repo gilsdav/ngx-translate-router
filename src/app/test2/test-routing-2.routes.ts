@@ -6,7 +6,7 @@ import { LocalizeRouterModule } from '@gilsdav/ngx-translate-router';
 import { BobComponent } from './bob/bob.component';
 import { Test2Component } from './test2/test2.component';
 
-const routes: Routes = [
+export const testRouting2Routes: Routes = [
   {
     path: '',
     component: Test2Component,
@@ -18,12 +18,3 @@ const routes: Routes = [
     ]
   }
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-    LocalizeRouterModule.forChild(routes)
-  ],
-  exports: [RouterModule, LocalizeRouterModule]
-})
-export class TestRoutingModule { }

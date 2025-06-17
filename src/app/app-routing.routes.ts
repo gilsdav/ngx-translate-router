@@ -1,13 +1,12 @@
-import { NgModule, inject } from '@angular/core';
-import { RouterModule, Routes, provideRouter } from '@angular/router';
+import { inject } from '@angular/core';
+import { Routes } from '@angular/router';
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
 import { TranslateService } from '@ngx-translate/core';
 
 import {
-  LocalizeRouterModule, LocalizeParser, ManualParserLoader, CacheMechanism,
-  LocalizeRouterSettings, withLocalizeRouter,
+  LocalizeRouterSettings,
   LocalizeRouterService
 } from '@gilsdav/ngx-translate-router';
 
@@ -15,8 +14,8 @@ import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loa
 
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { baseMatcher } from './matcher/matcher.module';
-import { detailMatcher } from './matcher/matcher-detail/matcher-detail.module';
+import { baseMatcher } from './matcher/matcher.routes';
+import { detailMatcher } from './matcher/matcher-detail/matcher-detail.routes';
 import { environment } from '../environments/environment';
 
 // export function ManualLoaderFactory(translate: TranslateService, location: Location, settings: LocalizeRouterSettings) {
@@ -33,17 +32,17 @@ export const routes: Routes = [
     path: '',
     title: 'HOME_TITLE',
     component: HomeComponent,
-    loadChildren: () => import('./test/test.module').then(mod => mod.TestModule),
+    loadChildren: () => import('./test/test-routing.routes').then(mod => mod.testRoutingRoutes),
     data: { discriminantPathKey: 'TESTPATH' }
   },
   {
     path: '',
-    loadChildren: () => import('./test2/test.module').then(mod => mod.TestModule),
+    loadChildren: () => import('./test2/test-routing-2.routes').then(mod => mod.testRouting2Routes),
     data: { discriminantPathKey: 'TEST2PATH' }
   },
   {
     path: '',
-    loadChildren: () => import('./test3/test.module').then(mod => mod.TestModule),
+    loadChildren: () => import('./test3/test-routing-3.routes').then(mod => mod.testRouting3Routes),
     data: { discriminantPathKey: 'TEST3PATH' }
   },
   {
@@ -55,11 +54,11 @@ export const routes: Routes = [
     children: [
       {
         matcher: detailMatcher,
-        loadChildren: () => import('./matcher/matcher-detail/matcher-detail.module').then(mod => mod.MatcherDetailModule)
+        loadChildren: () => import('./matcher/matcher-detail/matcher-detail.routes').then(mod => mod.matcherDetailRoutes)
       },
       {
         matcher: baseMatcher,
-        loadChildren: () => import('./matcher/matcher.module').then(mod => mod.MatcherModule),
+        loadChildren: () => import('./matcher/matcher.routes').then(mod => mod.matcherRoutes),
         data: {
           localizeMatcher: {
             params: {
@@ -71,8 +70,8 @@ export const routes: Routes = [
     ]
   },
   { path: 'home', component: HomeComponent },
-  { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
-  { path: '!test', component: HomeComponent, loadChildren: () => import('./test/test.module').then(mod => mod.TestModule) },
+  { path: 'test', component: HomeComponent, loadChildren: () => import('./test/test-routing.routes').then(mod => mod.testRoutingRoutes) },
+  { path: '!test', component: HomeComponent, loadChildren: () => import('./test/test-routing.routes').then(mod => mod.testRoutingRoutes) },
   { path: 'bil', loadChildren: () => import('./test4/test4.routes').then(mod => mod.routes) },
   {
     path: 'conditionalRedirectTo', redirectTo: ({ queryParams }) => {
@@ -110,30 +109,5 @@ export function shouldTranslateMap(param: string): string {
   return null;
 }
 
-@NgModule({
-  imports: [
-    RouterModule //.forRoot(routes/*, { initialNavigation: 'disabled' }*/),
-    // LocalizeRouterModule.forRoot(routes, {
-    //     parser: {
-    //       provide: LocalizeParser,
-    //       useFactory: HttpLoaderFactory,
-    //       deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
-    //     },
-    //     cacheMechanism: CacheMechanism.Cookie,
-    //     cookieFormat: '{{value}};{{expires:20}};path=/',
-    // })
-  ],
-  providers: [provideRouter(routes, withLocalizeRouter(routes, {
-    parser: {
-      provide: LocalizeParser,
-      useFactory: HttpLoaderFactory,
-      deps: [TranslateService, Location, LocalizeRouterSettings, HttpClient]
-    },
-    cacheMechanism: CacheMechanism.Cookie,
-    cookieFormat: '{{value}};{{expires:20}};path=/',
-  }))],
-  exports: [RouterModule, LocalizeRouterModule]
-})
-export class AppRoutingModule { }
 
 
