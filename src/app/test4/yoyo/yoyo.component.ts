@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { LocalizeRouterPipe } from '@gilsdav/ngx-translate-router';
+import { LocalizeRouterPipe } from 'ngx-translate-router';
 
 @Component({
   selector: 'app-yoyo',

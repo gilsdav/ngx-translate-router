@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterLinkActive, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { LocalizeRouterPipe } from '@gilsdav/ngx-translate-router';
+import { LocalizeRouterPipe } from 'ngx-translate-router';
 
 
 @Component({

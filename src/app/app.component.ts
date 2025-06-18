@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalizeRouterService, LocalizeRouterPipe } from '@gilsdav/ngx-translate-router';
+import { LocalizeRouterService, LocalizeRouterPipe } from 'ngx-translate-router';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 

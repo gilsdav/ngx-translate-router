@@ -17,21 +17,17 @@
       "dom"
     ],
     "paths": {
-      "@gilsdav/ngx-translate-router": [
+      "ngx-translate-router": [
         "dist/ngx-translate-router"
       ],
-      "@gilsdav/ngx-translate-router/*": [
+      "ngx-translate-router/*": [
         "dist/ngx-translate-router/*"
       ],
-      "@gilsdav/ngx-translate-router-http-loader": [
+      "ngx-translate-router-http-loader": [
         "dist/ngx-translate-router-http-loader"
       ],
-      "@gilsdav/ngx-translate-router-http-loader/*": [
+      "ngx-translate-router-http-loader/*": [
         "dist/ngx-translate-router-http-loader/*"
-      ],
-      "@gilsdav/ngx-translate-router-scully-plugin": [
-        "dist/ngx-translate-router-scully-plugin/ngx-translate-router-scully-plugin",
-        "dist/ngx-translate-router-scully-plugin"
       ]
     },
     "stripInternal": true,

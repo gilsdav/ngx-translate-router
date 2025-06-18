@@ -8,9 +8,9 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   LocalizeRouterSettings,
   LocalizeRouterService
-} from '@gilsdav/ngx-translate-router';
+} from 'ngx-translate-router';
 
-import { LocalizeRouterHttpLoader } from '@gilsdav/ngx-translate-router-http-loader';
+import { LocalizeRouterHttpLoader } from 'ngx-translate-router-http-loader';
 
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';

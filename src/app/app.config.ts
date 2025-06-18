@@ -8,7 +8,7 @@ import { provideRouter, TitleStrategy } from '@angular/router';
 import { provideClientHydration } from '@angular/platform-browser';
 
 import { ApplicationConfig } from '@angular/core';
-import { CacheMechanism, LocalizeParser, LocalizeRouterSettings, withLocalizeRouter } from '@gilsdav/ngx-translate-router';
+import { CacheMechanism, LocalizeParser, LocalizeRouterSettings, withLocalizeRouter } from 'ngx-translate-router';
 
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -1,6 +1,6 @@
 import { Routes, UrlSegment, UrlMatchResult } from '@angular/router';
 
-import { LocalizedMatcherUrlSegment } from '@gilsdav/ngx-translate-router';
+import { LocalizedMatcherUrlSegment } from 'ngx-translate-router';
 
 import { MatcherDetailComponent } from './matcher-detail.component';
 

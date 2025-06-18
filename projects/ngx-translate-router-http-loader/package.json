@@ -1,15 +1,23 @@
 {
-  "name": "@gilsdav/ngx-translate-router-http-loader",
-  "version": "20.0.0",
-  "homepage": "https://github.com/gilsdav/ngx-translate-router#readme",
-  "license" : "MIT",
+  "name": "ngx-translate-router-http-loader",
+  "version": "20.0.1",
+  "homepage": "https://github.com/ruizmarc/ngx-translate-router#readme",
+  "description": "An Angular library that provides  a way to translate routes using ngx-translate.",
+  "license": "MIT",
   "author": {
-    "name": "David Gilson",
-    "email": "davgilson@live.fr",
-    "url": "https://github.com/gilsdav"
+    "name": "Marc Ruiz",
+    "url": "https://github.com/ruizmarc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ruizmarc/ngx-translate-router.git"
+  },
+  "scripts": {
+    "prepublishOnly": "cp ../../README.md .",
+    "postpublish": "rm README.md"
   },
   "peerDependencies": {
-    "@gilsdav/ngx-translate-router": ">=20.0.0",
+    "ngx-translate-router": ">=20.0.0",
     "@angular/common": ">=20.0.0",
     "@angular/core": ">=20.0.0",
     "@angular/router": ">=20.0.0",

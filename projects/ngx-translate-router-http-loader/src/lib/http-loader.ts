@@ -1,4 +1,4 @@
-import { LocalizeParser, LocalizeRouterSettings } from '@gilsdav/ngx-translate-router';
+import { LocalizeParser, LocalizeRouterSettings } from 'ngx-translate-router';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { Routes } from '@angular/router';
