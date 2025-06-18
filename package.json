@@ -7,11 +7,9 @@
     "build": "npm run build:main && npm run build:http-loader",
     "build:main": "npx ng build --configuration production ngx-translate-router",
     "build:http-loader": "npx ng build --configuration production ngx-translate-router-http-loader",
-    "build:scully-plugin": "mkdir dist/ngx-translate-router-scully-plugin/ && cp ./projects/ngx-translate-router-scully-plugin/package.json dist/ngx-translate-router-scully-plugin/ && npx tsc ./projects/ngx-translate-router-scully-plugin/src/lib/scully-plugin.ts -d --outDir dist/ngx-translate-router-scully-plugin/",
     "test": "npx ng test",
     "lint": "npx ng lint",
-    "e2e": "npx ng e2e",
-    "serve:ssr:ngx-translate-router-demo": "node dist/ngx-translate-router-demo/server/server.mjs"
+    "e2e": "npx ng e2e"
   },
   "private": true,
   "dependencies": {
