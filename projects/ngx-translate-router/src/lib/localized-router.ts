@@ -13,8 +13,10 @@ export class LocalizedRouter extends Router {
   private compiler = inject(Compiler);
   private localize = inject(LocalizeParser);
   private childrenLoaders = new WeakMap<Route, Observable<LoadedRouterConfig>>();
+
   onLoadStartListener?: (r: Route) => void;
   onLoadEndListener?: (r: Route) => void;
+
   constructor() {
     super();
     // Custom configuration

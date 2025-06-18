@@ -36,8 +36,7 @@ export class LocalizeRouterService {
       @Inject(LocalizeParser) public parser: LocalizeParser,
       @Inject(LocalizeRouterSettings) public settings: LocalizeRouterSettings,
       @Inject(Router) private router: Router,
-      @Inject(ActivatedRoute) private route: ActivatedRoute/*,
-      @Inject(Location) private location: Location*/
+      @Inject(ActivatedRoute) private route: ActivatedRoute
     ) {
       this.routerEvents = new Subject<string>();
       const initializedSubject = new ReplaySubject<boolean>(1);
@@ -138,14 +137,6 @@ export class LocalizeRouterService {
     } else {
       return this.parseSegmentValue(snapshot);
     }
-    /* if (snapshot.firstChild && snapshot.firstChild.routeConfig && snapshot.firstChild.routeConfig.path) {
-      if (snapshot.firstChild.routeConfig.path !== '**') {
-        return this.parseSegmentValue(snapshot) + '/' + this.traverseRouteSnapshot(snapshot.firstChild);
-      } else {
-        return this.parseSegmentValue(snapshot.firstChild);
-      }
-    }
-    return this.parseSegmentValue(snapshot); */
   }
 
   /**
@@ -173,15 +164,6 @@ export class LocalizeRouterService {
     } else {
       return '';
     }
-    /* if (snapshot.routeConfig) {
-      if (snapshot.routeConfig.path === '**') {
-        return snapshot.url.filter((segment: UrlSegment) => segment.path).map((segment: UrlSegment) => segment.path).join('/');
-      } else {
-        const subPathSegments = snapshot.routeConfig.path.split('/');
-        return subPathSegments.map((s: string, i: number) => s.indexOf(':') === 0 ? snapshot.url[i].path : s).join('/');
-      }
-    }
-    return ''; */
   }
 
   private parseSegmentValueMatcher(snapshot: ActivatedRouteSnapshot): string[] {

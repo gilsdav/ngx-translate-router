@@ -41,24 +41,6 @@ export abstract class LocalizeParser {
   abstract load(routes: Routes): Promise<any>;
 
   /**
- * Prepare routes to be fully usable by ngx-translate-router
- * @param routes
- */
-  /* private initRoutes(routes: Routes, prefix = '') {
-    routes.forEach(route => {
-      if (route.path !== '**') {
-        const routeData: any = route.data = route.data || {};
-        routeData.localizeRouter = {};
-        routeData.localizeRouter.fullPath = `${prefix}/${route.path}`;
-        if (route.children && route.children.length > 0) {
-          this.initRoutes(route.children, routeData.localizeRouter.fullPath);
-        }
-      }
-    });
-  } */
-
-
-  /**
    * Initialize language and routes
    */
   protected init(routes: Routes): Promise<any> {

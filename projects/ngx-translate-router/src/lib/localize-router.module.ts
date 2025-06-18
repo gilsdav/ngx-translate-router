@@ -1,6 +1,9 @@
 import {
-  NgModule, ModuleWithProviders, APP_INITIALIZER, Optional, SkipSelf,
-  Injectable, Injector, Provider
+  NgModule, ModuleWithProviders, Optional, SkipSelf,
+  Injectable, Injector, Provider,
+  provideAppInitializer,
+  inject,
+  EnvironmentProviders
 } from '@angular/core';
 import { LocalizeRouterService } from './localize-router.service';
 import { DummyLocalizeParser, LocalizeParser } from './localize-router.parser';
@@ -33,7 +36,12 @@ export class ParserInitializer {
   constructor(private injector: Injector) {
   }
 
-  appInitializer(): Promise<any> {
+  appInitializer(parser: LocalizeParser, routes: Routes[]): Promise<void> {
+
+    this.parser = parser;
+    const routesCopy = deepCopy(routes);
+    this.routes = routesCopy.reduce((a, b) => a.concat(b));
+
     const res = this.parser.load(this.routes);
 
     return res.then(() => {
@@ -65,20 +73,9 @@ export class ParserInitializer {
     });
   }
 
-  generateInitializer(parser: LocalizeParser, routes: Routes[]): () => Promise<any> {
-    this.parser = parser;
-    this.routes = routes.reduce((a, b) => a.concat(b));
-    return this.appInitializer;
-  }
 }
 
-export function getAppInitializer(p: ParserInitializer, parser: LocalizeParser, routes: Routes[]): any {
-  // DeepCopy needed to prevent RAW_ROUTES mutation
-  const routesCopy = deepCopy(routes);
-  return p.generateInitializer(parser, routesCopy).bind(p);
-}
-
-function createLocalizeRouterProviders(routes: Routes, config: LocalizeRouterConfig): Provider[] {
+function createLocalizeRouterProviders(routes: Routes, config: LocalizeRouterConfig): (Provider | EnvironmentProviders)[] {
   return [
     {
       provide: Router,
@@ -106,15 +103,16 @@ function createLocalizeRouterProviders(routes: Routes, config: LocalizeRouterCon
     LocalizeRouterService,
     ParserInitializer,
     {
-      provide: APP_INITIALIZER,
-      multi: true,
-      useFactory: getAppInitializer,
-      deps: [ParserInitializer, LocalizeParser, RAW_ROUTES]
-    },
-    {
       provide: RouteReuseStrategy,
       useClass: GilsdavReuseStrategy
-    }
+    },
+    provideAppInitializer(() => {
+      const rawRoutes = inject(RAW_ROUTES);
+      const parser = inject(LocalizeParser);
+      const parserInitializer = inject(ParserInitializer);
+      const routesDeepCopy = deepCopy(rawRoutes);
+      return parserInitializer.appInitializer(parser, routesDeepCopy);
+    })
   ];
 }
 
