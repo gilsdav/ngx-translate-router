@@ -201,6 +201,8 @@ export class LocalizeRouterService {
    * Translate route to current language
    * If new language is explicitly provided then replace language part in url with new language
    */
+  translateRoute(path: string): string;
+  translateRoute(path: any[]): any[];
   translateRoute(path: string | any[]): string | any[] {
     if (typeof path === 'string') {
       const url = this.parser.translateRoute(path);
