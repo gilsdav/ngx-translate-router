@@ -344,7 +344,7 @@ Setting this flag on sub route has no effect as parent route would already have 
 `LocalizeRouter` depends on `ngx-translate` core service and automatically initializes it with selected locales.
 Following code is run on `LocalizeParser` init:
 ```ts
-this.translate.setDefaultLang(cachedLanguage || languageOfBrowser || firstLanguageFromConfig);
+this.translate.setFallbackLang(cachedLanguage || languageOfBrowser || firstLanguageFromConfig);
 // ...
 this.translate.use(languageFromUrl || cachedLanguage || languageOfBrowser || firstLanguageFromConfig);
 ```
