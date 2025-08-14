@@ -30,6 +30,7 @@ Based on and extension of [ngx-translate](https://github.com/ngx-translate/core)
 | 16              | 7.0.0            | 2.0.0       | active | minimum angular 16      |
 | 17              | 7.1.0            | 2.0.0       | active | optional standalone API |
 | 18              | 7.2.1            | 2.0.0       | active |  |
+| 18              | 8.0.0            | 2.0.0       | active | @ngx-translate/core v17+|
 
 Demo project can be found under sub folder `src`.
 
