@@ -1,5 +1,11 @@
-# ngx-translate-router
+# ngx-translate-router (deprecated)
 > An implementation of routes localization for Angular.
+
+> [!CAUTION]
+> It is with a heavy heart that I must announce (despite the fact that you have probably already noticed) that I no longer have the time to maintain this library due to personal reasons.
+> It is entirely open-source with an MIT license, so I would be happy to see someone else take it over. Thank you to all the users for these fantastic years.
+> Advice for the next person: don't do it alone.
+
 
 * ngx-translate-router
 [![npm version](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router.svg)](https://badge.fury.io/js/%40gilsdav%2Fngx-translate-router)
