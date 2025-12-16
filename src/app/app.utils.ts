@@ -1,17 +1,9 @@
 import { Injector } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { LocalizeRouterService } from '@gilsdav/ngx-translate-router';
 import { firstValueFrom } from 'rxjs';
 import { filter, first, tap } from 'rxjs/operators';
 import { NavigationEnd, Router } from '@angular/router';
-import { environment } from '../environments/environment';
-
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, `${environment.locales}/assets/locales/`, '.json');
-}
 
 export const appInitializerFactory = (injector: Injector) => {
   return () => {
